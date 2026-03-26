@@ -77,7 +77,7 @@ export default async function DashboardPage() {
     include: { user: true, workoutPlan: true } 
   });
   
-  const formattedFriendActivity = friendActivity.map(fa => ({ username: fa.user.username, workoutName: fa.workoutPlan.name }));
+  const formattedFriendActivity = friendActivity.map((fa: any) => ({ username: fa.user.username, workoutName: fa.workoutPlan?.name || "Custom Workout" }));
 
   // Get recent PRs for the competition aspect
   const sevenDaysAgo = new Date();
@@ -97,7 +97,7 @@ export default async function DashboardPage() {
     take: 10
   });
 
-  const recentPRs = recentLogsWithPR.map(log => ({
+  const recentPRs = recentLogsWithPR.map((log: any) => ({
     id: log.id,
     username: log.user.username,
     exercise: log.exercise.name,
@@ -110,7 +110,7 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen flex flex-col items-center p-6 space-y-8 pb-32">
       <CompetitionDashboard leaderboard={leaderboard} />
-      {myActiveWorkout && <CurrentWorkoutWidget workoutName={myActiveWorkout.workoutPlan.name} />}
+      {myActiveWorkout && <CurrentWorkoutWidget workoutName={myActiveWorkout.workoutPlan?.name || "Custom Workout"} />}
       <FriendActivityWidget activities={formattedFriendActivity} />
       <RecentPRsWidget prs={recentPRs} />
       <div className="w-full max-w-md">

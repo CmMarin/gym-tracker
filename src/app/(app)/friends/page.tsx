@@ -31,7 +31,7 @@ export default async function FriendsPage() {
     }
   });
 
-  const friends = friendships.map(f => {
+  const friends = friendships.map((f: any) => {
     const friendData = f.userId === userId ? f.friend : f.user;
     return friendData;
   });
@@ -39,7 +39,7 @@ export default async function FriendsPage() {
   // Get latest activity for friends
   const activeWorkouts = await prisma.activeWorkout.findMany({
     where: {
-      userId: { in: friends.map(f => f.id) }
+      userId: { in: friends.map((f: any) => f.id) }
     },
     include: {
       workoutPlan: { select: { name: true } }
@@ -48,7 +48,7 @@ export default async function FriendsPage() {
 
   const recentSessions = await prisma.workoutSession.findMany({
     where: {
-      userId: { in: friends.map(f => f.id) }
+      userId: { in: friends.map((f: any) => f.id) }
     },
     orderBy: { completedAt: 'desc' },
     distinct: ['userId'], // get latest session per user
@@ -58,7 +58,7 @@ export default async function FriendsPage() {
   });
 
   // Assemble friend data
-  const friendsData = friends.map(friend => {
+  const friendsData = friends.map((friend: any) => {
     const isOnline = activeWorkouts.find(aw => aw.userId === friend.id);
     const lastSession = recentSessions.find(rs => rs.userId === friend.id);
     
