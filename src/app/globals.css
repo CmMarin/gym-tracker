@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1e293b; /* slate-800 */
 }
 
 @theme inline {
@@ -12,15 +12,78 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base Light Themes */
+html[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #1e293b;
+}
+
+html[data-theme="pink-light"] {
+  --background: #fffafa;
+  --foreground: #601438;
+  --color-white: #ffffff;
+  --color-gray-50: #fdf2f8; 
+  --color-gray-100: #fce7f3;
+  --color-indigo-50: #fdf2f8;
+  --color-indigo-100: #fce7f3;
+  --color-indigo-500: #f472b6;
+  --color-rose-100: #e0e7ff;
+  --color-rose-500: #818cf8;
+  --color-slate-800: #831843;
+  --color-slate-500: #be185d;
+}
+
+/* Base Dark Properties shared across all darks */
+html[data-theme="dark"], html[data-theme="blue-dark"], html[data-theme="pink-dark"], html[data-theme="purple-dark"] {
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --color-white: #18181b; 
+  --color-gray-50: #09090b;
+  --color-gray-100: #27272a;
+  --color-gray-200: #3f3f46;
+  --color-slate-800: #f4f4f5;
+  --color-slate-700: #e4e4e7;
+  --color-slate-500: #a1a1aa;
+}
+
+html[data-theme="dark"] {
+  --color-indigo-50: #312e81;
+  --color-indigo-100: #3730a3;
+  --color-rose-100: #881337;
+}
+
+html[data-theme="blue-dark"] {
+  --color-indigo-50: #082f49;
+  --color-indigo-100: #0c4a6e;
+  --color-indigo-500: #38bdf8;
+  --color-rose-100: #1e1b4b;
+  --color-rose-500: #818cf8;
+}
+
+html[data-theme="pink-dark"] {
+  --color-indigo-50: #500724;
+  --color-indigo-100: #831843;
+  --color-indigo-500: #ec4899;
+  --color-rose-100: #4c1d95;
+  --color-rose-500: #a855f7;
+}
+
+html[data-theme="purple-dark"] {
+  --color-white: #1e1b4b;
+  --color-gray-50: #0f172a;
+  --color-gray-100: #2e1065;
+  --color-indigo-50: #3b0764;
+  --color-indigo-100: #4c1d95;
+  --color-indigo-500: #a855f7;
+  --color-rose-100: #172554;
+  --color-rose-500: #3b82f6;
+  --color-slate-800: #e9d5ff;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-gray-50);
+  color: var(--color-slate-800);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+

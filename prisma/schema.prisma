@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String   @id @default(cuid())
+  username   String   @unique
+  password   String
+  xp         Int      @default(0)
+  streakDays Int      @default(0)
+  image      String? // User avatar
+  createdAt  DateTime @default(now())
+
+  // Relationships
+  workoutPlans    WorkoutPlan[]
+  setLogs         SetLog[]
+  activeWorkouts  ActiveWorkout[]
+  workoutSessions WorkoutSession[]
+  achievements    UserAchievement[]
+  bodyWeightLogs  BodyWeightLog[]
+  friends         Friendship[]      @relation("UserFriends")
+  friendOf        Friendship[]      @relation("FriendUsers")
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  user   User @relation("UserFriends", fields: [userId], references: [id])
+  friend User @relation("FriendUsers", fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
+}
+
+model WorkoutPlan {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  dayOfWeek Int?
+  createdAt DateTime @default(now())
+
+  user            User             @relation(fields: [userId], references: [id])
+  planExercises   PlanExercise[]
+  activeWorkouts  ActiveWorkout[]
+  workoutSessions WorkoutSession[]
+}
+
+model Exercise {
+  id       String  @id @default(cuid())
+  name     String
+  category String?
+
+  planExercises PlanExercise[]
+  setLogs       SetLog[]
+}
+
+model PlanExercise {
+  id            String @id @default(cuid())
+  workoutPlanId String
+  exerciseId    String
+  targetSets    Int
+  targetReps    Int
+
+  workoutPlan WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+  exercise    Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+}
+
+model WorkoutSession {
+  id              String   @id @default(cuid())
+  userId          String
+  workoutPlanId   String?
+  totalXpEarned   Int      @default(0)
+  durationMinutes Int      @default(0)
+  completedAt     DateTime @default(now())
+
+  user        User         @relation(fields: [userId], references: [id])
+  workoutPlan WorkoutPlan? @relation(fields: [workoutPlanId], references: [id], onDelete: SetNull)
+  setLogs     SetLog[]
+}
+
+model SetLog {
+  id         String   @id @default(cuid())
+  userId     String
+  sessionId  String
+  exerciseId String
+  setNumber  Int
+  reps       Int
+  weight     Float
+  isPR       Boolean  @default(false)
+  xpEarned   Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  user     User           @relation(fields: [userId], references: [id])
+  session  WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise Exercise       @relation(fields: [exerciseId], references: [id])
+}
+
+model ActiveWorkout {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  workoutPlanId String
+  startTime     DateTime @default(now())
+  state         Json // Stores current progression: current exercise index, completed sets, etc.
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workoutPlan WorkoutPlan @relation(fields: [workoutPlanId], references: [id])
+}
+
+enum AchievementType {
+  FIRST_WORKOUT
+  STREAK_7_DAYS
+  PR_HIT
+  LIFT_1000_KG
+}
+
+model UserAchievement {
+  id         String          @id @default(cuid())
+  userId     String
+  type       AchievementType
+  achievedAt DateTime        @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+}
+
+model BodyWeightLog {
+  id        String   @id @default(cuid())
+  userId    String
+  weight    Float
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
