@@ -44,7 +44,7 @@ export default async function DashboardPage() {
   const acceptedFriends: UserForLeaderboard[] = [];
   const pendingRequestsToMe: { friendshipId: string; user: UserForLeaderboard }[] = [];
 
-  friendships.forEach(f => {
+  friendships.forEach((f: any) => {
     if (f.status === "ACCEPTED") {
       const otherUser = f.userId === userId ? f.friend : f.user;
       acceptedFriends.push(otherUser as UserForLeaderboard);
