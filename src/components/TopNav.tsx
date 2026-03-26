@@ -39,9 +39,9 @@ export default function TopNav() {
   return (
     <div className="sticky top-0 z-50 w-full bg-white border-b-2 border-gray-100 flex items-center justify-between px-4 py-3 shadow-sm">
       <Link href="/dashboard" className="font-black text-xl text-slate-800 tracking-tight">
-        gym<span className="text-blue-500">tracker</span>
+        Buff<span className="text-blue-500">Buddies</span>
       </Link>
-      
+
       <div className="flex items-center space-x-3">
         <div className="flex items-center text-orange-500 font-bold">
           <Flame fill="currentColor" size={24} className="mr-1" />

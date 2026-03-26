@@ -37,6 +37,8 @@ model Friendship {
   friend User @relation("FriendUsers", fields: [friendId], references: [id])
 
   @@unique([userId, friendId])
+  @@index([userId])
+  @@index([friendId])
 }
 
 model WorkoutPlan {
@@ -50,6 +52,8 @@ model WorkoutPlan {
   planExercises   PlanExercise[]
   activeWorkouts  ActiveWorkout[]
   workoutSessions WorkoutSession[]
+
+  @@index([userId])
 }
 
 model Exercise {
@@ -83,6 +87,9 @@ model WorkoutSession {
   user        User         @relation(fields: [userId], references: [id])
   workoutPlan WorkoutPlan? @relation(fields: [workoutPlanId], references: [id], onDelete: SetNull)
   setLogs     SetLog[]
+
+  @@index([userId])
+  @@index([completedAt(sort: Desc)])
 }
 
 model SetLog {
@@ -100,6 +107,10 @@ model SetLog {
   user     User           @relation(fields: [userId], references: [id])
   session  WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   exercise Exercise       @relation(fields: [exerciseId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt(sort: Desc)])
+  @@index([isPR])
 }
 
 model ActiveWorkout {

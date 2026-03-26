@@ -59,6 +59,15 @@ export default function ProfileClient({ savedWorkouts }: { savedWorkouts: any[] 
         </div>
       </motion.button>
 
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="text-center mt-12 mb-6"
+      >
+        <p className="text-gray-400 font-medium text-sm">v0.1.0</p>
+      </motion.div>
+
       <SavedWorkoutsModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

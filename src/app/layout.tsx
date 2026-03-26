@@ -14,12 +14,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gamified Gym Tracker",
+  title: "BuffBuddies",
   description: "Level up your workouts",
+  icons: {
+    icon: '/site-icon.ico',
+    apple: '/site-icon.ico'
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Gym Tracker",
+    title: "BuffBuddies",
   },
   formatDetection: {
     telephone: false,

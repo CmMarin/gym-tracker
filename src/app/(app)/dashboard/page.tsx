@@ -21,25 +21,28 @@ export default async function DashboardPage() {
 
   const userId = session.user.id;
 
-  const currentUser = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true, username: true, xp: true },
-  });
+  // Run initial independent queries in parallel
+  const [currentUser, friendships, myActiveWorkout] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, username: true, xp: true },
+    }),
+    prisma.friendship.findMany({
+      where: {
+        OR: [{ userId: userId }, { friendId: userId }]
+      },
+      include: {
+        user: { select: { id: true, username: true, xp: true } },
+        friend: { select: { id: true, username: true, xp: true } }
+      }
+    }),
+    prisma.activeWorkout.findUnique({
+      where: { userId },
+      include: { workoutPlan: true }
+    })
+  ]);
 
   if (!currentUser) return null;
-
-  const friendships = await prisma.friendship.findMany({
-    where: {
-      OR: [
-        { userId: userId },
-        { friendId: userId }
-      ]
-    },
-    include: {
-      user: { select: { id: true, username: true, xp: true } },
-      friend: { select: { id: true, username: true, xp: true } }
-    }
-  });
 
   const acceptedFriends: UserForLeaderboard[] = [];
   const pendingRequestsToMe: { friendshipId: string; user: UserForLeaderboard }[] = [];
@@ -70,33 +73,29 @@ export default async function DashboardPage() {
       isMe: u.id === userId
     }));
 
-  const myActiveWorkout = await prisma.activeWorkout.findUnique({ where: { userId }, include: { workoutPlan: true } });
-  
-  const friendActivity = await prisma.activeWorkout.findMany({ 
-    where: { userId: { in: acceptedFriends.map(f => f.id) } }, 
-    include: { user: true, workoutPlan: true } 
-  });
-  
-  const formattedFriendActivity = friendActivity.map((fa: any) => ({ username: fa.user.username, workoutName: fa.workoutPlan?.name || "Custom Workout" }));
+  // Dependent queries in parallel
+  const [friendActivity, recentLogsWithPR] = await Promise.all([
+    prisma.activeWorkout.findMany({
+      where: { userId: { in: acceptedFriends.map(f => f.id) } },
+      include: { user: true, workoutPlan: true }
+    }),
+    prisma.setLog.findMany({
+      where: {
+        userId: { in: allNetworkUsers },
+        isPR: true,
+      },
+      include: {
+        user: true,
+        exercise: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 10
+    })
+  ]);
+
+  const formattedFriendActivity = friendActivity.map((fa: any) => ({ username: fa.user.username, workoutName: fa.workoutPlan?.name || "Custom Workout" }));    
 
   // Get recent PRs for the competition aspect
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-  const recentLogsWithPR = await prisma.setLog.findMany({
-    where: {
-      userId: { in: allNetworkUsers },
-      isPR: true,
-      
-    },
-    include: {
-      user: true,
-      exercise: true
-    },
-    orderBy: { createdAt: 'desc' },
-    take: 10
-  });
-
   const recentPRs = recentLogsWithPR.map((log: any) => ({
     id: log.id,
     username: log.user.username,

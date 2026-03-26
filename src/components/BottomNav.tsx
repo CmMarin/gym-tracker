@@ -4,10 +4,12 @@ import { Home, Dumbbell, User, Users, LineChart } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useAppSounds } from "@/hooks/useAppSounds";
 
 export default function BottomNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { playPop } = useAppSounds();
 
   if (!session) return null;
 
@@ -18,6 +20,7 @@ export default function BottomNav() {
       <div className="flex justify-around items-center h-20 max-w-xl mx-auto px-4">
         <Link
           href="/dashboard"
+          onClick={() => playPop()}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
             isActive('/dashboard') ? 'text-blue-500' : 'text-slate-400'
           }`}
@@ -28,6 +31,7 @@ export default function BottomNav() {
 
         <Link
           href="/friends"
+          onClick={() => playPop()}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
             isActive('/friends') ? 'text-blue-500' : 'text-slate-400'
           }`}
@@ -38,13 +42,14 @@ export default function BottomNav() {
 
         {/* Floating Action Button for workout */}
         <div className="relative -top-6 mx-2">
-          <Link href="/workout" className="flex items-center justify-center w-16 h-16 bg-blue-500 rounded-full shadow-[0_6px_0_0_theme(colors.blue.600)] active:shadow-none active:translate-y-[6px] transition-all text-white hover:bg-blue-400 border-4 border-white">
+          <Link href="/workout" onClick={() => playPop()} className="flex items-center justify-center w-16 h-16 bg-blue-500 rounded-full shadow-[0_6px_0_0_theme(colors.blue.600)] active:shadow-none active:translate-y-[6px] transition-all text-white hover:bg-blue-400 border-4 border-white">
             <Dumbbell size={30} strokeWidth={3} />
           </Link>
         </div>
 
         <Link
           href="/progress"
+          onClick={() => playPop()}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
             isActive('/progress') ? 'text-blue-500' : 'text-slate-400'
           }`}
@@ -55,6 +60,7 @@ export default function BottomNav() {
 
         <Link
           href="/profile"
+          onClick={() => playPop()}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
             isActive('/profile') ? 'text-blue-500' : 'text-slate-400'
           }`}

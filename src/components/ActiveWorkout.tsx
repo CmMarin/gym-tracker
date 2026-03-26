@@ -7,15 +7,17 @@ import { finishWorkoutAction } from "@/app/actions/workout-actions";
 import { updateWorkoutState, cancelActiveWorkout } from "@/app/actions/active-workout-actions";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useAppSounds } from "@/hooks/useAppSounds";
 
 export default function ActiveWorkout({ 
   planName, 
   initialState
 }: { 
-  planName: string, 
+  planName: string,
   initialState: any
 }) {
   const router = useRouter();
+  const { playBuzzer, playDing, playPop } = useAppSounds();
   const [workoutState, setWorkoutState] = useState(initialState);
   const [showMilestone, setShowMilestone] = useState(false);
   const [isFinishing, setIsFinishing] = useState(false);
@@ -46,19 +48,23 @@ export default function ActiveWorkout({
     const newState = { ...workoutState };
     const set = newState.exercises[currentExerciseIndex].sets[currentSetIndex];
     if (!set.reps || !set.weight) {
+      playBuzzer();
       toast.error("Enter weight and reps!");
       return;
     }
-    
+
     set.completed = true;
 
     // Advance Logic
     const nextSetIndex = newState.exercises[currentExerciseIndex].sets.findIndex((s: any) => !s.completed);
-    
+
     if (nextSetIndex === -1) {
+      playDing();
       if (currentExerciseIndex < exercises.length - 1) {
         newState.currentExerciseIndex += 1;
       }
+    } else {
+      playPop();
     }
 
     setWorkoutState(newState);

@@ -9,41 +9,40 @@ import { format } from "date-fns";
 
 export default async function ProgressPage() {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/login");
   }
 
-  const username = session.user.name as string;
+  const userId = session.user.id;
 
-  const user = await prisma.user.findUnique({
-    where: { username },
-    include: {
-      setLogs: {
-        include: {
-          exercise: true,
-          session: true
-        },
-        orderBy: { createdAt: 'desc' }
-      },
-      bodyWeightLogs: {
-        orderBy: { createdAt: 'asc' }
+  // Execute queries in parallel, fetching ONLY the necessary fields to drastically drop load time
+  const [bodyWeightLogs, setLogs] = await Promise.all([
+    prisma.bodyWeightLog.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'asc' },
+      select: { weight: true, createdAt: true }
+    }),
+    prisma.setLog.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        weight: true,
+        reps: true,
+        createdAt: true,
+        exercise: { select: { name: true } }
       }
-    }
-  });
-
-  if (!user) {
-    redirect("/login");
-  }
+    })
+  ]);
 
   // 1. Body weight data
-  const weightData = user.bodyWeightLogs.map(bw => ({
+  const weightData = bodyWeightLogs.map(bw => ({
     weight: bw.weight,
     date: new Date(bw.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }));
 
   // 2. Personal Records
   const prs = new Map<string, number>();
-  user.setLogs.forEach(log => {
+  setLogs.forEach(log => {
     if (log.weight) {
       const currentPr = prs.get(log.exercise.name) || 0;
       if (log.weight > currentPr) prs.set(log.exercise.name, log.weight);
@@ -55,10 +54,9 @@ export default async function ProgressPage() {
 
   // 3. Volume Data (Grouped by date)
   const volumeByDate = new Map<string, number>();
-  
+
   // To keep dates in chronological order, we can reverse the setLogs or sort Map entries at the end.
-  const logsAsc = [...user.setLogs].reverse(); 
-  
+  const logsAsc = [...setLogs].reverse();
   logsAsc.forEach(log => {
     if (log.weight && log.reps) {
       // Use the session completetion time or just set log creation
