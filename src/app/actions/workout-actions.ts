@@ -84,23 +84,29 @@ export async function finishWorkoutAction(workoutData: any) {
 
       const weight = parseFloat(set.weight);
       const reps = parseInt(set.reps, 10);
+      const isWarmup = set.isWarmup || false;
       let isPR = false;
 
-      // Update this session's max stats for deduction check
-      if (weight > thisSessionMaxWeight || (weight === thisSessionMaxWeight && reps > thisSessionMaxReps)) {
-        thisSessionMaxWeight = weight;
-        thisSessionMaxReps = reps;
-      }
+      // Only count non-warmup sets for PRs and Performance Tracking
+      if (!isWarmup) {
+        // Update this session's max stats for deduction check
+        if (weight > thisSessionMaxWeight || (weight === thisSessionMaxWeight && reps > thisSessionMaxReps)) {
+          thisSessionMaxWeight = weight;
+          thisSessionMaxReps = reps;
+        }
 
-      // PR Logic: Strictly greater than historical max, AND history must exist 
-      if (hasHistory && (weight > allTimeBestWeight || (weight === allTimeBestWeight && reps > allTimeBestReps))) {
-        isPR = true;
-        exercisePr = true;
-        allTimeBestWeight = weight; // update it so subsequent sets must beat THIS to be another PR
-        allTimeBestReps = reps;
-        totalXpEarned += 50; // PR Bonus!
+        // PR Logic: Strictly greater than historical max, AND history must exist
+        if (hasHistory && (weight > allTimeBestWeight || (weight === allTimeBestWeight && reps > allTimeBestReps))) {
+          isPR = true;
+          exercisePr = true;
+          allTimeBestWeight = weight; // update it so subsequent sets must beat THIS to be another PR
+          allTimeBestReps = reps;
+          totalXpEarned += 50; // PR Bonus!
+        } else {
+          totalXpEarned += 10; // Normal set XP
+        }
       } else {
-        totalXpEarned += 10; // Normal set XP
+        totalXpEarned += 5; // Small XP for warmups
       }
 
       await prisma.setLog.create({
@@ -111,8 +117,9 @@ export async function finishWorkoutAction(workoutData: any) {
           setNumber: i + 1,
           reps,
           weight,
+          isWarmup,
           isPR,
-          xpEarned: isPR ? 60 : 10
+          xpEarned: isPR ? 60 : (isWarmup ? 5 : 10)
         }
       });
     }

@@ -68,12 +68,12 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 
 - [PENDING] Weekly Leaderboard Reset: Implement automatic weekly leaderboard resets, including user notifications and profile rewards such as badges or placements based on ranking  
 - [PENDING] Shareable Workout Blueprints: Enable users to generate unique links or codes for custom workout splits (e.g., Push Day, Pull Day) that others can instantly import into their app  
-- [PENDING] Built-in Rest Timer: Add a countdown timer (e.g., 60s, 90s, 120s) that automatically starts after a user marks a set as complete, including an audible alert or buzzer when rest time ends  
-- [PENDING] Plate Calculator Utility: Add a quick-access tool next to weight input fields where users can input a total weight (e.g., 100kg) and receive exact plate distribution per side of the barbell  
+- [COMPLETED] Built-in Rest Timer: Add a countdown timer (e.g., 60s, 90s, 120s) that automatically starts after a user marks a set as complete, including an audible alert or buzzer when rest time ends
+- [COMPLETED] Plate Calculator Utility: Add a quick-access tool next to weight input fields where users can input a total weight (e.g., 100kg) and receive exact plate distribution per side of the barbell
 
 - [PENDING] Badges & Achievements Dashboard: Create a system of unlockable achievements tied to milestones (e.g., “100kg Club” for bench press, “Night Owl” for workouts after 10 PM, “Iron Streak” for a 30-day streak)  
 - [PENDING] Co-op Workouts: Allow users to link workout sessions with friends where sets completed and XP earned contribute to a shared experience pool in real time  
-- [PENDING] Warm-up Sets Toggle: Add a toggle option (e.g., 🔥 icon) to mark sets as warm-ups, ensuring they are excluded from PR calculations and fatigue tracking  
+- [COMPLETED] Warm-up Sets Toggle: Add a toggle option (e.g., 🔥 icon) to mark sets as warm-ups, ensuring they are excluded from PR calculations and fatigue tracking  
 - [PENDING] Push Notifications: Implement web push notifications (PWA) to remind users about expiring streaks or notify them when friends complete workouts  
 - [PENDING] 1RM (One Rep Max) Predictions: Build a smart calculation system that estimates a user’s true 1-rep max from higher-rep sets (e.g., 8–12 reps) for key lifts like bench press, squat, and deadlift  
 
