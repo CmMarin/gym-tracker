@@ -22,6 +22,7 @@ model User {
   workoutSessions WorkoutSession[]
   achievements    UserAchievement[]
   bodyWeightLogs  BodyWeightLog[]
+  customExercises CustomExercise[]
   friends         Friendship[]      @relation("UserFriends")
   friendOf        Friendship[]      @relation("FriendUsers")
 }
@@ -65,15 +66,32 @@ model Exercise {
   setLogs       SetLog[]
 }
 
-model PlanExercise {
-  id            String @id @default(cuid())
-  workoutPlanId String
-  exerciseId    String
-  targetSets    Int
-  targetReps    Int
+model CustomExercise {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  category      String?
+  targetMuscles String[] // e.g., ["Chest", "Triceps"]
+  createdAt     DateTime @default(now())
 
-  workoutPlan WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
-  exercise    Exercise    @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planExercises PlanExercise[]
+  setLogs       SetLog[]
+
+  @@index([userId])
+}
+
+model PlanExercise {
+  id               String  @id @default(cuid())
+  workoutPlanId    String
+  exerciseId       String?
+  customExerciseId String?
+  targetSets       Int
+  targetReps       Int
+
+  workoutPlan    WorkoutPlan     @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+  exercise       Exercise?       @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  customExercise CustomExercise? @relation(fields: [customExerciseId], references: [id], onDelete: Cascade)
 }
 
 model WorkoutSession {
@@ -93,21 +111,23 @@ model WorkoutSession {
 }
 
 model SetLog {
-  id         String   @id @default(cuid())
-  userId     String
-  sessionId  String
-  exerciseId String
-  setNumber  Int
-  reps       Int
-  weight     Float
-    isWarmup   Boolean  @default(false)
-  isPR       Boolean  @default(false)
-  xpEarned   Int      @default(0)
-  createdAt  DateTime @default(now())
+  id               String   @id @default(cuid())
+  userId           String
+  sessionId        String
+  exerciseId       String?
+  customExerciseId String?
+  setNumber        Int
+  reps             Int
+  weight           Float
+  isWarmup         Boolean  @default(false)
+  isPR             Boolean  @default(false)
+  xpEarned         Int      @default(0)
+  createdAt        DateTime @default(now())
 
-  user     User           @relation(fields: [userId], references: [id])
-  session  WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  exercise Exercise       @relation(fields: [exerciseId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+  session        WorkoutSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise       Exercise?       @relation(fields: [exerciseId], references: [id])
+  customExercise CustomExercise? @relation(fields: [customExerciseId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt(sort: Desc)])

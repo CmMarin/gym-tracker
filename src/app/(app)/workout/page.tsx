@@ -9,7 +9,7 @@ export default async function WorkoutPage() {
 
   const workoutPlansRaw = await prisma.workoutPlan.findMany({
     where: { userId: session.user.id },
-    include: { planExercises: { include: { exercise: true } } },
+    include: { planExercises: { include: { exercise: true, customExercise: true } } },
     orderBy: { dayOfWeek: 'asc' }
   });
 
@@ -17,12 +17,15 @@ export default async function WorkoutPage() {
     id: p.id,
     name: p.name,
     dayOfWeek: p.dayOfWeek,
-    exercises: p.planExercises.map(px => ({
-       id: px.exercise.id,
-       name: px.exercise.name,
-       targetSets: px.targetSets,
-       targetReps: px.targetReps
-    }))
+    exercises: p.planExercises.map(px => {
+       const exercise = px.exercise || px.customExercise;
+       return {
+         id: exercise?.id || "",
+         name: exercise?.name || "Unknown Exercise",
+         targetSets: px.targetSets,
+         targetReps: px.targetReps
+       };
+    })
   }));
 
   const activeWorkout = await prisma.activeWorkout.findUnique({

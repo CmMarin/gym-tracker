@@ -29,7 +29,8 @@ export default async function ProgressPage() {
         weight: true,
         reps: true,
         createdAt: true,
-        exercise: { select: { name: true } }
+        exercise: { select: { name: true } },
+        customExercise: { select: { name: true } }
       }
     })
   ]);
@@ -44,8 +45,9 @@ export default async function ProgressPage() {
   const prs = new Map<string, number>();
   setLogs.forEach(log => {
     if (log.weight) {
-      const currentPr = prs.get(log.exercise.name) || 0;
-      if (log.weight > currentPr) prs.set(log.exercise.name, log.weight);
+      const exerciseName = log.exercise?.name || log.customExercise?.name || "Unknown Exercise";
+      const currentPr = prs.get(exerciseName) || 0;
+      if (log.weight > currentPr) prs.set(exerciseName, log.weight);
     }
   });
 

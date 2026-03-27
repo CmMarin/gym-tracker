@@ -5,7 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { User, Flame, Activity, Clock, Trophy, Dumbbell } from "lucide-react";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import { formatDistanceToNow } from "date-fns";
-import FriendDetailsModal from "./FriendDetailsModal";
+import dynamic from "next/dynamic";
+
+const FriendDetailsModal = dynamic(() => import("./FriendDetailsModal"), {
+  ssr: false,
+});
 
 type Friend = {
   id: string;

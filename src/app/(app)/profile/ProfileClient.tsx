@@ -3,12 +3,17 @@
 import { useState } from "react";
 import { FolderHeart, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
-import SavedWorkoutsModal from "@/components/SavedWorkoutsModal";
+import dynamic from "next/dynamic";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { motion } from "framer-motion";
 
+const SavedWorkoutsModal = dynamic(() => import("@/components/SavedWorkoutsModal"), { 
+  ssr: false,
+});
+
 export default function ProfileClient({ savedWorkouts }: { savedWorkouts: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasOpenedModal, setHasOpenedModal] = useState(false);
 
   return (
     <>
@@ -16,7 +21,7 @@ export default function ProfileClient({ savedWorkouts }: { savedWorkouts: any[] 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => { setHasOpenedModal(true); setIsModalOpen(true); }}
         className="w-full bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
       >
         <div className="flex items-center gap-4">
@@ -68,11 +73,13 @@ export default function ProfileClient({ savedWorkouts }: { savedWorkouts: any[] 
         <p className="text-gray-400 font-medium text-sm">v0.1.0</p>
       </motion.div>
 
-      <SavedWorkoutsModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        savedWorkouts={savedWorkouts}
-      />
+      {hasOpenedModal && (
+        <SavedWorkoutsModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          savedWorkouts={savedWorkouts}
+        />
+      )}
     </>
   );
 }

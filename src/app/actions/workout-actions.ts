@@ -42,7 +42,10 @@ export async function finishWorkoutAction(workoutData: any) {
     const pastLogsAll = await prisma.setLog.findMany({
       where: {
         userId,
-        exercise: { name: ex.name }
+        OR: [
+          { exercise: { name: ex.name } },
+          { customExercise: { name: ex.name } }
+        ]
       },
       orderBy: { createdAt: "desc" }
     });
@@ -113,7 +116,8 @@ export async function finishWorkoutAction(workoutData: any) {
         data: {
           userId,
           sessionId: workoutSession.id,
-          exerciseId: ex.id,
+          exerciseId: ex.isCustom ? null : ex.id,
+          customExerciseId: ex.isCustom ? ex.id : null,
           setNumber: i + 1,
           reps,
           weight,

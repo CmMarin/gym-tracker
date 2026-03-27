@@ -78,6 +78,6 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [PENDING] 1RM (One Rep Max) Predictions: Build a smart calculation system that estimates a user’s true 1-rep max from higher-rep sets (e.g., 8–12 reps) for key lifts like bench press, squat, and deadlift  
 
 ### Optimizations Roadmap:
-- [PENDING] Dynamic Imports (Code Splitting): Implement lazy loading for non-critical components (e.g., SavedWorkoutsModal, heavy chart components), ensuring they are only loaded when triggered by user interaction rather than included in the initial bundle  
-- [PENDING] In-Memory Caching: Wrap infrequently changing queries (such as global exercise definitions or friend lists) using Next.js unstable_cache to significantly reduce database reads and improve performance  
-- [PENDING] Service Worker Caching Strategies: Optimize the PWA service worker (Serwist) by applying a stale-while-revalidate caching strategy for the dashboard, enabling instant loading from local cache while fetching and updating fresh data in the background  
+- [COMPLETED] Dynamic Imports (Code Splitting): Implement lazy loading for non-critical components (e.g., SavedWorkoutsModal, heavy chart components), ensuring they are only loaded when triggered by user interaction rather than included in the initial bundle  
+- [COMPLETED] In-Memory Caching: Wrap infrequently changing queries (such as global exercise definitions or friend lists) using Next.js unstable_cache to significantly reduce database reads and improve performance  
+- [COMPLETED] Service Worker Caching Strategies: Optimize the PWA service worker (Serwist) by applying a stale-while-revalidate caching strategy for the dashboard, enabling instant loading from local cache while fetching and updating fresh data in the background  

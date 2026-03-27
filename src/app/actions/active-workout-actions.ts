@@ -27,31 +27,52 @@ export async function startOrResumeWorkout(workoutPlanId: string) {
     where: { id: workoutPlanId },
     include: {
       planExercises: {
-        include: { exercise: true }
+        include: { exercise: true, customExercise: true }
       }
     }
   });
 
   if (!plan) throw new Error("Plan not found");
 
-  const pastLogs = await prisma.setLog.groupBy({
-    by: ["exerciseId"],
-    where: { userId, exerciseId: { in: plan.planExercises.map(px => px.exerciseId) } },
-    _max: { weight: true, reps: true }
-  });
+  const exerciseIds = plan.planExercises.map(px => px.exerciseId).filter((id): id is string => id !== null);
+  const customExerciseIds = plan.planExercises.map(px => px.customExerciseId).filter((id): id is string => id !== null);
+
+  const pastLogsData = await Promise.all([
+    exerciseIds.length > 0 ? prisma.setLog.groupBy({
+      by: ["exerciseId"],
+      where: { userId, exerciseId: { in: exerciseIds } },
+      _max: { weight: true, reps: true }
+    }) : Promise.resolve([]),
+    customExerciseIds.length > 0 ? prisma.setLog.groupBy({
+      by: ["customExerciseId"],
+      where: { userId, customExerciseId: { in: customExerciseIds } },
+      _max: { weight: true, reps: true }
+    }) : Promise.resolve([])
+  ]);
+
+  const allPastLogs = {
+    exercises: pastLogsData[0],
+    customExercises: pastLogsData[1]
+  };
 
   const state = {
     currentExerciseIndex: 0,
     exercises: plan.planExercises.map(px => {
-      const pastLog = pastLogs.find(l => l.exerciseId === px.exerciseId);
+      const exercise = px.exercise || px.customExercise;
+      
+      const pastLog = px.customExerciseId
+        ? allPastLogs.customExercises.find(l => l.customExerciseId === px.customExerciseId)
+        : allPastLogs.exercises.find(l => l.exerciseId === px.exerciseId);
+
       return {
-        id: px.exerciseId,
-        name: px.exercise.name,
+        id: px.exerciseId || px.customExerciseId,
+        name: exercise?.name || "Unknown",
+        isCustom: !!px.customExerciseId,
         targetSets: px.targetSets,
         targetReps: px.targetReps,
         sets: Array.from({ length: px.targetSets }).map(() => ({
-          reps: pastLog?._max.reps?.toString() || "",
-          weight: pastLog?._max.weight?.toString() || "",
+          reps: pastLog?._max?.reps?.toString() || "",
+          weight: pastLog?._max?.weight?.toString() || "",
           completed: false
         }))
       };

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import ProfileClient from "./ProfileClient";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import UploadPdfWidget from "@/components/UploadPdfWidget";
+import CustomExercisesWidget from "@/components/CustomExercisesWidget";
 import { Trophy } from "lucide-react";
 
 export default async function ProfilePage() {
@@ -21,7 +22,7 @@ export default async function ProfilePage() {
       workoutPlans: {
         include: {
           planExercises: {
-            include: { exercise: true }
+            include: { exercise: true, customExercise: true }
           }
         }
       },
@@ -39,12 +40,15 @@ export default async function ProfilePage() {
     id: p.id,
     name: p.name,
     dayOfWeek: p.dayOfWeek,
-    exercises: p.planExercises.map(px => ({
-       id: px.exercise.id,
-       name: px.exercise.name,
-       targetSets: px.targetSets,
-       targetReps: px.targetReps
-    }))
+    exercises: p.planExercises.map(px => {
+       const exercise = px.exercise || px.customExercise;
+       return {
+         id: exercise?.id || "",
+         name: exercise?.name || "Unknown Exercise",
+         targetSets: px.targetSets,
+         targetReps: px.targetReps
+       };
+    })
   }));
 
   const formatAchievementType = (type: string) => {
@@ -93,6 +97,8 @@ export default async function ProfilePage() {
               </div>
             )}
           </div>
+
+          <CustomExercisesWidget />
 
           <ProfileClient savedWorkouts={mappedWorkoutPlans} />
           
