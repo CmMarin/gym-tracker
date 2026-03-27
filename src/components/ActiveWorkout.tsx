@@ -177,7 +177,7 @@ export default function ActiveWorkout({
             </div>
             
             <button
-              onClick={() => router.push("/dashboard")}
+              onClick={() => window.location.href = "/dashboard"}
               className="bg-white text-green-600 font-black text-xl w-full py-4 rounded-2xl shadow-[0_6px_0_0_#dcfce7] active:translate-y-[6px] active:shadow-none transition-all"
             >
               CONTINUE TO DASHBOARD

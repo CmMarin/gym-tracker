@@ -184,6 +184,27 @@ export async function finishWorkoutAction(workoutData: any) {
     data: { xp: newXp, streakDays: newStreak }
   });
 
+  // --- ACHIEVEMENTS LOGIC ---
+  const earnedAchs: string[] = [];
+  const existingAchs = await prisma.userAchievement.findMany({ where: { userId } });
+  const existingTypes = new Set(existingAchs.map(a => a.type));
+
+  const checkAndAward = async (type: any, condition: boolean) => {
+    if (condition && !existingTypes.has(type)) {
+      await prisma.userAchievement.create({ data: { userId, type } });
+      earnedAchs.push(type);
+    }
+  };
+
+  await checkAndAward("FIRST_WORKOUT", !prevSession);
+  await checkAndAward("NIGHT_OWL", new Date().getHours() >= 22 || new Date().getHours() <= 3);
+  await checkAndAward("IRON_STREAK", newStreak >= 30);
+  
+  const hit100kg = workoutData.exercises.some((ex: any) => 
+    ex.sets?.some((s: any) => parseFloat(s.weight || "0") >= 100)
+  );
+  await checkAndAward("CLUB_100_KG", hit100kg);
+
   revalidatePath("/dashboard");
   revalidatePath("/profile");
   revalidatePath("/workout");
@@ -194,6 +215,7 @@ export async function finishWorkoutAction(workoutData: any) {
     newLevel,
     didLevelUp,
     xpEarned: totalXpEarned,
-    prs
+    prs,
+    earnedAchievements: earnedAchs
   };
 }

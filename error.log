@@ -1,0 +1,38 @@
+FAIL __tests__/actions/workout-actions.test.ts
+  ● Workout Actions - finishWorkoutAction › calculates correct XP and detects PR for a normal session
+
+    TypeError: Cannot read properties of undefined (reading 'findMany')
+
+    [0m [90m 187 |[39m   [90m// --- ACHIEVEMENTS LOGIC ---[39m
+     [90m 188 |[39m   [36mconst[39m earnedAchs[33m:[39m string[] [33m=[39m [][33m;[39m
+    [31m[1m>[22m[39m[90m 189 |[39m   [36mconst[39m existingAchs [33m=[39m [36mawait[39m prisma[33m.[39muserAchievement[33m.[39mfindMany({ where[33m:[39m { userId } })[33m;[39m
+     [90m     |[39m                                                     [31m[1m^[22m[39m
+     [90m 190 |[39m   [36mconst[39m existingTypes [33m=[39m [36mnew[39m [33mSet[39m(existingAchs[33m.[39mmap(a [33m=>[39m a[33m.[39mtype))[33m;[39m
+     [90m 191 |[39m
+     [90m 192 |[39m   [36mconst[39m checkAndAward [33m=[39m [36masync[39m (type[33m:[39m any[33m,[39m condition[33m:[39m boolean) [33m=>[39m {[0m
+
+      at findMany (src/app/actions/workout-actions.ts:189:53)
+      at Object.<anonymous> (__tests__/actions/workout-actions.test.ts:65:20)
+
+  ● Workout Actions - finishWorkoutAction › applies regression penalty if lifted less than previous session
+
+    TypeError: Cannot read properties of undefined (reading 'findMany')
+
+    [0m [90m 187 |[39m   [90m// --- ACHIEVEMENTS LOGIC ---[39m
+     [90m 188 |[39m   [36mconst[39m earnedAchs[33m:[39m string[] [33m=[39m [][33m;[39m
+    [31m[1m>[22m[39m[90m 189 |[39m   [36mconst[39m existingAchs [33m=[39m [36mawait[39m prisma[33m.[39muserAchievement[33m.[39mfindMany({ where[33m:[39m { userId } })[33m;[39m
+     [90m     |[39m                                                     [31m[1m^[22m[39m
+     [90m 190 |[39m   [36mconst[39m existingTypes [33m=[39m [36mnew[39m [33mSet[39m(existingAchs[33m.[39mmap(a [33m=>[39m a[33m.[39mtype))[33m;[39m
+     [90m 191 |[39m
+     [90m 192 |[39m   [36mconst[39m checkAndAward [33m=[39m [36masync[39m (type[33m:[39m any[33m,[39m condition[33m:[39m boolean) [33m=>[39m {[0m
+
+      at findMany (src/app/actions/workout-actions.ts:189:53)
+      at Object.<anonymous> (__tests__/actions/workout-actions.test.ts:104:20)
+
+PASS __tests__/components/ActiveWorkout.test.tsx
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       2 failed, 4 passed, 6 total
+Snapshots:   0 total
+Time:        5.913 s
+Ran all test suites.

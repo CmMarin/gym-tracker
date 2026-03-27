@@ -150,6 +150,9 @@ enum AchievementType {
   STREAK_7_DAYS
   PR_HIT
   LIFT_1000_KG
+  CLUB_100_KG
+  NIGHT_OWL
+  IRON_STREAK
 }
 
 model UserAchievement {

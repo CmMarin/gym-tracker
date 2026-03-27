@@ -71,7 +71,7 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [COMPLETED] Built-in Rest Timer: Add a countdown timer (e.g., 60s, 90s, 120s) that automatically starts after a user marks a set as complete, including an audible alert or buzzer when rest time ends
 - [COMPLETED] Plate Calculator Utility: Add a quick-access tool next to weight input fields where users can input a total weight (e.g., 100kg) and receive exact plate distribution per side of the barbell
 
-- [PENDING] Badges & Achievements Dashboard: Create a system of unlockable achievements tied to milestones (e.g., “100kg Club” for bench press, “Night Owl” for workouts after 10 PM, “Iron Streak” for a 30-day streak)  
+- [COMPLETED] Badges & Achievements Dashboard: Create a system of unlockable achievements tied to milestones (e.g., “100kg Club” for bench press, “Night Owl” for workouts after 10 PM, “Iron Streak” for a 30-day streak)  
 - [PENDING] Co-op Workouts: Allow users to link workout sessions with friends where sets completed and XP earned contribute to a shared experience pool in real time  
 - [COMPLETED] Warm-up Sets Toggle: Add a toggle option (e.g., 🔥 icon) to mark sets as warm-ups, ensuring they are excluded from PR calculations and fatigue tracking  
 - [PENDING] Push Notifications: Implement web push notifications (PWA) to remind users about expiring streaks or notify them when friends complete workouts  
