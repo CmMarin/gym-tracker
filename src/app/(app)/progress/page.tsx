@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import BodyWeightTracker from "@/components/BodyWeightTracker";
 import ExerciseTiers from "@/components/ExerciseTiers";
 import VolumeTracker from "@/components/VolumeTracker";
+import OneRepMaxWidget from "@/components/OneRepMaxWidget";
 import { format } from "date-fns";
 
 export default async function ProgressPage() {
@@ -74,6 +75,48 @@ export default async function ProgressPage() {
     volume: Math.round(volume)
   }));
 
+  // 4. One Rep Max Data (1RM)
+  // Target specifically major compound movements if present, or fallback to the top lifts
+  const oneRMByExerciseAndDate = new Map<string, Map<string, number>>();
+
+  logsAsc.forEach(log => {
+      if (log.weight && log.reps) {
+          const exerciseName = log.exercise?.name || log.customExercise?.name || "Unknown Exercise";
+          const dateStr = format(new Date(log.createdAt), 'MMM d');
+          
+          // Epley Formula: 1RM = Weight * (1 + 0.0333 * Reps)
+          const oneRepMax = log.weight * (1 + 0.0333 * log.reps);
+          
+          if (!oneRMByExerciseAndDate.has(exerciseName)) {
+              oneRMByExerciseAndDate.set(exerciseName, new Map());
+          }
+          
+          const dateMap = oneRMByExerciseAndDate.get(exerciseName)!;
+          const currentMaxForDate = dateMap.get(dateStr) || 0;
+          
+          if (oneRepMax > currentMaxForDate) {
+              dateMap.set(dateStr, oneRepMax);
+          }
+      }
+  });
+
+  // Convert to structured array, filtering for compound lifts or taking the top trackable exercises
+  const targetLifts = ["Bench Press", "Squat", "Deadlift", "Barbell Row", "Overhead Press"];
+  let oneRMData = Array.from(oneRMByExerciseAndDate.entries())
+      .map(([exercise, dateMap]) => ({
+          exercise,
+          data: Array.from(dateMap.entries()).map(([date, oneRM]) => ({ date, oneRM: Math.round(oneRM) }))
+      }))
+      .filter(entry => entry.data.length >= 1); // Allow even a single data point
+
+  // If we have "core" lifts, prioritize them
+  const coreRMData = oneRMData.filter(d => targetLifts.some(tl => d.exercise.toLowerCase().includes(tl.toLowerCase())));
+  if (coreRMData.length > 0) {
+      oneRMData = coreRMData;
+  } else {
+      // Otherwise just show the top trackable ones
+      oneRMData = oneRMData.sort((a, b) => b.data.length - a.data.length).slice(0, 5);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24 font-sans selection:bg-indigo-100 selection:text-indigo-900">
@@ -84,6 +127,7 @@ export default async function ProgressPage() {
 
       <div className="container mx-auto px-4 w-full max-w-md">
         <div className="flex flex-col gap-6">
+          <OneRepMaxWidget compoundData={oneRMData} />
           <VolumeTracker data={volumeData} />
           <BodyWeightTracker data={weightData} />
           <ExerciseTiers prs={prList} />

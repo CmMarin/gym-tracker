@@ -62,7 +62,7 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 ### Feature Roadmap:
 - [COMPLETED] Weekly Streak System Fix: Rework streak tracking logic so streaks update correctly and are counted on a weekly basis rather than daily, aligning with realistic workout frequency  
 - [COMPLETED] Haptic Feedback: Integrate tactile feedback using the Web API (navigator.vibrate([50])) to trigger subtle phone vibrations on key button presses (excluding menu buttons) for a more premium feel  
-- [PENDING] Custom Exercise Builder: Allow users to create and store their own workouts in the database, including assigning target muscle groups when a desired exercise is not available in the default list  
+- [COMPLETED] Custom Exercise Builder: Allow users to create and store their own workouts in the database, including assigning target muscle groups when a desired exercise is not available in the default list  
 - [PENDING] Advanced Charts & Graphs: Implement detailed analytics including line charts tracking estimated 1RM (One Rep Max) over time, pie charts displaying weekly volume per muscle group, and a body diagram that dynamically updates to reflect muscles trained during the week  
 - [PENDING] Interactive Muscle Heatmap: Add a visual 3D model or 2D body graphic on the profile tab where muscle groups highlight in red/orange when fatigued from recent workouts and gradually transition to green as they recover  
 
@@ -75,7 +75,7 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [PENDING] Co-op Workouts: Allow users to link workout sessions with friends where sets completed and XP earned contribute to a shared experience pool in real time  
 - [COMPLETED] Warm-up Sets Toggle: Add a toggle option (e.g., 🔥 icon) to mark sets as warm-ups, ensuring they are excluded from PR calculations and fatigue tracking  
 - [PENDING] Push Notifications: Implement web push notifications (PWA) to remind users about expiring streaks or notify them when friends complete workouts  
-- [PENDING] 1RM (One Rep Max) Predictions: Build a smart calculation system that estimates a user’s true 1-rep max from higher-rep sets (e.g., 8–12 reps) for key lifts like bench press, squat, and deadlift  
+- [WIP] 1RM (One Rep Max) Predictions: Build a smart calculation system that estimates a user’s true 1-rep max from higher-rep sets (e.g., 8–12 reps) for key lifts like bench press, squat, and deadlift  
 
 ### Optimizations Roadmap:
 - [COMPLETED] Dynamic Imports (Code Splitting): Implement lazy loading for non-critical components (e.g., SavedWorkoutsModal, heavy chart components), ensuring they are only loaded when triggered by user interaction rather than included in the initial bundle  
