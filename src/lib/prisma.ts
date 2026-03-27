@@ -5,7 +5,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-// @ts-expect-error type override
+// @ts-ignore
 const adapter = new PrismaPg(pool)
 
 export const prisma =
