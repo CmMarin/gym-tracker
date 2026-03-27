@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { differenceInCalendarWeeks } from "date-fns";
 
 export async function finishWorkoutAction(workoutData: any) {
   const session = await getServerSession(authOptions);
@@ -148,9 +149,28 @@ export async function finishWorkoutAction(workoutData: any) {
   const newLevel = Math.floor(newXp / 1000) + 1;
   const didLevelUp = newLevel > currentLevel;
 
+  // Streak logic
+  const prevSession = await prisma.workoutSession.findFirst({
+    where: { userId, id: { not: workoutSession.id } },
+    orderBy: { completedAt: "desc" }
+  });
+
+  let newStreak = user.streakDays || 0;
+  if (!prevSession) {
+    newStreak = 1;
+  } else {
+    const diffWeeks = differenceInCalendarWeeks(workoutSession.completedAt, prevSession.completedAt, { weekStartsOn: 1 });
+    if (diffWeeks === 1) {
+      newStreak += 1;
+    } else if (diffWeeks > 1) {
+      newStreak = 1;
+    }
+  }
+  if (newStreak === 0) newStreak = 1;
+
   await prisma.user.update({
     where: { id: user.id },
-    data: { xp: newXp }
+    data: { xp: newXp, streakDays: newStreak }
   });
 
   revalidatePath("/dashboard");

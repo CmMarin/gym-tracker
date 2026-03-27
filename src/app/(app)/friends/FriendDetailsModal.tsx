@@ -84,7 +84,7 @@ export default function FriendDetailsModal({
                   {data.streakDays > 0 && (
                     <span className="flex items-center text-sm font-bold text-orange-500 bg-orange-50 px-3 py-1 rounded-xl">
                       <Flame size={16} className="mr-1" />
-                      {data.streakDays} Day Streak
+                        {data.streakDays} Week Streak
                     </span>
                   )}
                 </div>
