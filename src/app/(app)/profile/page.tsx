@@ -7,6 +7,8 @@ import ProfileAvatar from "@/components/ProfileAvatar";
 import UploadPdfWidget from "@/components/UploadPdfWidget";
 import CustomExercisesWidget from "@/components/CustomExercisesWidget";
 import AchievementItem from "@/components/AchievementItem";
+import MuscleHeatmapWidget from "@/components/MuscleHeatmapWidget";
+import { getMuscleFatigue } from "@/app/actions/analytics-actions";
 import { Trophy } from "lucide-react";
 
 export default async function ProfilePage() {
@@ -17,21 +19,24 @@ export default async function ProfilePage() {
 
   const username = session.user.name as string;
 
-  const user = await prisma.user.findUnique({
-    where: { username },
-    include: {
-      workoutPlans: {
-        include: {
-          planExercises: {
-            include: { exercise: true, customExercise: true }
+  const [user, fatigueData] = await Promise.all([
+    prisma.user.findUnique({
+      where: { username },
+      include: {
+        workoutPlans: {
+          include: {
+            planExercises: {
+              include: { exercise: true, customExercise: true }
+            }
           }
+        },
+        achievements: {
+          orderBy: { achievedAt: 'desc' }
         }
-      },
-      achievements: {
-        orderBy: { achievedAt: 'desc' }
       }
-    }
-  });
+    }),
+    getMuscleFatigue()
+  ]);
 
   if (!user) {
     redirect("/login");
@@ -94,8 +99,8 @@ export default async function ProfilePage() {
             )}
           </div>
 
+          <MuscleHeatmapWidget fatigueData={fatigueData} />
           <CustomExercisesWidget />
-
           <ProfileClient savedWorkouts={mappedWorkoutPlans} />
 
           <UploadPdfWidget />

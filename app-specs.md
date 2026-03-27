@@ -63,8 +63,8 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [COMPLETED] Weekly Streak System Fix: Rework streak tracking logic so streaks update correctly and are counted on a weekly basis rather than daily, aligning with realistic workout frequency  
 - [COMPLETED] Haptic Feedback: Integrate tactile feedback using the Web API (navigator.vibrate([50])) to trigger subtle phone vibrations on key button presses (excluding menu buttons) for a more premium feel  
 - [COMPLETED] Custom Exercise Builder: Allow users to create and store their own workouts in the database, including assigning target muscle groups when a desired exercise is not available in the default list  
-- [PENDING] Advanced Charts & Graphs: Implement detailed analytics including line charts tracking estimated 1RM (One Rep Max) over time, pie charts displaying weekly volume per muscle group, and a body diagram that dynamically updates to reflect muscles trained during the week  
-- [PENDING] Interactive Muscle Heatmap: Add a visual 3D model or 2D body graphic on the profile tab where muscle groups highlight in red/orange when fatigued from recent workouts and gradually transition to green as they recover  
+- [COMPLETED] Advanced Charts & Graphs: Implement detailed analytics including line charts tracking estimated 1RM (One Rep Max) over time, pie charts displaying weekly volume per muscle group, and a body diagram that dynamically updates to reflect muscles trained during the week  
+- [COMPLETED] Interactive Muscle Heatmap: Add a visual 3D model or 2D body graphic on the profile tab where muscle groups highlight in red/orange when fatigued from recent workouts and gradually transition to green as they recover  
 
 - [PENDING] Weekly Leaderboard Reset: Implement automatic weekly leaderboard resets, including user notifications and profile rewards such as badges or placements based on ranking  
 - [PENDING] Shareable Workout Blueprints: Enable users to generate unique links or codes for custom workout splits (e.g., Push Day, Pull Day) that others can instantly import into their app  

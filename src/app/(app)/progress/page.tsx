@@ -5,8 +5,10 @@ import { prisma } from "@/lib/prisma";
 import BodyWeightTracker from "@/components/BodyWeightTracker";
 import ExerciseTiers from "@/components/ExerciseTiers";
 import VolumeTracker from "@/components/VolumeTracker";
+import WeeklyVolumeWidget from "@/components/WeeklyVolumeWidget";
 import OneRepMaxWidget from "@/components/OneRepMaxWidget";
 import { format } from "date-fns";
+import { getWeeklyVolumeAnalytics } from "@/app/actions/analytics-actions";
 
 export default async function ProgressPage() {
   const session = await getServerSession(authOptions);
@@ -17,7 +19,7 @@ export default async function ProgressPage() {
   const userId = session.user.id;
 
   // Execute queries in parallel, fetching ONLY the necessary fields to drastically drop load time
-  const [bodyWeightLogs, setLogs] = await Promise.all([
+  const [bodyWeightLogs, setLogs, weeklyVolumeData] = await Promise.all([
     prisma.bodyWeightLog.findMany({
       where: { userId },
       orderBy: { createdAt: 'asc' },
@@ -33,7 +35,8 @@ export default async function ProgressPage() {
         exercise: { select: { name: true } },
         customExercise: { select: { name: true } }
       }
-    })
+    }),
+    getWeeklyVolumeAnalytics()
   ]);
 
   // 1. Body weight data
@@ -129,6 +132,7 @@ export default async function ProgressPage() {
         <div className="flex flex-col gap-6">
           <OneRepMaxWidget compoundData={oneRMData} />
           <VolumeTracker data={volumeData} />
+          <WeeklyVolumeWidget initData={weeklyVolumeData} />
           <BodyWeightTracker data={weightData} />
           <ExerciseTiers prs={prList} />
         </div>
