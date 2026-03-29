@@ -123,7 +123,7 @@ export default async function ProgressPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24 font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      <div className="bg-[var(--color-white)] pt-12 pb-8 px-4 rounded-b-[3rem] shadow-[0_4px_0_var(--color--)] mb-6 text-center border-b-2 border-indigo-50">
+      <div className="bg-[var(--color-white)] pt-12 pb-8 px-4 rounded-b-[3rem] shadow-[0_4px_0_var(--color-theme-shadow)] mb-6 text-center border-b-2 border-indigo-50">
         <h1 className="text-3xl font-black text-slate-800 tracking-tight">Progress</h1>
         <p className="text-slate-500 font-medium mt-2">Track your gains over time</p>
       </div>

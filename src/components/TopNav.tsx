@@ -36,7 +36,7 @@ export default function TopNav() {
     return () => window.removeEventListener('user-stats-updated', fetchStats);
   }, [session]);
 
-  if (!session) return null;
+  
 
   return (
     <div className="sticky top-0 z-50 w-full bg-[var(--color-white)] border-b-2 border-indigo-50 flex items-center justify-between px-4 py-3 shadow-sm">

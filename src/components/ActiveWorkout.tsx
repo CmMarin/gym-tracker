@@ -28,6 +28,7 @@ export default function ActiveWorkout({
   const [showMilestone, setShowMilestone] = useState(false);
   const [isFinishing, setIsFinishing] = useState(false);
   const [summary, setSummary] = useState<any>(null);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const [restTimeLeft, setRestTimeLeft] = useState<number | null>(null);
   const [showPlateCalc, setShowPlateCalc] = useState(false);
@@ -140,16 +141,41 @@ export default function ActiveWorkout({
 
   const currentSet = currentSetIndex !== -1 && currentExercise ? currentExercise.sets[currentSetIndex] : null;
 
-  return (
+    if (showCancelConfirm) {
+    return (
+      <div className="min-h-full flex flex-col items-center justify-start pt-20 p-4">
+        <div className="bg-[var(--color-white)] rounded-3xl p-8 max-w-sm w-full text-center shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-[var(--color-indigo-50)]">
+          <h2 className="text-2xl font-black text-[var(--color-slate-800)] mb-4">End Workout?</h2>
+          <p className="text-[var(--color-slate-500)] mb-8 font-medium">Are you sure you want to end this workout without finishing it?</p>
+          <div className="flex flex-col gap-4">
+            <button 
+              onClick={async () => {
+                 await cancelActiveWorkout();
+                 window.location.href = "/workout";
+               }}
+              className="w-full py-4 bg-[var(--color-rose-500)] text-[var(--color-white)] rounded-xl font-bold shadow-[0_4px_0_var(--color-button-shadow)] active:translate-y-1 active:shadow-none hover:bg-[var(--color-rose-600)] transition-all"
+            >
+              Yes, End Workout
+            </button>
+            <button 
+              onClick={() => setShowCancelConfirm(false)}
+              className="w-full py-4 bg-[var(--color-gray-100)] text-[var(--color-slate-700)] rounded-xl font-bold border-2 border-[var(--color-gray-200)] hover:bg-[var(--color-gray-200)] transition-colors"
+            >
+              Resume Workout
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+return (
     <div className="min-h-full h-full bg-transparent flex flex-col p-6 items-center relative">
       <div className="w-full max-w-md flex justify-center items-center mb-8 relative">
-          <h1 className="font-bold text-2xl text-[var(--color-slate-800)] text-center">{planName}</h1>
+            <h1 className="font-bold text-2xl text-[var(--color-slate-800)] text-center px-16">{planName}</h1>
           <button
-             onClick={async () => {
-               await cancelActiveWorkout();
-               window.location.href = "/workout";
-             }}
-             className="absolute right-0 top-0 text-[var(--color-slate-400)] hover:text-red-500 p-2">
+              onClick={() => setShowCancelConfirm(true)}
+             className="absolute right-0 top-1/2 -translate-y-1/2 text-[var(--color-slate-500)] hover:text-[var(--color-rose-500)] p-3 bg-[var(--color-gray-100)] rounded-xl hover:scale-110 transition-all border border-[var(--color-gray-200)] shadow-[0_4px_0_var(--color-button-shadow)]">
              <X size={24} />
           </button>
         </div>

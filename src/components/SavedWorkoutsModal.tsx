@@ -34,7 +34,7 @@ export default function SavedWorkoutsModal({
   const handleClearAll = () => {
     toast((t) => (
       <div className="flex flex-col gap-3">
-        <p className="font-medium text-slate-800">
+        <p className="font-medium text-[var(--color-slate-800)]">
           Are you sure you want to delete ALL your saved workout routines?
         </p>
         <div className="flex justify-end gap-2">
@@ -58,8 +58,8 @@ export default function SavedWorkoutsModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-[var(--color-white)] w-full max-w-lg rounded-3xl p-6 max-h-[85vh] overflow-y-auto no-scrollbar relative animate-in zoom-in-95 duration-200">
-        <div className="sticky top-0 bg-[var(--color-white)] pb-4 mb-4 border-b border-indigo-50 flex items-center justify-between z-10">
-          <h2 className="text-2xl font-black text-slate-800">Saved Routines</h2>
+        <div className="sticky top-0 bg-[var(--color-white)] pb-4 mb-4 border-b border-[var(--color-gray-100)] flex items-center justify-between z-10">
+          <h2 className="text-2xl font-black text-[var(--color-slate-800)]">Saved Routines</h2>
           <div className="flex items-center gap-2">
             {savedWorkouts.length > 0 && (
               <button
@@ -76,7 +76,7 @@ export default function SavedWorkoutsModal({
             )}
             <button
               onClick={onClose}
-              className="p-2 bg-gray-100 text-slate-500 rounded-full hover:bg-gray-200 transition-colors"
+              className="p-2 bg-gray-100 text-[var(--color-slate-500)] rounded-full hover:bg-gray-200 transition-colors"
             >
               <X size={20} />
             </button>
@@ -84,7 +84,7 @@ export default function SavedWorkoutsModal({
         </div>
 
         {savedWorkouts.length === 0 ? (
-          <p className="text-center text-slate-400 py-10 font-bold">No saved routines yet.</p>
+          <p className="text-center text-[var(--color-slate-400)] py-10 font-bold">No saved routines yet.</p>
         ) : (
           <div className="flex flex-col gap-4">
             {savedWorkouts.map((workout: any) => (

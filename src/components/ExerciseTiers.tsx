@@ -64,7 +64,7 @@ export default function ExerciseTiers({ prs }: { prs: { name: string; maxWeight:
               <div className="h-3 w-full bg-[var(--color-gray-100)] rounded-full overflow-hidden z-10 relative shadow-inner border border-[var(--color-gray-200)]">
                 <div
                   className="h-full bg-[var(--color-indigo-400)] rounded-full transition-all duration-1000"
-                  style={{ width: \\%\ }}
+                  style={{ width: `${info.progress}%` }}
                 />
               </div>
             </div>

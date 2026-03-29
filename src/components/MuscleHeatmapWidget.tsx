@@ -8,7 +8,7 @@ import { Activity } from "lucide-react";
 const Model = dynamic(() => import("react-body-highlighter").then(mod => mod.default), {
   ssr: false,
   loading: () => (
-    <div className="h-64 flex items-center justify-center text-slate-400 font-medium bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+    <div className="h-64 flex items-center justify-center text-[var(--color-slate-400)] font-medium bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
       Loading body map...
     </div>
   )
@@ -52,15 +52,15 @@ export default function MuscleHeatmapWidget({ fatigueData }: { fatigueData: Reco
   });
 
   return (
-    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-6">
+    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-[var(--color-gray-100)] mb-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-100 text-rose-600 rounded-xl">
+          <div className="p-2 bg-[var(--color-indigo-100)] text-[var(--color-indigo-500)] rounded-xl">
             <Activity size={24} className="stroke-[3]" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-slate-800">Muscle Recovery</h2>
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Fatigue Heatmap</p>
+            <h2 className="text-xl font-black text-[var(--color-slate-800)]">Muscle Recovery</h2>
+            <p className="text-sm font-bold text-[var(--color-slate-400)] uppercase tracking-wider">Fatigue Heatmap</p>
           </div>
         </div>
         <button 

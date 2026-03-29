@@ -40,7 +40,7 @@ export default function ProfileAvatar({ currentImage, username }: { currentImage
               className="rounded-[2rem] mx-auto border-4 border-[var(--color-white)] shadow-lg ring-4 ring-indigo-50 bg-indigo-50"
             />
           ) : (
-            <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-[2rem] mx-auto flex items-center justify-center border-4 border-[var(--color-white)] shadow-lg ring-4 ring-indigo-50 text-[var(--color-white)] font-black text-3xl shadow-[0_4px_0_var(--color--)] pb-1">
+            <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-[2rem] mx-auto flex items-center justify-center border-4 border-[var(--color-white)] shadow-lg ring-4 ring-indigo-50 text-[var(--color-white)] font-black text-3xl shadow-[0_4px_0_var(--color-theme-shadow)] pb-1">
               {username[0]?.toUpperCase() || "U"}
             </div>
           )}

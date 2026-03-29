@@ -35,18 +35,18 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
     e.stopPropagation();
     toast((t) => (
       <div className="flex flex-col gap-3">
-        <p className="font-medium text-slate-800">
+        <p className="font-medium text-[var(--color-slate-800)]">
           Delete the routine "{plan.name}"?
         </p>
         <div className="flex justify-end gap-2">
-          <button 
-            className="px-3 py-1.5 bg-gray-100 text-slate-600 font-bold rounded-lg text-sm hover:bg-gray-200"
+          <button
+            className="px-3 py-1.5 bg-[var(--color-gray-100)] text-[var(--color-slate-600)] font-bold rounded-lg text-sm hover:bg-[var(--color-gray-200)]"
             onClick={() => toast.dismiss(t.id)}
           >
             Cancel
           </button>
-          <button 
-            className="px-3 py-1.5 bg-red-500 text-[var(--color-white)] font-bold rounded-lg text-sm hover:bg-red-600"
+          <button
+            className="px-3 py-1.5 bg-[var(--color-indigo-500)] text-[var(--color-white)] font-bold rounded-lg text-sm hover:bg-[var(--color-indigo-600)]"
             onClick={() => executeDelete(t.id)}
           >
             Delete
@@ -59,48 +59,53 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
   if (isDeleting) return null;
 
   return (
-    <div className="rounded-xl bg-gray-50 border-2 border-indigo-50 overflow-hidden">
-      <div className="w-full p-2 pr-4 flex justify-between items-center group"><button onClick={() => setIsOpen(!isOpen)} className="flex-1 text-left p-3 rounded-lg border-b border-[var(--color-gray-100)] last:border-b-0 hover:bg-[var(--color-gray-100)] transition-colors focus:outline-none">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-bold text-slate-800">{plan.name}</h3>
-            {plan.dayOfWeek && (
-              <span className="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-1 rounded-lg shrink-0 border border-indigo-200">
-                Day {plan.dayOfWeek}
-              </span>
-            )}
+    <div className="rounded-xl bg-[var(--color-gray-50)] border-2 border-[var(--color-indigo-50)] overflow-hidden">
+      <div className="w-full p-2 pr-4 flex justify-between items-center group">
+        <button onClick={() => setIsOpen(!isOpen)} className="flex-1 text-left p-2 rounded-lg hover:bg-[var(--color-gray-100)] transition-colors focus:outline-none">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="font-bold text-[var(--color-slate-800)]">{plan.name}</h3>
+              {plan.dayOfWeek && (
+                <span className="text-xs font-bold bg-[var(--color-indigo-100)] text-[var(--color-indigo-700)] px-2 py-1 rounded-lg shrink-0 border border-[var(--color-indigo-200)]">
+                  Day {plan.dayOfWeek}
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-[var(--color-slate-500)] font-medium">
+              {plan.exercises.length} exercises
+            </p>
           </div>
-          <p className="text-sm text-slate-500 font-medium">
-            {plan.exercises.length} exercises
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <div 
+        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
             onClick={handleDelete}
-            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2 text-[var(--color-slate-400)] hover:text-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-50)] rounded-lg transition-colors"
             title="Delete Routine"
           >
             <Trash2 size={18} />
-          </div>
-          <div className="text-slate-400 p-2">
+          </button>
+          <button onClick={() => setIsOpen(!isOpen)} className="text-[var(--color-slate-400)] p-2 hover:bg-[var(--color-gray-100)] rounded-lg">
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          </div>
-        </div></div><AnimatePresence>
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t-2 border-indigo-50"
+            className="border-t-2 border-[var(--color-indigo-50)]"
           >
             <div className="p-4 space-y-2">
               {plan.exercises.map((ex, index) => (
-                <div key={ex.id} className="flex justify-between items-center text-sm p-3 rounded-lg border-b border-[var(--color-gray-100)] last:border-b-0 hover:bg-gray-50">
+                <div key={ex.id} className="flex justify-between items-center text-sm p-3 rounded-lg border-b border-[var(--color-gray-100)] last:border-b-0 hover:bg-[var(--color-gray-100)] transition-colors">
                   <div className="flex items-center gap-3">
-                    <span className="text-slate-400 font-bold w-4">{index + 1}.</span>
-                    <span className="font-medium text-slate-700">{ex.name}</span>
+                    <span className="text-[var(--color-slate-400)] font-bold w-4">{index + 1}.</span>
+                    <span className="font-medium text-[var(--color-slate-700)]">{ex.name}</span>
                   </div>
-                  <span className="text-slate-500 font-medium bg-gray-100 px-2 py-1 rounded-md">
+                  <span className="text-[var(--color-slate-500)] font-medium bg-[var(--color-gray-100)] px-2 py-1 rounded-md">
                     {ex.targetSets}x{ex.targetReps}
                   </span>
                 </div>

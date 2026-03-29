@@ -100,7 +100,7 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
             ) : (
               <button
                 onClick={handleSendRequest}
-                className="bg-slate-800 hover:bg-slate-700 text-[var(--color-white)] font-bold px-4 py-2 rounded-xl shadow-[0_4px_0_0_var(--color--)] active:shadow-[0_0px_0_0_var(--color--)] active:translate-y-[4px] transition-all flex items-center space-x-2"
+                className="bg-slate-800 hover:bg-slate-700 text-[var(--color-white)] font-bold px-4 py-2 rounded-xl shadow-[0_4px_0_0_var(--color-button-shadow)] active:shadow-[0_0px_0_0_var(--color-button-shadow)] active:translate-y-[4px] transition-all flex items-center space-x-2"
               >
                 <UserPlus size={18} />
                 <span>ADD</span>

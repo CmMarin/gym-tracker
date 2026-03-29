@@ -12,147 +12,237 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Base Light Themes */
+/* ========================================================= */
+/* 1. DEFAULT LIGHT THEME                                    */
+/* ========================================================= */
 html[data-theme="light"] {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --color-white: #ffffff;
-  --color-gray-50: #f8fafc;
-  --color-gray-100: #f1f5f9;
-  --color-gray-200: #e2e8f0;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-700: #334155;
-  --color-slate-800: #1e293b;
+  /* --- BACKGROUNDS & SURFACES --- */
+  --color-white: #ffffff;      /* Main card and container backgrounds */
+  --color-gray-50: #f8fafc;    /* The app's main background (behind cards) */
+  --color-gray-100: #f1f5f9;   /* Subtle borders, dividers, disabled states */
+  --color-gray-200: #e2e8f0;   /* Slightly stronger borders and unselected traits */
+  
+  /* --- TEXT & NEUTRAL ICONS --- */
+  --color-slate-400: #94a3b8;  /* Muted text, inactive bottom navbar icons */
+  --color-slate-500: #64748b;  /* Secondary text (subtitles, dates) */
+  --color-slate-700: #334155;  /* Primary body text */
+  --color-slate-800: #1e293b;  /* Main headings and titles */
 
-  --color-indigo-50: #eff6ff;
-  --color-indigo-100: #dbeafe;
-  --color-indigo-200: #bfdbfe;
-  --color-indigo-300: #93c5fd;
-  --color-indigo-400: #60a5fa;
-  --color-indigo-500: #3b82f6;
-  --color-indigo-600: #2563eb;
-  --color-indigo-700: #1d4ed8;
-  --color-indigo-800: #1e40af;
-  --color-indigo-900: #1e3a8a;
+  /* --- PRIMARY THEME COLORS (Affects buttons, active icons, highlights) --- */
+  --color-indigo-50: #eff6ff;  /* Extremely light primary - used for hover effects */
+  --color-indigo-100: #dbeafe; /* Very light primary - container borders */
+  --color-indigo-200: #bfdbfe; /* Light primary */
+  --color-indigo-300: #93c5fd; /* Soft primary accents */
+  --color-indigo-400: #60a5fa; /* Vibrant primary */
+  --color-indigo-500: #3b82f6; /* MAIN PRIMARY: Active buttons, Bottom Nav icons, Toggles */
+  --color-indigo-600: #2563eb; /* DARK PRIMARY: Button hover states, active depth */
+  --color-indigo-700: #1d4ed8; /* Deeper primary text highlights */
+  --color-indigo-800: #1e40af; /* Very dark primary text */
+  --color-indigo-900: #1e3a8a; /* Darkest primary */
 
+  /* --- SHADOWS --- */
+  --color-theme-shadow: #93c5fd; /* Container outer drop shadow (Contrasting light blue) */
+  --color-button-shadow: #2563eb; /* 3D Button bottom shadow (Darker for depth) */
+
+  /* --- SECONDARY/ACCENTS (e.g. Delete buttons, warnings) --- */
   --color-rose-100: #ffe4e6;
   --color-rose-400: #fb7185;
   --color-rose-500: #f43f5e;
 }
 
+/* ========================================================= */
+/* 2. PINK LIGHT THEME                                       */
+/* ========================================================= */
 html[data-theme="pink-light"] {
-  --background: #fdf2f8;
-  --foreground: #4c0519;
-  --color-white: #ffffff;
-  --color-gray-50: #fdf2f8;
-  --color-gray-100: #fce7f3;
-  --color-gray-200: #fbcfe8;
-  --color-slate-400: #f472b6;
-  --color-slate-500: #db2777;
-  --color-slate-700: #9d174d;
-  --color-slate-800: #831843;
+  /* --- BACKGROUNDS & SURFACES --- */
+  --color-white: #ffffff;      
+  --color-gray-50: #fdf2f8;    
+  --color-gray-100: #fce7f3;   
+  --color-gray-200: #fbcfe8;   
+  
+  /* --- TEXT & NEUTRAL ICONS --- */
+  --color-slate-400: #f472b6;  
+  --color-slate-500: #db2777;  
+  --color-slate-700: #9d174d;  
+  --color-slate-800: #831843;  
 
-  --color-indigo-50: #fdf2f8;
-  --color-indigo-100: #fce7f3;
-  --color-indigo-200: #fbcfe8;
-  --color-indigo-300: #f9a8d4;
-  --color-indigo-400: #f472b6;
-  --color-indigo-500: #ec4899;
-  --color-indigo-600: #db2777;
-  --color-indigo-700: #be185d;
-  --color-indigo-800: #9d174d;
-  --color-indigo-900: #831843;
+  /* --- PRIMARY THEME COLORS --- */
+  --color-indigo-50: #fdf2f8;  
+  --color-indigo-100: #fce7f3; 
+  --color-indigo-200: #fbcfe8; 
+  --color-indigo-300: #f9a8d4; 
+  --color-indigo-400: #f472b6; 
+  --color-indigo-500: #ec4899; /* MAIN PRIMARY */
+  --color-indigo-600: #db2777; 
+  --color-indigo-700: #be185d; 
+  --color-indigo-800: #9d174d; 
+  --color-indigo-900: #831843; 
 
+  /* --- SHADOWS --- */
+  --color-theme-shadow: #ec4899;  /* Container shadow (same pink as bottom bar icons per request) */
+  --color-button-shadow: #be185d; /* 3D Button bottom shadow */
+
+  /* --- SECONDARY/ACCENTS --- */
   --color-rose-100: #e0e7ff;
   --color-rose-400: #a5b4fc;
   --color-rose-500: #818cf8;
 }
 
-/* Base Dark Properties shared across all darks */
-html[data-theme="dark"], html[data-theme="blue-dark"] {\n  --color-white: #122c4a;\n  --color-gray-50: #0a192f;\n  --color-gray-100: #122c4a;\n  --color-gray-200: #1e3a5f;\n  --color-slate-400: #7dd3fc;\n  --color-slate-500: #38bdf8;\n  --color-slate-700: #e0f2fe;\n  --color-slate-800: #f0f9ff;\n\n  --color-indigo-50: #082f49;\n  --color-indigo-100: #0c4a6e;\n  --color-indigo-200: #075985;\n  --color-indigo-300: #0369a1;\n  --color-indigo-400: #0ea5e9;\n  --color-indigo-500: #38bdf8;\n  --color-indigo-600: #0284c7;\n  --color-indigo-700: #0369a1;\n  --color-indigo-800: #bae6fd;\n  --color-indigo-900: #e0f2fe;\n\n  --color-rose-100: #881337;
+/* ========================================================= */
+/* 3. BASE DARK THEME (PURE DARK/GRAY)                       */
+/* ========================================================= */
+html[data-theme="dark"] {
+  /* --- BACKGROUNDS & SURFACES --- */
+  --color-white: #1f2937;      /* Main card and container backgrounds (dark gray) */
+  --color-gray-50: #111827;    /* The app's main background (very dark gray) */
+  --color-gray-100: #1f2937;   /* Subtle borders */
+  --color-gray-200: #374151;   /* Stronger borders */
+  
+  /* --- TEXT & NEUTRAL ICONS --- */
+  --color-slate-400: #9ca3af;  /* Muted text, inactive bottom navbar icons */
+  --color-slate-500: #d1d5db;  /* Secondary text */
+  --color-slate-700: #f3f4f6;  /* Primary body text */
+  --color-slate-800: #f9fafb;  /* Main headings and titles */
+
+  /* --- PRIMARY THEME COLORS --- */
+  --color-indigo-50: #1f2937;  /* Hover backgrounds */
+  --color-indigo-100: #374151; /* Borders */
+  --color-indigo-200: #4b5563; 
+  --color-indigo-300: #6b7280; 
+  --color-indigo-400: #9ca3af; 
+  --color-indigo-500: #9ca3af; /* MAIN PRIMARY: Uses Gray for icons/accents in this theme */
+  --color-indigo-600: #6b7280; /* DARK PRIMARY: Button hovers */
+  --color-indigo-700: #4b5563; 
+  --color-indigo-800: #374151; 
+  --color-indigo-900: #1f2937; 
+
+  /* --- SHADOWS --- */
+  --color-theme-shadow: #374151;  /* Container shadow: Gray */
+  --color-button-shadow: #030712; /* 3D Button bottom shadow: Deepest Black/Gray */
+
+  /* --- SECONDARY/ACCENTS --- */
+  --color-rose-100: #881337;
   --color-rose-400: #fb7185;
   --color-rose-500: #f43f5e;
 }
 
+/* ========================================================= */
+/* 4. BABY BLUE DARK THEME                                   */
+/* ========================================================= */
 html[data-theme="blue-dark"] {
-  --color-white: #0f172a;
-  --color-gray-50: #020617;
-  --color-gray-100: #0f172a;
-  --color-gray-200: #1e293b;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #cbd5e1;
-  --color-slate-700: #f1f5f9;
-  --color-slate-800: #f8fafc;
+  /* --- BACKGROUNDS & SURFACES --- */
+  --color-white: #0f172a;      /* Main card backgrounds (navy) */
+  --color-gray-50: #020617;    /* App base background (deep navy) */
+  --color-gray-100: #0f172a;   /* Subtle borders */
+  --color-gray-200: #1e293b;   /* Stronger borders */
+  
+  /* --- TEXT & NEUTRAL ICONS --- */
+  --color-slate-400: #94a3b8;  
+  --color-slate-500: #cbd5e1;  
+  --color-slate-700: #f1f5f9;  
+  --color-slate-800: #f8fafc;  
 
-  --color-indigo-50: #082f49;
-  --color-indigo-100: #0c4a6e;
-  --color-indigo-200: #075985;
-  --color-indigo-300: #0369a1;
-  --color-indigo-400: #0ea5e9;
-  --color-indigo-500: #38bdf8;
-  --color-indigo-600: #7dd3fc;
-  --color-indigo-700: #bae6fd;
-  --color-indigo-800: #e0f2fe;
-  --color-indigo-900: #f0f9ff;
+  /* --- PRIMARY THEME COLORS --- */
+  --color-indigo-50: #082f49;  
+  --color-indigo-100: #0c4a6e; 
+  --color-indigo-200: #075985; 
+  --color-indigo-300: #0369a1; 
+  --color-indigo-400: #0ea5e9; 
+  --color-indigo-500: #38bdf8; /* MAIN PRIMARY: Light Baby Blue */
+  --color-indigo-600: #7dd3fc; 
+  --color-indigo-700: #bae6fd; 
+  --color-indigo-800: #e0f2fe; 
+  --color-indigo-900: #f0f9ff; 
 
+  /* --- SHADOWS --- */
+  --color-theme-shadow: #7dd3fc;  /* Container shadow: Nice baby blue highlight */
+  --color-button-shadow: #0284c7; /* 3D Button bottom shadow (Darker blue for depth) */
+
+  /* --- SECONDARY/ACCENTS --- */
   --color-rose-100: #312e81;
   --color-rose-400: #818cf8;
   --color-rose-500: #6366f1;
 }
 
+/* ========================================================= */
+/* 5. PINK DARK THEME                                        */
+/* ========================================================= */
 html[data-theme="pink-dark"] {
-  --color-white: #4c0519;
-  --color-gray-50: #2b0213;
-  --color-gray-100: #4c0519;
-  --color-gray-200: #831843;
-  --color-slate-400: #f472b6;
-  --color-slate-500: #fbcfe8;
-  --color-slate-700: #fce7f3;
-  --color-slate-800: #fdf2f8;
+  /* --- BACKGROUNDS & SURFACES --- */
+  --color-white: #1c0a14;      /* Cards: Deep dark pinkish black */
+  --color-gray-50: #0a0307;    /* Base: Very dark void */
+  --color-gray-100: #1c0a14;   
+  --color-gray-200: #3d142b;   
+  
+  /* --- TEXT & NEUTRAL ICONS --- */
+  --color-slate-400: #b56c8f;  
+  --color-slate-500: #df9cb8;  
+  --color-slate-700: #f3d4e3;  
+  --color-slate-800: #fdf5f9;  
 
-  --color-indigo-50: #500724;
-  --color-indigo-100: #831843;
-  --color-indigo-200: #9d174d;
-  --color-indigo-300: #be185d;
-  --color-indigo-400: #db2777;
-  --color-indigo-500: #ec4899;
-  --color-indigo-600: #f472b6;
-  --color-indigo-700: #f9a8d4;
-  --color-indigo-800: #fbcfe8;
-  --color-indigo-900: #fce7f3;
+  /* --- PRIMARY THEME COLORS --- */
+  --color-indigo-50: #3d142b;  
+  --color-indigo-100: #5c1b3f; 
+  --color-indigo-200: #822256; 
+  --color-indigo-300: #a8276f; 
+  --color-indigo-400: #c93a89; 
+  --color-indigo-500: #df449b; /* MAIN PRIMARY: Dark & Pink (Magenta), not red */
+  --color-indigo-600: #ef6fb5; 
+  --color-indigo-700: #f69acc; 
+  --color-indigo-800: #fbcfe8; 
+  --color-indigo-900: #fce7f3; 
 
+  /* --- SHADOWS --- */
+  --color-theme-shadow: #a8276f;  /* Container shadow: Slightly darker pink */
+  --color-button-shadow: #5c1b3f; /* 3D Button shadow: Even darker for depth */
+
+  /* --- SECONDARY/ACCENTS --- */
   --color-rose-100: #4c1d95;
   --color-rose-400: #a855f7;
   --color-rose-500: #c084fc;
 }
 
+/* ========================================================= */
+/* 6. PURPLE DARK THEME                                      */
+/* ========================================================= */
 html[data-theme="purple-dark"] {
-  --color-white: #2e1065;
-  --color-gray-50: #0f172a;
-  --color-gray-100: #1e1b4b;
-  --color-gray-200: #3b0764;
-  --color-slate-400: #c084fc;
-  --color-slate-500: #d8b4fe;
-  --color-slate-700: #f3e8ff;
-  --color-slate-800: #faf5ff;
+  /* --- BACKGROUNDS & SURFACES --- */
+  --color-white: #1a1025;      /* Cards (Dark purple black) */
+  --color-gray-50: #0b0710;    /* Base */
+  --color-gray-100: #1a1025;   
+  --color-gray-200: #361b5c;   
+  
+  /* --- TEXT & NEUTRAL ICONS --- */
+  --color-slate-400: #9d7abf;  
+  --color-slate-500: #bfa1db;  
+  --color-slate-700: #ebdff7;  
+  --color-slate-800: #f7f1fc;  
 
-  --color-indigo-50: #3b0764;
-  --color-indigo-100: #4c1d95;
-  --color-indigo-200: #581c87;
-  --color-indigo-300: #6b21a8;
-  --color-indigo-400: #9333ea;
-  --color-indigo-500: #a855f7;
-  --color-indigo-600: #c084fc;
-  --color-indigo-700: #d8b4fe;
-  --color-indigo-800: #e9d5ff;
-  --color-indigo-900: #f3e8ff;
+  /* --- PRIMARY THEME COLORS --- */
+  --color-indigo-50: #291244;  
+  --color-indigo-100: #3d1966; 
+  --color-indigo-200: #582194; 
+  --color-indigo-300: #7b2cbf; 
+  --color-indigo-400: #9d4edd; 
+  --color-indigo-500: #a658e6; /* MAIN PRIMARY */
+  --color-indigo-600: #c288f0; 
+  --color-indigo-700: #dbb3f7; 
+  --color-indigo-800: #ebdff7; 
+  --color-indigo-900: #f5edfc; 
 
+  /* --- SHADOWS --- */
+  --color-theme-shadow: #d946ef;  /* Container shadow: Magenta/purple highlights */
+  --color-button-shadow: #582194; /* 3D Button shadow: Dark purple for contrast */
+
+  /* --- SECONDARY/ACCENTS --- */
   --color-rose-100: #172554;
   --color-rose-400: #3b82f6;
   --color-rose-500: #60a5fa;
 }
 
+/* ========================================================= */
+/* GLOBAL APP RULES                                          */
+/* ========================================================= */
 html, body {
   background: var(--color-gray-50);
   color: var(--color-slate-800);

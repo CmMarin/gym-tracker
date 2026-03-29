@@ -29,7 +29,7 @@ export default function CoopPanel({ sessionId, currentExercise }: { sessionId: s
   const progress = Math.min((sessionData.totalXp / sessionData.goalXp) * 100, 100);
 
   return (
-    <div className="w-full max-w-md bg-[var(--color-white)] border-2 border-indigo-100 rounded-3xl p-5 mb-6 shadow-[0_4px_0_0_var(--color--)]">
+    <div className="w-full max-w-md bg-[var(--color-white)] border-2 border-indigo-100 rounded-3xl p-5 mb-6 shadow-[0_4px_0_0_var(--color-theme-shadow)]">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-slate-800 flex items-center gap-2">
           <Users size={20} className="text-indigo-500" /> Co-Op: {sessionData.name}

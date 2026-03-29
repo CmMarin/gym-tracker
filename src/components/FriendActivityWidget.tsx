@@ -14,7 +14,7 @@ export default function FriendActivityWidget({ activities }: { activities: Frien
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-6"
+      className="w-full max-w-md bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50 mb-6"
     >
       <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
         <Activity className="text-indigo-500" />
@@ -24,7 +24,7 @@ export default function FriendActivityWidget({ activities }: { activities: Frien
         <AnimatePresence>
           {activities.map((act, i) => (
             <motion.div
-              key={i}
+              key={act.username}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}

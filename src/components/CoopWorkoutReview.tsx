@@ -110,7 +110,7 @@ export default function CoopWorkoutReview({ sessionId }: { sessionId: string }) 
           </div>
           <div className="w-full h-3 bg-indigo-900 rounded-full overflow-hidden">
             <motion.div 
-              className="h-full bg-green-400 rounded-full shadow-[0_0_10px_var(--color--)]"
+              className="h-full bg-green-400 rounded-full shadow-[0_0_10px_var(--color-theme-shadow)]"
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(100, (sessionData.totalXp / sessionData.goalXp) * 100)}%` }}
             />

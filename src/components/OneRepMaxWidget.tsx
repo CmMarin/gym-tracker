@@ -2,17 +2,12 @@
 
 import { useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { TrendingUp, Activity } from "lucide-react";
+import { TrendingUp, Activity, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type OneRMData = {
-  exercise: string;
-  data: { date: string; oneRM: number }[];
-};
-
-export default function OneRepMaxWidget({ compoundData }: { compoundData: OneRMData[] }) {
+export default function OneRepMaxWidget({ compoundData }: { compoundData: any[] }) {
   const [selectedExercise, setSelectedExercise] = useState<string>(
-    compoundData.length > 0 ? compoundData[0].exercise : ""
+    compoundData?.length > 0 ? compoundData[0].exercise : ""
   );
 
   if (!compoundData || compoundData.length === 0) return null;
@@ -20,26 +15,12 @@ export default function OneRepMaxWidget({ compoundData }: { compoundData: OneRMD
   const currentData = compoundData.find((d) => d.exercise === selectedExercise)?.data || [];
 
   return (
-    <div className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-slate-800 flex items-center">
-          <Activity className="mr-2 text-rose-500" size={24} />
+    <div className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50 mb-8">
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-xl font-bold text-[var(--color-slate-800)] flex items-center">
+          <Activity className="mr-2 text-[var(--color-rose-500)]" size={24} />
           Estimated 1RM
         </h2>
-        
-        {compoundData.length > 1 && (
-          <select
-            value={selectedExercise}
-            onChange={(e) => setSelectedExercise(e.target.value)}
-            className="bg-gray-100 text-slate-700 font-bold rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-rose-500 text-sm"
-          >
-            {compoundData.map((d) => (
-              <option key={d.exercise} value={d.exercise}>
-                {d.exercise}
-              </option>
-            ))}
-          </select>
-        )}
       </div>
 
       <AnimatePresence mode="wait">
@@ -71,12 +52,31 @@ export default function OneRepMaxWidget({ compoundData }: { compoundData: OneRMD
               </AreaChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-full text-slate-500 font-medium">
+            <div className="flex items-center justify-center h-full text-[var(--color-slate-500)] font-medium">
               Not enough data.
             </div>
           )}
         </motion.div>
       </AnimatePresence>
+
+      {compoundData.length > 1 && (
+        <div className="mt-4 flex justify-center relative">
+          <select
+            value={selectedExercise}
+            onChange={(e) => setSelectedExercise(e.target.value)}
+            className="bg-[var(--color-gray-100)] text-[var(--color-slate-700)] font-bold rounded-xl px-4 py-2 pr-10 outline-none focus:ring-2 focus:ring-[var(--color-rose-500)] text-sm appearance-none border-2 border-[var(--color-gray-200)] shadow-sm cursor-pointer"
+          >
+            {compoundData.map((d) => (
+              <option className="bg-[var(--color-white)] text-[var(--color-slate-800)]" key={d.exercise} value={d.exercise}>
+                {d.exercise}
+              </option>
+            ))}
+          </select>
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--color-slate-400)]">
+            <ChevronDown size={18} strokeWidth={3} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

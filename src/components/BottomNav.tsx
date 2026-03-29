@@ -11,7 +11,7 @@ export default function BottomNav() {
   const { data: session } = useSession();
   const { playPop } = useAppSounds();
 
-  if (!session) return null;
+  
 
   const isActive = (path: string) => pathname === path;
 
@@ -42,7 +42,7 @@ export default function BottomNav() {
 
         {/* Floating Action Button for workout */}
         <div className="relative -top-6 mx-2">
-          <Link href="/workout" onClick={() => playPop(false)} className="flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full shadow-[0_6px_0_0_var(--color--)] active:shadow-none active:translate-y-[6px] transition-all text-[var(--color-white)] hover:bg-indigo-400 border-4 border-[var(--color-white)]">
+          <Link href="/workout" onClick={() => playPop(false)} className="flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full shadow-[0_6px_0_0_var(--color-button-shadow)] active:shadow-none active:translate-y-[6px] transition-all text-[var(--color-white)] hover:bg-indigo-400 border-4 border-[var(--color-white)]">
             <Dumbbell size={30} strokeWidth={3} />
           </Link>
         </div>

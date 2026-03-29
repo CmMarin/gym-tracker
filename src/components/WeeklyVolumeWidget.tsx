@@ -18,7 +18,7 @@ export default function WeeklyVolumeWidget({ initData }: { initData: any[] }) {
   const COLORS = ["#10b981", "#3b82f6", "#8b5cf6", "#f43f5e", "#f59e0b", "#f97316", "#14b8a6", "#06b6d4"];
 
   return (
-    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-6">
+    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50 mb-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-purple-100 text-purple-600 rounded-xl">
           <PieChartIcon size={24} className="stroke-[3]" />

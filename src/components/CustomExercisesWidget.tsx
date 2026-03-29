@@ -41,7 +41,7 @@ export default function CustomExercisesWidget() {
   }, []);
 
   return (
-    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50">
+    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl">
@@ -51,7 +51,7 @@ export default function CustomExercisesWidget() {
         </div>
         <button 
           onClick={() => { playPop(); setHasOpenedModal(true); setIsModalOpen(true); }}
-          className="bg-indigo-500 hover:bg-indigo-600 active:translate-y-1 active:shadow-none text-[var(--color-white)] p-2 rounded-xl shadow-[0_4px_0_var(--color--)] transition-all"
+          className="bg-indigo-500 hover:bg-indigo-600 active:translate-y-1 active:shadow-none text-[var(--color-white)] p-2 rounded-xl shadow-[0_4px_0_var(--color-button-shadow)] transition-all"
         >
           <Plus size={20} className="stroke-[3]" />
         </button>

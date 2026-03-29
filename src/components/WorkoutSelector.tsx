@@ -86,7 +86,7 @@ export default function WorkoutSelector({
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[var(--color-white)] rounded-3xl p-8 border-2 border-indigo-100 shadow-[0_8px_0_var(--color--)] text-center flex flex-col items-center"
+          className="bg-[var(--color-white)] rounded-3xl p-8 border-2 border-indigo-100 shadow-[0_8px_0_var(--color-theme-shadow)] text-center flex flex-col items-center"
         >
           <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-6">
             <UploadCloud className="text-indigo-400" size={40} />
@@ -97,7 +97,7 @@ export default function WorkoutSelector({
           </p>
           <Link 
             href="/profile"
-            className="bg-indigo-500 hover:bg-indigo-600 active:translate-y-1 active:shadow-none text-[var(--color-white)] font-bold py-4 px-8 rounded-2xl shadow-[0_4px_0_var(--color--)] transition-all w-full flex items-center justify-center gap-2"
+            className="bg-indigo-500 hover:bg-indigo-600 active:translate-y-1 active:shadow-none text-[var(--color-white)] font-bold py-4 px-8 rounded-2xl shadow-[0_4px_0_var(--color-button-shadow)] transition-all w-full flex items-center justify-center gap-2"
           >
             Go to Profile
           </Link>
@@ -109,7 +109,7 @@ export default function WorkoutSelector({
               key={plan.id}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="bg-[var(--color-white)] rounded-3xl p-6 border-2 border-indigo-50 shadow-[0_4px_0_var(--color--)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+              className="bg-[var(--color-white)] rounded-3xl p-6 border-2 border-indigo-50 shadow-[0_4px_0_var(--color-theme-shadow)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
             >
               <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -138,7 +138,7 @@ export default function WorkoutSelector({
                 <button
                   onClick={() => handleStart(plan)}
                   disabled={loadingPlan !== null}
-                  className="bg-green-500 hover:bg-green-600 text-[var(--color-white)] font-bold py-3 px-6 rounded-2xl shadow-[0_4px_0_var(--color--)] transition-all flex-1 text-center flex justify-center items-center gap-2"
+                  className="bg-green-500 hover:bg-green-600 text-[var(--color-white)] font-bold py-3 px-6 rounded-2xl shadow-[0_4px_0_var(--color-theme-shadow)] transition-all flex-1 text-center flex justify-center items-center gap-2"
                 >
                   {loadingPlan === plan.id ? (
                     <div className="w-5 h-5 border-2 border-[var(--color-white)] border-t-transparent rounded-full animate-spin" />
@@ -177,7 +177,7 @@ export default function WorkoutSelector({
                 <button 
                   onClick={handleHostCoop}
                   disabled={isCoopLoading}
-                  className="w-full bg-indigo-500 text-[var(--color-white)] font-bold py-4 rounded-xl shadow-[0_4px_0_var(--color--)] active:shadow-none active:translate-y-1"
+                  className="w-full bg-indigo-500 text-[var(--color-white)] font-bold py-4 rounded-xl shadow-[0_4px_0_var(--color-button-shadow)] active:shadow-none active:translate-y-1"
                 >
                   {isCoopLoading ? "Starting..." : "Host New Session"}
                 </button>
@@ -200,7 +200,7 @@ export default function WorkoutSelector({
                   <button 
                     onClick={handleJoinCoop}
                     disabled={isCoopLoading || !inviteCodeInput}
-                    className="bg-slate-800 text-[var(--color-white)] font-bold px-6 rounded-xl shadow-[0_4px_0_var(--color--)] active:shadow-none active:translate-y-1 disabled:opacity-50"
+                    className="bg-slate-800 text-[var(--color-white)] font-bold px-6 rounded-xl shadow-[0_4px_0_var(--color-button-shadow)] active:shadow-none active:translate-y-1 disabled:opacity-50"
                   >
                     Join
                   </button>

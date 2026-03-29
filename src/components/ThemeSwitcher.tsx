@@ -36,7 +36,7 @@ export default function ThemeSwitcher() {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
+        className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-button-shadow)] border-2 border-indigo-50 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
       >
         <div className="flex items-center gap-4">
           <div className="p-3 bg-indigo-100 text-indigo-500 rounded-2xl group-hover:scale-110 transition-transform">

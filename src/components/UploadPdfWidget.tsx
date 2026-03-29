@@ -40,7 +40,7 @@ export default function UploadPdfWidget() {
   };
 
   return (
-    <div className="bg-[var(--color-white)] shadow-[0_4px_0_var(--color--)] rounded-2xl p-6 border-2 border-indigo-50 mt-6 animate-in fade-in duration-300">
+    <div className="bg-[var(--color-white)] shadow-[0_4px_0_var(--color-theme-shadow)] rounded-2xl p-6 border-2 border-indigo-50 mt-6 animate-in fade-in duration-300">
       <h3 className="text-xl font-bold text-slate-800 mb-4">Import Routine (PDF)</h3>
       <p className="text-sm text-slate-500 mb-4">Upload a PDF of your workout routine and AI will automatically convert it.</p>
       <input
