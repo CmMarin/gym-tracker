@@ -5,9 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Trophy, Timer, Calculator, Flame, X } from "lucide-react";
 import { finishWorkoutAction } from "@/app/actions/workout-actions";
 import { updateWorkoutState, cancelActiveWorkout } from "@/app/actions/active-workout-actions";
+import { updateCoopStatus } from "@/app/actions/coop-actions";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAppSounds } from "@/hooks/useAppSounds";
+import CoopPanel from "./CoopPanel";
+import CoopWorkoutReview from "./CoopWorkoutReview";
 
 const BARBELL_WEIGHT = 20;
 const AVAILABLE_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25];
@@ -29,7 +32,7 @@ export default function ActiveWorkout({
   const [restTimeLeft, setRestTimeLeft] = useState<number | null>(null);
   const [showPlateCalc, setShowPlateCalc] = useState(false);
 
-  const { currentExerciseIndex, exercises } = workoutState;
+  const { currentExerciseIndex, exercises, coopSessionId } = workoutState;
   const currentExercise = exercises[currentExerciseIndex];
 
   // Find the first uncompleted set
@@ -37,6 +40,7 @@ export default function ActiveWorkout({
 
   useEffect(() => {
     if (restTimeLeft !== null && restTimeLeft > 0) {
+      if (coopSessionId && currentExercise) updateCoopStatus(coopSessionId, "RESTING", currentExercise.name);
       const interval = setInterval(() => setRestTimeLeft(prev => prev! - 1), 1000);
       return () => clearInterval(interval);
     } else if (restTimeLeft === 0) {
@@ -46,8 +50,9 @@ export default function ActiveWorkout({
       playDing(); 
       toast.success("Rest is over, time to lift!");
       setRestTimeLeft(null);
+      if (coopSessionId && currentExercise) updateCoopStatus(coopSessionId, "LIFTING", currentExercise.name);
     }
-  }, [restTimeLeft, playDing]);
+  }, [restTimeLeft, playDing, coopSessionId, currentExercise]);
 
   if (!exercises || exercises.length === 0) return <div>No exercises.</div>;
 
@@ -91,6 +96,12 @@ export default function ActiveWorkout({
 
     // Save to DB in background
     updateWorkoutState(newState).catch(console.error);
+
+    // Co-Op Sync
+    if (coopSessionId) {
+       updateCoopStatus(coopSessionId, "LIFTING", currentExercise.name, 15);
+       toast.success("+15 Team XP", { icon: "🔥", position: "top-center" });
+    }
 
     const isWorkoutFinished = newState.currentExerciseIndex === exercises.length - 1 && 
                               newState.exercises[newState.currentExerciseIndex].sets.findIndex((s: any) => !s.completed) === -1;
@@ -142,7 +153,7 @@ export default function ActiveWorkout({
           End Workout
         </button>
       </div>
-
+      {coopSessionId && <CoopPanel sessionId={coopSessionId} currentExercise={currentExercise?.name} />}
       <div className="w-full max-w-md h-6 bg-gray-200 rounded-full mb-10 overflow-hidden border-2 border-gray-100 shadow-inner">
         <motion.div
           className="h-full bg-green-500 rounded-full"
@@ -154,6 +165,9 @@ export default function ActiveWorkout({
 
       <AnimatePresence mode="wait">
         {showMilestone ? (
+          coopSessionId ? (
+            <CoopWorkoutReview sessionId={coopSessionId} />
+          ) : (
           <motion.div
             key="milestone"
             initial={{ scale: 0.8, opacity: 0 }}
@@ -183,6 +197,7 @@ export default function ActiveWorkout({
               CONTINUE TO DASHBOARD
             </button>
           </motion.div>
+          )
         ) : restTimeLeft !== null && restTimeLeft > 0 ? (
           <motion.div
             key="rest-timer-panel"

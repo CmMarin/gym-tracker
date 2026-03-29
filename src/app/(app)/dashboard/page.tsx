@@ -13,7 +13,7 @@ function getColors(username: string) {
   return colors[charCode % colors.length];
 }
 
-type UserForLeaderboard = { id: string; username: string; xp: number };
+type UserForLeaderboard = { id: string; username: string; xp: number; weeklyXp: number };
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -25,15 +25,15 @@ export default async function DashboardPage() {
   const [currentUser, friendships, myActiveWorkout] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, username: true, xp: true },
+      select: { id: true, username: true, xp: true, weeklyXp: true },
     }),
     prisma.friendship.findMany({
       where: {
         OR: [{ userId: userId }, { friendId: userId }]
       },
       include: {
-        user: { select: { id: true, username: true, xp: true } },
-        friend: { select: { id: true, username: true, xp: true } }
+        user: { select: { id: true, username: true, xp: true, weeklyXp: true } },
+        friend: { select: { id: true, username: true, xp: true, weeklyXp: true } }
       }
     }),
     prisma.activeWorkout.findUnique({
@@ -63,11 +63,11 @@ export default async function DashboardPage() {
 
   const leaderboardRaw = [currentUser as UserForLeaderboard, ...acceptedFriends];
   const leaderboard = leaderboardRaw
-    .sort((a, b) => b.xp - a.xp)
+    .sort((a, b) => b.weeklyXp - a.weeklyXp)
     .map((u, index) => ({
       id: u.id,
       username: u.id === userId ? "You" : u.username,
-      xp: u.xp,
+      xp: u.weeklyXp,
       rank: index + 1,
       avatarColor: getColors(u.username),
       isMe: u.id === userId

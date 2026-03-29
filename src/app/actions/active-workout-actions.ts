@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
-export async function startOrResumeWorkout(workoutPlanId: string) {
+export async function startOrResumeWorkout(workoutPlanId: string, coopSessionId?: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error("Not authenticated");
 
@@ -17,6 +17,15 @@ export async function startOrResumeWorkout(workoutPlanId: string) {
 
   if (existing) {
     if (existing.workoutPlanId === workoutPlanId) {
+      if (coopSessionId) {
+        // Inject coop session id into the existing state
+        const newState = { ...(existing.state as any), coopSessionId };
+        await prisma.activeWorkout.update({
+          where: { userId },
+          data: { state: newState }
+        });
+        existing.state = newState;
+      }
       return { success: true, activeWorkout: existing };
     } else {
       await prisma.activeWorkout.delete({ where: { userId } });
@@ -57,6 +66,7 @@ export async function startOrResumeWorkout(workoutPlanId: string) {
 
   const state = {
     currentExerciseIndex: 0,
+    coopSessionId: coopSessionId || undefined,
     exercises: plan.planExercises.map(px => {
       const exercise = px.exercise || px.customExercise;
       

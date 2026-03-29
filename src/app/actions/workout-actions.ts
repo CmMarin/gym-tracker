@@ -17,8 +17,13 @@ export async function finishWorkoutAction(workoutData: any) {
   const activeWk = await prisma.activeWorkout.findUnique({ where: { userId } });
   if (!activeWk) throw new Error("No active workout found");
   
+  const stateData = activeWk.state ? (typeof activeWk.state === 'string' ? JSON.parse(activeWk.state) : activeWk.state) : {};
+  const coopSessionId = stateData.coopSessionId;
+  
   let totalXpEarned = 100; // Base completion XP
   const prs: string[] = [];
+  let totalVolume = 0;
+  let penaltyCount = 0;
   
   // Create workout session first
   const startTime = activeWk.startTime;
@@ -90,6 +95,8 @@ export async function finishWorkoutAction(workoutData: any) {
       const isWarmup = set.isWarmup || false;
       let isPR = false;
 
+      totalVolume += weight * reps;
+
       // Only count non-warmup sets for PRs and Performance Tracking
       if (!isWarmup) {
         // Update this session's max stats for deduction check
@@ -133,6 +140,7 @@ export async function finishWorkoutAction(workoutData: any) {
       if (thisSessionMaxWeight < lastSessionMaxWeight ||
          (thisSessionMaxWeight === lastSessionMaxWeight && thisSessionMaxReps < lastSessionMaxReps)) {
         totalXpEarned -= 20; // Regression penalty
+        penaltyCount += 1;
       }
     }
 
@@ -155,7 +163,47 @@ export async function finishWorkoutAction(workoutData: any) {
     where: { userId }
   });
 
+  // --- CO-OP GAMEPLAY COMPLETION ---
+  if (coopSessionId) {
+    try {
+      const coopSession = await prisma.coopSession.findUnique({ where: { id: coopSessionId } });
+      if (coopSession && coopSession.status === "ACTIVE") {
+        totalXpEarned += 100; // Bonus for finishing a co-op session!
+        
+        await prisma.coopSessionMember.update({
+          where: { sessionId_userId: { sessionId: coopSessionId, userId } },
+          data: { 
+            status: "COMPLETED",
+            prsCount: prs.length,
+            volume: totalVolume,
+            penalties: penaltyCount
+          }
+        });
+
+        // Check if all members are completed
+        const allMembers = await prisma.coopSessionMember.findMany({
+          where: { sessionId: coopSessionId }
+        });
+        const allCompleted = allMembers.every((m: any) => m.status === "COMPLETED");
+
+        if (allCompleted) {
+          const finalSession = await prisma.coopSession.update({
+            where: { id: coopSessionId },
+            data: { status: "COMPLETED", endedAt: new Date() }
+          });
+          
+          if (finalSession.totalXp >= finalSession.goalXp) {
+            totalXpEarned += 200; // Team met the shared goal!
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Co-Op Completion Error:", error);
+    }
+  }
+
   const newXp = user.xp + totalXpEarned;
+  const newWeeklyXp = (user.weeklyXp || 0) + totalXpEarned;
   const currentLevel = Math.floor(user.xp / 1000) + 1;
   const newLevel = Math.floor(newXp / 1000) + 1;
   const didLevelUp = newLevel > currentLevel;
@@ -181,7 +229,7 @@ export async function finishWorkoutAction(workoutData: any) {
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { xp: newXp, streakDays: newStreak }
+    data: { xp: newXp, weeklyXp: newWeeklyXp, streakDays: newStreak }
   });
 
   // --- ACHIEVEMENTS LOGIC ---

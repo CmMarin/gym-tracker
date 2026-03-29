@@ -1,10 +1,12 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ActiveWorkout from "./ActiveWorkout";
-import { Dumbbell, Calendar, Play, UploadCloud } from "lucide-react";
+import { Dumbbell, Calendar, Play, UploadCloud, Users, X } from "lucide-react";
 import { startOrResumeWorkout } from "@/app/actions/active-workout-actions";
+import { createCoopSession, joinCoopSession } from "@/app/actions/coop-actions";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 type Exercise = { id: string; name: string; targetSets: number; targetReps: number; };
 type Plan = { id: string; name: string; dayOfWeek: number | null; exercises: Exercise[] };
@@ -19,17 +21,55 @@ export default function WorkoutSelector({
   const [activeState, setActiveState] = useState<any>(existingActiveWorkout || null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  const handleStart = async (plan: Plan) => {
+  const [showCoopModal, setShowCoopModal] = useState(false);
+  const [selectedPlanForCoop, setSelectedPlanForCoop] = useState<Plan | null>(null);
+  const [inviteCodeInput, setInviteCodeInput] = useState("");
+  const [isCoopLoading, setIsCoopLoading] = useState(false);
+
+  const handleStart = async (plan: Plan, coopSessionId?: string) => {
     setLoadingPlan(plan.id);
     try {
-      const res = await startOrResumeWorkout(plan.id);
+      const res = await startOrResumeWorkout(plan.id, coopSessionId);
       if (res.success && res.activeWorkout) {
         setActiveState(res.activeWorkout);
       }
     } catch (e) {
       console.error(e);
+      toast.error("Failed to start workout");
     }
     setLoadingPlan(null);
+  };
+
+  const handleHostCoop = async () => {
+    if (!selectedPlanForCoop) return;
+    setIsCoopLoading(true);
+    try {
+      const res = await createCoopSession(selectedPlanForCoop.id);
+      if (res.success) {
+        toast.success("Co-Op Session Created! Code: " + res.inviteCode, { duration: 5000 });
+        await handleStart(selectedPlanForCoop, res.sessionId);
+        setShowCoopModal(false);
+      }
+    } catch (e) {
+      toast.error("Failed to create Co-Op session");
+    }
+    setIsCoopLoading(false);
+  };
+
+  const handleJoinCoop = async () => {
+    if (!selectedPlanForCoop || !inviteCodeInput) return;
+    setIsCoopLoading(true);
+    try {
+      const res = await joinCoopSession(inviteCodeInput.toUpperCase());
+      if (res.success) {
+        toast.success("Joined Co-Op Session!");
+        await handleStart(selectedPlanForCoop, res.sessionId);
+        setShowCoopModal(false);
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to join Co-Op session");
+    }
+    setIsCoopLoading(false);
   };
 
   if (activeState) {
@@ -84,23 +124,92 @@ export default function WorkoutSelector({
                 <p className="text-slate-500 font-medium text-sm">{plan.exercises.length} exercises</p>
               </div>
 
-              <button
-                onClick={() => handleStart(plan)}
-                disabled={loadingPlan !== null}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-2xl shadow-[0_4px_0_theme(colors.green.600)] transition-all w-full sm:w-auto text-center shrink-0 flex justify-center items-center gap-2"
-              >
-                {loadingPlan === plan.id ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <Play fill="white" size={16} /> START
-                  </>
-                )}
-              </button>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <button
+                  onClick={() => {
+                    setSelectedPlanForCoop(plan);
+                    setShowCoopModal(true);
+                  }}
+                  disabled={loadingPlan !== null}
+                  className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-3 rounded-2xl shadow-sm transition-all flex justify-center items-center"
+                >
+                  <Users size={20} />
+                </button>
+                <button
+                  onClick={() => handleStart(plan)}
+                  disabled={loadingPlan !== null}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-2xl shadow-[0_4px_0_theme(colors.green.600)] transition-all flex-1 text-center flex justify-center items-center gap-2"
+                >
+                  {loadingPlan === plan.id ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Play fill="white" size={16} /> START
+                    </>
+                  )}
+                </button>
+              </div>
             </motion.div>
           ))}
         </div>
       )}
+
+      <AnimatePresence>
+        {showCoopModal && (
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex flex-col justify-end sm:justify-center p-4">
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              className="bg-white rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-xl w-full max-w-md mx-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2 text-slate-800">
+                  <Users className="text-blue-500" />
+                  <h2 className="text-2xl font-black">Co-Op Workout</h2>
+                </div>
+                <button onClick={() => setShowCoopModal(false)} className="p-2 bg-gray-100 rounded-full text-slate-500">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <button 
+                  onClick={handleHostCoop}
+                  disabled={isCoopLoading}
+                  className="w-full bg-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_0_theme(colors.blue.600)] active:shadow-none active:translate-y-1"
+                >
+                  {isCoopLoading ? "Starting..." : "Host New Session"}
+                </button>
+
+                <div className="relative flex items-center py-2">
+                  <div className="flex-grow border-t border-gray-200"></div>
+                  <span className="mx-4 text-slate-400 font-bold text-sm">OR</span>
+                  <div className="flex-grow border-t border-gray-200"></div>
+                </div>
+
+                <div className="flex gap-2">
+                  <input 
+                    type="text"
+                    placeholder="Enter Invite Code"
+                    value={inviteCodeInput}
+                    onChange={(e) => setInviteCodeInput(e.target.value)}
+                    className="flex-1 bg-gray-100 rounded-xl px-4 py-3 font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 uppercase"
+                    maxLength={6}
+                  />
+                  <button 
+                    onClick={handleJoinCoop}
+                    disabled={isCoopLoading || !inviteCodeInput}
+                    className="bg-slate-800 text-white font-bold px-6 rounded-xl shadow-[0_4px_0_theme(colors.slate.900)] active:shadow-none active:translate-y-1 disabled:opacity-50"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -77,14 +77,20 @@ export default function FriendDetailsModal({
                   </div>
                 )}
                 <h3 className="text-2xl font-black text-slate-800 mt-3 mb-1">{data.username}</h3>
-                <div className="flex gap-3 mt-2">
+                <div className="flex gap-3 mt-2 flex-wrap justify-center">
                   <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-xl text-sm font-bold">
                     Lvl {Math.floor(data.xp / 1000) + 1}
                   </span>
                   {data.streakDays > 0 && (
                     <span className="flex items-center text-sm font-bold text-orange-500 bg-orange-50 px-3 py-1 rounded-xl">
                       <Flame size={16} className="mr-1" />
-                        {data.streakDays} Week Streak
+                        {data.streakDays} Wk Streak
+                    </span>
+                  )}
+                  {data.leaderboardRank && data.weeklyXp > 0 && (
+                    <span className="flex items-center text-sm font-bold text-yellow-600 bg-yellow-100 px-3 py-1 rounded-xl">
+                      <Trophy size={16} className="mr-1" />
+                      #{data.leaderboardRank} Rank
                     </span>
                   )}
                 </div>

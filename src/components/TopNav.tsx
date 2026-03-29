@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Flame, Zap } from "lucide-react";
+import { Flame, Zap, Bell } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -9,6 +9,7 @@ export default function TopNav() {
   const { data: session } = useSession();
   const [xp, setXp] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     // In a real app this would use SWR or React Query, but we will simply fetch the authenticated users latest stats
@@ -19,6 +20,7 @@ export default function TopNav() {
           const data = await res.json();
           setXp(data.xp);
           setStreak(data.streakDays);
+          setUnreadCount(data.unreadNotifications || 0);
         }
       } catch {
         // Handle error silently or log if needed
@@ -43,6 +45,13 @@ export default function TopNav() {
       </Link>
 
       <div className="flex items-center space-x-3">
+        <Link href="/notifications" className="relative p-2 text-slate-400 hover:text-slate-600 transition-colors">
+          <Bell size={24} strokeWidth={2.5} />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 w-3 h-3 bg-rose-500 rounded-full border-2 border-white"></span>
+          )}
+        </Link>
+
         <div className="flex items-center text-orange-500 font-bold">
           <Flame fill="currentColor" size={24} className="mr-1" />
           <span className="text-lg">{streak}</span>
