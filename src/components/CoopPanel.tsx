@@ -29,7 +29,7 @@ export default function CoopPanel({ sessionId, currentExercise }: { sessionId: s
   const progress = Math.min((sessionData.totalXp / sessionData.goalXp) * 100, 100);
 
   return (
-    <div className="w-full max-w-md bg-white border-2 border-indigo-100 rounded-3xl p-5 mb-6 shadow-[0_4px_0_0_theme(colors.indigo.100)]">
+    <div className="w-full max-w-md bg-[var(--color-white)] border-2 border-indigo-100 rounded-3xl p-5 mb-6 shadow-[0_4px_0_0_var(--color--)]">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-slate-800 flex items-center gap-2">
           <Users size={20} className="text-indigo-500" /> Co-Op: {sessionData.name}
@@ -43,7 +43,7 @@ export default function CoopPanel({ sessionId, currentExercise }: { sessionId: s
         {sessionData.members.map((m: any) => (
           <div key={m.id} className="flex items-center justify-between text-sm bg-gray-50 p-2 rounded-xl">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold">
+              <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-[var(--color-white)] font-bold">
                 {m.user?.username?.charAt(0).toUpperCase()}
               </div>
               <div>

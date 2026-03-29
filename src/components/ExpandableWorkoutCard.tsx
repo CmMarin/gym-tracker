@@ -46,7 +46,7 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
             Cancel
           </button>
           <button 
-            className="px-3 py-1.5 bg-red-500 text-white font-bold rounded-lg text-sm hover:bg-red-600"
+            className="px-3 py-1.5 bg-red-500 text-[var(--color-white)] font-bold rounded-lg text-sm hover:bg-red-600"
             onClick={() => executeDelete(t.id)}
           >
             Delete
@@ -59,11 +59,8 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
   if (isDeleting) return null;
 
   return (
-    <div className="rounded-xl bg-gray-50 border-2 border-gray-100 overflow-hidden">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-4 flex justify-between items-center text-left hover:bg-gray-100 transition-colors group"
-      >
+    <div className="rounded-xl bg-gray-50 border-2 border-indigo-50 overflow-hidden">
+      <div className="w-full p-2 pr-4 flex justify-between items-center group"><button onClick={() => setIsOpen(!isOpen)} className="flex-1 text-left p-3 rounded-lg border-b border-[var(--color-gray-100)] last:border-b-0 hover:bg-[var(--color-gray-100)] transition-colors focus:outline-none">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <h3 className="font-bold text-slate-800">{plan.name}</h3>
@@ -88,20 +85,17 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
           <div className="text-slate-400 p-2">
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
-        </div>
-      </button>
-
-      <AnimatePresence>
+        </div></div><AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t-2 border-gray-100"
+            className="border-t-2 border-indigo-50"
           >
             <div className="p-4 space-y-2">
               {plan.exercises.map((ex, index) => (
-                <div key={ex.id} className="flex justify-between items-center text-sm p-2 rounded-lg hover:bg-gray-50">
+                <div key={ex.id} className="flex justify-between items-center text-sm p-3 rounded-lg border-b border-[var(--color-gray-100)] last:border-b-0 hover:bg-gray-50">
                   <div className="flex items-center gap-3">
                     <span className="text-slate-400 font-bold w-4">{index + 1}.</span>
                     <span className="font-medium text-slate-700">{ex.name}</span>

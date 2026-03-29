@@ -25,22 +25,22 @@ export default async function NotificationsPage() {
   return (
     <div className="max-w-md mx-auto p-4 pb-32 min-h-screen">
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-blue-100 text-blue-500 p-3 rounded-2xl">
+        <div className="bg-indigo-100 text-indigo-500 p-3 rounded-2xl">
           <Bell size={24} />
         </div>
         <h1 className="text-2xl font-black text-slate-800">Notifications</h1>
       </div>
 
       {notifications.length === 0 ? (
-        <div className="bg-white border-2 border-gray-100 rounded-[2rem] p-8 text-center text-slate-500 font-bold">
+        <div className="bg-[var(--color-white)] border-2 border-indigo-50 rounded-[2rem] p-8 text-center text-slate-500 font-bold">
           No notifications yet!
         </div>
       ) : (
         <div className="space-y-4">
           {notifications.map(notif => (
-            <div key={notif.id} className={`p-4 rounded-2xl border-2 transition-all ${notif.read ? 'bg-white border-gray-100 opacity-75' : 'bg-blue-50 border-blue-200 shadow-sm'}`}>
+            <div key={notif.id} className={`p-4 rounded-2xl border-2 transition-all ${notif.read ? 'bg-[var(--color-white)] border-indigo-50 opacity-75' : 'bg-indigo-50 border-indigo-200 shadow-sm'}`}>
               <div className="flex gap-3">
-                <div className="text-blue-500 pt-1 shrink-0">
+                <div className="text-indigo-500 pt-1 shrink-0">
                   <Trophy size={20} />
                 </div>
                 <div>

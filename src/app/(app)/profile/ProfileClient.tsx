@@ -22,7 +22,7 @@ export default function ProfileClient({ savedWorkouts }: { savedWorkouts: any[] 
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
         onClick={() => { setHasOpenedModal(true); setIsModalOpen(true); }}
-        className="w-full bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
+        className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
       >
         <div className="flex items-center gap-4">
           <div className="p-3 bg-pink-100 text-pink-500 rounded-2xl group-hover:scale-110 transition-transform">
@@ -51,7 +51,7 @@ export default function ProfileClient({ savedWorkouts }: { savedWorkouts: any[] 
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
         onClick={() => signOut({ callbackUrl: "/login" })}
-        className="w-full bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-8 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
+        className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-8 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
       >
         <div className="flex items-center gap-4">
           <div className="p-3 bg-red-100 text-red-500 rounded-2xl group-hover:scale-110 transition-transform">

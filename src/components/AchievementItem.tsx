@@ -47,7 +47,7 @@ export default function AchievementItem({ type, achievedAt }: { type: string, ac
   const Icon = config.icon;
 
   return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-gray-100 shadow-sm hover:border-gray-200 hover:shadow-md transition-all">
+    <div className="flex items-center justify-between p-4 bg-[var(--color-white)] rounded-2xl border-2 border-indigo-50 shadow-sm hover:border-gray-200 hover:shadow-md transition-all">
       <div className="flex items-center gap-4">
         <div className={['p-3 rounded-xl', config.bg, config.color].join(' ')}>
           <Icon size={24} strokeWidth={2.5} />

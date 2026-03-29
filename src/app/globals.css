@@ -70,33 +70,7 @@ html[data-theme="pink-light"] {
 }
 
 /* Base Dark Properties shared across all darks */
-html[data-theme="dark"], html[data-theme="blue-dark"], html[data-theme="pink-dark"], html[data-theme="purple-dark"] {
-  --background: #09090b;
-  --foreground: #f4f4f5;
-  --color-white: #18181b; 
-  --color-gray-50: #09090b;
-  --color-gray-100: #27272a;
-  --color-gray-200: #3f3f46;
-  --color-slate-400: #a1a1aa;
-  --color-slate-500: #71717a;
-  --color-slate-700: #e4e4e7;
-  --color-slate-800: #f4f4f5;
-}
-
-/* Default Dark uses a true Slate and Blue palette */
-html[data-theme="dark"] {
-  --color-indigo-50: #172554;
-  --color-indigo-100: #1e3a8a;
-  --color-indigo-200: #1e40af;
-  --color-indigo-300: #1d4ed8;
-  --color-indigo-400: #3b82f6;
-  --color-indigo-500: #60a5fa;
-  --color-indigo-600: #93c5fd;
-  --color-indigo-700: #bfdbfe;
-  --color-indigo-800: #dbeafe;
-  --color-indigo-900: #eff6ff;
-
-  --color-rose-100: #881337;
+html[data-theme="dark"], html[data-theme="blue-dark"] {\n  --color-white: #122c4a;\n  --color-gray-50: #0a192f;\n  --color-gray-100: #122c4a;\n  --color-gray-200: #1e3a5f;\n  --color-slate-400: #7dd3fc;\n  --color-slate-500: #38bdf8;\n  --color-slate-700: #e0f2fe;\n  --color-slate-800: #f0f9ff;\n\n  --color-indigo-50: #082f49;\n  --color-indigo-100: #0c4a6e;\n  --color-indigo-200: #075985;\n  --color-indigo-300: #0369a1;\n  --color-indigo-400: #0ea5e9;\n  --color-indigo-500: #38bdf8;\n  --color-indigo-600: #0284c7;\n  --color-indigo-700: #0369a1;\n  --color-indigo-800: #bae6fd;\n  --color-indigo-900: #e0f2fe;\n\n  --color-rose-100: #881337;
   --color-rose-400: #fb7185;
   --color-rose-500: #f43f5e;
 }
@@ -179,9 +153,10 @@ html[data-theme="purple-dark"] {
   --color-rose-500: #60a5fa;
 }
 
-body {
+html, body {
   background: var(--color-gray-50);
   color: var(--color-slate-800);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100%;
 }

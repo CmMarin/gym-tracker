@@ -8,7 +8,7 @@ import FriendActivityWidget from "@/components/FriendActivityWidget";
 import RecentPRsWidget from "@/components/RecentPRsWidget";
 
 function getColors(username: string) {
-  const colors = ["bg-blue-500", "bg-purple-500", "bg-pink-500", "bg-green-500", "bg-amber-500", "bg-rose-500"];
+  const colors = ["bg-indigo-500", "bg-purple-500", "bg-pink-500", "bg-green-500", "bg-amber-500", "bg-rose-500"];
   const charCode = username.charCodeAt(0) || 0;
   return colors[charCode % colors.length];
 }
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-6 space-y-8 pb-32">
+    <div className="min-h-full flex flex-col items-center p-6 space-y-8 pb-32">
       <CompetitionDashboard leaderboard={leaderboard} />
       {myActiveWorkout && <CurrentWorkoutWidget workoutName={myActiveWorkout.workoutPlan?.name || "Custom Workout"} />}
       <FriendActivityWidget activities={formattedFriendActivity} />

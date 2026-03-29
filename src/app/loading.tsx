@@ -8,7 +8,7 @@ export default function Loading() {
           <Dumbbell className="w-16 h-16 text-primary animate-bounce shadow-primary" />
           <span className="absolute -bottom-2 -right-2 text-4xl" role="img" aria-label="flexing-bicep">💪</span>
         </div>
-        <h1 className="text-4xl font-extrabold tracking-tight text-white dark:text-white drop-shadow-md">
+        <h1 className="text-4xl font-extrabold tracking-tight text-[var(--color-white)] dark:text-[var(--color-white)] drop-shadow-md">
           Buff<span className="text-primary">Budies</span>
         </h1>
         <div className="flex space-x-2">

@@ -37,14 +37,14 @@ export default function ProfileAvatar({ currentImage, username }: { currentImage
               alt={username}
               width={100}
               height={100}
-              className="rounded-[2rem] mx-auto border-4 border-white shadow-lg ring-4 ring-indigo-50 bg-indigo-50"
+              className="rounded-[2rem] mx-auto border-4 border-[var(--color-white)] shadow-lg ring-4 ring-indigo-50 bg-indigo-50"
             />
           ) : (
-            <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-[2rem] mx-auto flex items-center justify-center border-4 border-white shadow-lg ring-4 ring-indigo-50 text-white font-black text-3xl shadow-[0_4px_0_theme(colors.indigo.200)] pb-1">
+            <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-[2rem] mx-auto flex items-center justify-center border-4 border-[var(--color-white)] shadow-lg ring-4 ring-indigo-50 text-[var(--color-white)] font-black text-3xl shadow-[0_4px_0_var(--color--)] pb-1">
               {username[0]?.toUpperCase() || "U"}
             </div>
           )}
-          <div className="absolute -bottom-2 -right-2 bg-slate-800 text-white p-2 rounded-xl border-2 border-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute -bottom-2 -right-2 bg-slate-800 text-[var(--color-white)] p-2 rounded-xl border-2 border-[var(--color-white)] shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
             <Camera size={16} />
           </div>
         </button>
@@ -52,7 +52,7 @@ export default function ProfileAvatar({ currentImage, username }: { currentImage
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-sm rounded-[2rem] p-6 relative animate-in zoom-in-95 duration-200">
+          <div className="bg-[var(--color-white)] w-full max-w-sm rounded-[2rem] p-6 relative animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-black text-slate-800">Choose Avatar</h2>
               <button onClick={() => setIsOpen(false)} className="p-2 bg-gray-100 text-slate-500 rounded-full">
@@ -66,7 +66,7 @@ export default function ProfileAvatar({ currentImage, username }: { currentImage
                   key={url}
                   disabled={loading}
                   onClick={() => selectAvatar(url)}
-                  className={`relative aspect-square rounded-2xl border-4 ${currentImage === url ? 'border-indigo-500 bg-indigo-50' : 'border-gray-100 bg-gray-50 hover:border-indigo-200'} transition-all overflow-hidden flex items-center justify-center`}
+                  className={`relative aspect-square rounded-2xl border-4 ${currentImage === url ? 'border-indigo-500 bg-indigo-50' : 'border-indigo-50 bg-gray-50 hover:border-indigo-200'} transition-all overflow-hidden flex items-center justify-center`}
                 >
                   <img src={url} alt="Avatar option" className="w-full h-full p-2 object-contain" />
                 </button>

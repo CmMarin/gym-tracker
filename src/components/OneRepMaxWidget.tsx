@@ -20,7 +20,7 @@ export default function OneRepMaxWidget({ compoundData }: { compoundData: OneRMD
   const currentData = compoundData.find((d) => d.exercise === selectedExercise)?.data || [];
 
   return (
-    <div className="w-full bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-8">
+    <div className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-slate-800 flex items-center">
           <Activity className="mr-2 text-rose-500" size={24} />

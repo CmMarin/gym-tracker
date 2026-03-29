@@ -14,7 +14,7 @@ export default function CompetitionDashboard({ leaderboard }: { leaderboard: Fri
   const maxXP = Math.max(...leaderboard.map(f => f.xp), 1);
 
   return (
-    <div className="bg-white rounded-[2rem] p-6 shadow-sm border-2 border-gray-100 w-full max-w-md">
+    <div className="bg-[var(--color-white)] rounded-[2rem] p-6 shadow-sm border-2 border-indigo-50 w-full max-w-md">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-extrabold text-slate-800">Weekly League</h2>
         <span className="text-sm font-bold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">Live</span>
@@ -30,11 +30,11 @@ export default function CompetitionDashboard({ leaderboard }: { leaderboard: Fri
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={"flex items-center p-4 rounded-2xl " + (user.username === "You" ? "bg-rose-100 border-2 border-rose-500" : "bg-gray-50 border-2 border-gray-100")}
+              className={"flex items-center p-4 rounded-2xl " + (user.username === "You" ? "bg-rose-100 border-2 border-rose-500" : "bg-gray-50 border-2 border-indigo-50")}
             >
               <div className="font-black text-xl text-slate-400 w-8">{user.rank}</div>
 
-              <div className={"w-12 h-12 rounded-full " + user.avatarColor + " border-2 border-white shadow-sm flex items-center justify-center text-white font-bold text-lg mr-4"}>
+              <div className={"w-12 h-12 rounded-full " + user.avatarColor + " border-2 border-[var(--color-white)] shadow-sm flex items-center justify-center text-[var(--color-white)] font-bold text-lg mr-4"}>
                 {user.username.charAt(0).toUpperCase()}
               </div>
 

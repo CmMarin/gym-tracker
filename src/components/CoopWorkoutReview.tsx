@@ -27,7 +27,7 @@ export default function CoopWorkoutReview({ sessionId }: { sessionId: string }) 
     return () => clearInterval(interval);
   }, [sessionId]);
 
-  if (!sessionData) return <div className="text-white animate-pulse font-bold mt-10">Loading review...</div>;
+  if (!sessionData) return <div className="text-[var(--color-white)] animate-pulse font-bold mt-10">Loading review...</div>;
 
   const allFinished = sessionData.status === "COMPLETED";
 
@@ -43,7 +43,7 @@ export default function CoopWorkoutReview({ sessionId }: { sessionId: string }) 
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-indigo-600 p-8 rounded-[2rem] shadow-2xl w-full max-w-md text-center text-white border-b-8 border-indigo-800 mt-10"
+      className="bg-indigo-600 p-8 rounded-[2rem] shadow-2xl w-full max-w-md text-center text-[var(--color-white)] border-b-8 border-indigo-800 mt-10"
     >
       <PartyPopper size={80} className="mx-auto mb-4 text-yellow-300 drop-shadow-lg" />
       <h2 className="text-4xl font-black mb-2">Team Review</h2>
@@ -110,7 +110,7 @@ export default function CoopWorkoutReview({ sessionId }: { sessionId: string }) 
           </div>
           <div className="w-full h-3 bg-indigo-900 rounded-full overflow-hidden">
             <motion.div 
-              className="h-full bg-green-400 rounded-full shadow-[0_0_10px_theme(colors.green.400)]"
+              className="h-full bg-green-400 rounded-full shadow-[0_0_10px_var(--color--)]"
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(100, (sessionData.totalXp / sessionData.goalXp) * 100)}%` }}
             />
@@ -123,7 +123,7 @@ export default function CoopWorkoutReview({ sessionId }: { sessionId: string }) 
 
       <button
         onClick={() => window.location.href = "/dashboard"}
-        className="bg-white text-indigo-600 font-black text-xl w-full py-4 rounded-2xl shadow-[0_6px_0_0_#bfdbfe] active:translate-y-[6px] active:shadow-none transition-all"
+        className="bg-[var(--color-white)] text-indigo-600 font-black text-xl w-full py-4 rounded-2xl shadow-[0_6px_0_0_#bfdbfe] active:translate-y-[6px] active:shadow-none transition-all"
       >
         BACK TO DASHBOARD
       </button>

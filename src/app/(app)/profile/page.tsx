@@ -59,7 +59,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24 font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      <div className="bg-white pt-12 pb-8 px-4 rounded-b-[3rem] shadow-[0_4px_0_theme(colors.gray.200)] mb-6 flex flex-col items-center border-b-2 border-gray-100">
+      <div className="bg-[var(--color-white)] pt-12 pb-8 px-4 rounded-b-[3rem] shadow-[0_4px_0_var(--color--)] mb-6 flex flex-col items-center border-b-2 border-indigo-50">
         <div className="mb-4">
           <ProfileAvatar
              currentImage={user.image}
@@ -74,7 +74,7 @@ export default async function ProfilePage() {
         <div className="flex flex-col gap-4">
 
           {/* Achievements Section */}
-          <div className="bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-2">
+          <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-yellow-100 text-yellow-600 rounded-xl">
                 <Trophy size={24} />

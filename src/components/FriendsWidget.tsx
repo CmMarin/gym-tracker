@@ -50,7 +50,7 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
   };
 
   return (
-    <div className="w-full max-w-md bg-white rounded-[2rem] p-6 shadow-sm border-2 border-gray-100 flex flex-col space-y-6">
+    <div className="w-full max-w-md bg-[var(--color-white)] rounded-[2rem] p-6 shadow-sm border-2 border-indigo-50 flex flex-col space-y-6">
       {pendingRequests.length > 0 && (
         <div>
           <h3 className="text-xl font-extrabold text-slate-800 mb-3">Pending Invites</h3>
@@ -60,14 +60,14 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
                 <div className="font-bold text-slate-800">@{req.user.username}</div>
                 <button
                   onClick={() => handleAccept(req.friendshipId)}
-                  className="bg-green-500 hover:bg-green-400 text-white rounded-xl p-2 shadow-[0_4px_0_0_#16a34a] active:shadow-none active:translate-y-[4px] transition-all"
+                  className="bg-green-500 hover:bg-green-400 text-[var(--color-white)] rounded-xl p-2 shadow-[0_4px_0_0_#16a34a] active:shadow-none active:translate-y-[4px] transition-all"
                 >
                   <Check size={20} strokeWidth={3} />
                 </button>
               </div>
             ))}
           </div>
-          <hr className="mt-6 border-gray-100" />
+          <hr className="mt-6 border-indigo-50" />
         </div>
       )}
 
@@ -79,11 +79,11 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search username..."
-            className="flex-1 bg-gray-100 text-slate-700 font-bold p-3 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:bg-white transition-all"
+            className="flex-1 bg-gray-100 text-slate-700 font-bold p-3 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:bg-[var(--color-white)] transition-all"
           />
           <button
             type="submit"
-            className="bg-indigo-500 hover:bg-indigo-400 text-white font-bold p-3 rounded-2xl shadow-[0_4px_0_0_#2563eb] active:shadow-none active:translate-y-[4px] transition-all"
+            className="bg-indigo-500 hover:bg-indigo-400 text-[var(--color-white)] font-bold p-3 rounded-2xl shadow-[0_4px_0_0_var(--color-indigo-600)] active:shadow-none active:translate-y-[4px] transition-all"
           >
             <Search size={22} strokeWidth={3} />
           </button>
@@ -93,14 +93,14 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
         {error && <p className="text-red-500 font-bold mt-4 text-center bg-red-50 p-3 rounded-xl border border-red-100">{error}</p>}
         
         {result && (
-          <div className="mt-4 flex items-center justify-between bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl">
+          <div className="mt-4 flex items-center justify-between bg-gray-50 border-2 border-indigo-50 p-4 rounded-2xl">
             <div className="font-bold text-slate-800 text-lg">@{result.username}</div>
             {result.sent ? (
               <span className="text-green-500 font-bold flex items-center"><UserCheck size={20} className="mr-1" /> Sent!</span>
             ) : (
               <button
                 onClick={handleSendRequest}
-                className="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl shadow-[0_4px_0_0_theme(colors.slate.800)] active:shadow-[0_0px_0_0_theme(colors.slate.800)] active:translate-y-[4px] transition-all flex items-center space-x-2"
+                className="bg-slate-800 hover:bg-slate-700 text-[var(--color-white)] font-bold px-4 py-2 rounded-xl shadow-[0_4px_0_0_var(--color--)] active:shadow-[0_0px_0_0_var(--color--)] active:translate-y-[4px] transition-all flex items-center space-x-2"
               >
                 <UserPlus size={18} />
                 <span>ADD</span>

@@ -16,7 +16,7 @@ export default function RecentPRsWidget({ prs }: { prs: any[] }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white rounded-[2rem] p-6 shadow-sm border-2 border-gray-100 w-full max-w-md"
+      className="bg-[var(--color-white)] rounded-[2rem] p-6 shadow-sm border-2 border-indigo-50 w-full max-w-md"
     >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
@@ -36,7 +36,7 @@ export default function RecentPRsWidget({ prs }: { prs: any[] }) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="flex items-center justify-between p-4 rounded-2xl border-2 border-gray-100 bg-gray-50"
+              className="flex items-center justify-between p-4 rounded-2xl border-2 border-indigo-50 bg-gray-50"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-lg bg-yellow-100 text-yellow-600">

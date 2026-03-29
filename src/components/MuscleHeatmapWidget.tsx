@@ -52,7 +52,7 @@ export default function MuscleHeatmapWidget({ fatigueData }: { fatigueData: Reco
   });
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-6">
+    <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-rose-100 text-rose-600 rounded-xl">
@@ -65,7 +65,7 @@ export default function MuscleHeatmapWidget({ fatigueData }: { fatigueData: Reco
         </div>
         <button 
           onClick={() => setView(view === "anterior" ? "posterior" : "anterior")}
-          className="px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-xl active:scale-95 transition-transform"
+          className="px-4 py-2 bg-[var(--color-indigo-100)] text-[var(--color-indigo-700)] font-bold rounded-xl active:scale-95 transition-transform"
         >
           Turn {view === "anterior" ? "Back" : "Front"}
         </button>

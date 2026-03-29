@@ -35,7 +35,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-[2rem] p-8 shadow-sm border-2 border-gray-100">
+      <div className="w-full max-w-md bg-[var(--color-white)] rounded-[2rem] p-8 shadow-sm border-2 border-indigo-50">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-black text-slate-800 mb-2">Welcome Back!</h1>
           <p className="text-slate-500 font-medium">Ready to crush your goals?</p>
@@ -54,7 +54,7 @@ export default function LoginPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-blue-400 transition-all border-2 border-transparent focus:bg-white"
+              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all border-2 border-transparent focus:bg-[var(--color-white)]"
               placeholder="e.g. jsmith"
               required
             />
@@ -66,7 +66,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-blue-400 transition-all border-2 border-transparent focus:bg-white"
+              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all border-2 border-transparent focus:bg-[var(--color-white)]"
               placeholder="••••••••"
               required
             />
@@ -75,7 +75,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-500 hover:bg-blue-400 disabled:bg-blue-300 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:shadow-[0_0px_0_0_#2563eb] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2 mt-4"
+            className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:bg-indigo-300 text-[var(--color-white)] font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_var(--color-indigo-600)] active:shadow-[0_0px_0_0_var(--color-indigo-600)] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2 mt-4"
           >
             <span>{isLoading ? "LOADING..." : "LOGIN"}</span>
             {!isLoading && <MoveRight strokeWidth={3} />}
@@ -85,7 +85,7 @@ export default function LoginPage() {
         <div className="mt-8 text-center">
           <p className="text-slate-500 font-bold">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-blue-500 hover:text-blue-600">
+            <Link href="/register" className="text-indigo-500 hover:text-indigo-600">
               Sign up
             </Link>
           </p>

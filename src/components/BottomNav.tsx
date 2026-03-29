@@ -16,7 +16,7 @@ export default function BottomNav() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="fixed bottom-0 w-full bg-white border-t-2 border-gray-100 pb-safe z-50">
+    <div className="fixed bottom-0 w-full bg-[var(--color-white)] border-t-2 border-indigo-50 pb-safe z-50">
       <div className="flex justify-around items-center h-20 max-w-xl mx-auto px-4">
         <Link
           href="/dashboard"
@@ -42,7 +42,7 @@ export default function BottomNav() {
 
         {/* Floating Action Button for workout */}
         <div className="relative -top-6 mx-2">
-          <Link href="/workout" onClick={() => playPop(false)} className="flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full shadow-[0_6px_0_0_theme(colors.indigo.600)] active:shadow-none active:translate-y-[6px] transition-all text-white hover:bg-indigo-400 border-4 border-white">
+          <Link href="/workout" onClick={() => playPop(false)} className="flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full shadow-[0_6px_0_0_var(--color--)] active:shadow-none active:translate-y-[6px] transition-all text-[var(--color-white)] hover:bg-indigo-400 border-4 border-[var(--color-white)]">
             <Dumbbell size={30} strokeWidth={3} />
           </Link>
         </div>

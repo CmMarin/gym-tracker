@@ -45,7 +45,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-[2rem] p-8 shadow-sm border-2 border-gray-100">
+      <div className="w-full max-w-md bg-[var(--color-white)] rounded-[2rem] p-8 shadow-sm border-2 border-indigo-50">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-black text-slate-800 mb-2">Create Profile</h1>
           <p className="text-slate-500 font-medium">Join the leaderboard today.</p>
@@ -64,7 +64,7 @@ export default function RegisterPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-green-400 transition-all border-2 border-transparent focus:bg-white"
+              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-green-400 transition-all border-2 border-transparent focus:bg-[var(--color-white)]"
               placeholder="e.g. jsmith"
               required
             />
@@ -76,7 +76,7 @@ export default function RegisterPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-green-400 transition-all border-2 border-transparent focus:bg-white"
+              className="w-full text-lg font-bold text-slate-700 bg-gray-100 rounded-2xl p-4 focus:outline-none focus:ring-4 focus:ring-green-400 transition-all border-2 border-transparent focus:bg-[var(--color-white)]"
               placeholder="Min 6 characters"
               required
               minLength={6}
@@ -86,7 +86,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-green-500 hover:bg-green-400 disabled:bg-green-300 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#16a34a] active:shadow-[0_0px_0_0_#16a34a] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2 mt-4"
+            className="w-full bg-green-500 hover:bg-green-400 disabled:bg-green-300 text-[var(--color-white)] font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#16a34a] active:shadow-[0_0px_0_0_#16a34a] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2 mt-4"
           >
             <UserPlus strokeWidth={3} className="mr-2" />
             <span>{isLoading ? "CREATING..." : "SIGN UP"}</span>

@@ -44,10 +44,10 @@ export default function FriendDetailsModal({
         initial={{ y: 50, scale: 0.95 }}
         animate={{ y: 0, scale: 1 }}
         exit={{ y: 50, scale: 0.95 }}
-        className="bg-white w-full max-w-md rounded-3xl overflow-hidden relative max-h-[90vh] flex flex-col shadow-2xl"
+        className="bg-[var(--color-white)] w-full max-w-md rounded-3xl overflow-hidden relative max-h-[90vh] flex flex-col shadow-2xl"
       >
         {/* Header - Fixed */}
-        <div className="bg-white p-6 border-b-2 border-gray-100 flex items-center justify-between sticky top-0 z-10 shrink-0">
+        <div className="bg-[var(--color-white)] p-6 border-b-2 border-indigo-50 flex items-center justify-between sticky top-0 z-10 shrink-0">
           <h2 className="text-xl font-black text-slate-800">Profile</h2>
           <button
             onClick={onClose}
@@ -72,7 +72,7 @@ export default function FriendDetailsModal({
                 {data.image ? (
                   <img src={data.image} className="w-24 h-24 rounded-full border-4 border-indigo-50 shadow-lg object-cover" />
                 ) : (
-                  <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full mx-auto flex items-center justify-center border-4 border-white shadow-lg text-white font-black text-3xl">
+                  <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full mx-auto flex items-center justify-center border-4 border-[var(--color-white)] shadow-lg text-[var(--color-white)] font-black text-3xl">
                     {data.username.charAt(0).toUpperCase()}
                   </div>
                 )}
@@ -98,13 +98,13 @@ export default function FriendDetailsModal({
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-2xl p-4 border-2 border-gray-100">
+                <div className="bg-[var(--color-white)] rounded-2xl p-4 border-2 border-indigo-50">
                   <div className="text-slate-500 text-sm font-bold mb-1 flex items-center gap-2">
                     <Dumbbell size={16} /> Workouts
                   </div>
                   <div className="text-2xl font-black text-slate-800">{data.totalWorkouts || 0}</div>
                 </div>
-                <div className="bg-white rounded-2xl p-4 border-2 border-gray-100">
+                <div className="bg-[var(--color-white)] rounded-2xl p-4 border-2 border-indigo-50">
                   <div className="text-slate-500 text-sm font-bold mb-1 flex items-center gap-2">
                     <Trophy size={16} /> Total XP
                   </div>
@@ -120,7 +120,7 @@ export default function FriendDetailsModal({
                 <div className="space-y-3">
                   {data.achievements && data.achievements.length > 0 ? (
                     data.achievements.map((ach: any) => (
-                      <div key={ach.id} className="bg-white p-3 rounded-2xl border-2 border-gray-100 flex items-center gap-3">
+                      <div key={ach.id} className="bg-[var(--color-white)] p-3 rounded-2xl border-2 border-indigo-50 flex items-center gap-3">
                         <div className="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center">
                           <Trophy size={20} />
                         </div>

@@ -20,7 +20,7 @@ export default async function AppLayout({
     <>
       <TopNav />
       {/* Main content takes up screen space minus top/bottom navs */}
-      <main className="flex-1 pb-24 overflow-y-auto overflow-x-hidden w-full max-w-md mx-auto relative bg-gray-50 dark:bg-background">
+      <main className="flex-1 pb-24 overflow-y-auto overflow-x-hidden w-full max-w-md mx-auto relative bg-transparent">
         <PageTransition>
           {children}
         </PageTransition>

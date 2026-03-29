@@ -36,7 +36,7 @@ export default function ThemeSwitcher() {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
+        className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-4 active:shadow-none active:translate-y-1 transition-all flex items-center justify-between group cursor-pointer"
       >
         <div className="flex items-center gap-4">
           <div className="p-3 bg-indigo-100 text-indigo-500 rounded-2xl group-hover:scale-110 transition-transform">
@@ -52,14 +52,14 @@ export default function ThemeSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full top-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 grid grid-cols-2 gap-2">
+        <div className="absolute z-10 w-full top-full mt-2 bg-[var(--color-white)] rounded-2xl shadow-xl border border-indigo-50 p-2 grid grid-cols-2 gap-2">
           {themes.map(theme => (
             <button
               key={theme.id}
               onClick={() => changeTheme(theme.id)}
               className={`p-3 rounded-xl text-sm font-bold text-left transition-colors ${
                 currentTheme === theme.id 
-                  ? "bg-indigo-500 text-white" 
+                  ? "bg-indigo-500 text-[var(--color-white)]" 
                   : "bg-gray-50 text-slate-700 hover:bg-gray-100"
               }`}
             >

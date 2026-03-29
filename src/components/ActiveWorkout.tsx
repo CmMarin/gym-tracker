@@ -141,20 +141,20 @@ export default function ActiveWorkout({
   const currentSet = currentSetIndex !== -1 && currentExercise ? currentExercise.sets[currentSetIndex] : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col p-6 items-center relative">
-      <div className="w-full max-w-md flex items-center justify-between mb-8">
-        <h1 className="font-bold text-2xl text-slate-800">{planName}</h1>
-        <button 
-           onClick={async () => {
-             await cancelActiveWorkout();
-             window.location.href = "/workout";
-           }}
-           className="text-sm font-bold text-red-500 bg-red-100 px-3 py-1 rounded-xl">
-          End Workout
-        </button>
-      </div>
+    <div className="min-h-full h-full bg-transparent flex flex-col p-6 items-center relative">
+      <div className="w-full max-w-md flex justify-center items-center mb-8 relative">
+          <h1 className="font-bold text-2xl text-[var(--color-slate-800)] text-center">{planName}</h1>
+          <button
+             onClick={async () => {
+               await cancelActiveWorkout();
+               window.location.href = "/workout";
+             }}
+             className="absolute right-0 top-0 text-[var(--color-slate-400)] hover:text-red-500 p-2">
+             <X size={24} />
+          </button>
+        </div>
       {coopSessionId && <CoopPanel sessionId={coopSessionId} currentExercise={currentExercise?.name} />}
-      <div className="w-full max-w-md h-6 bg-gray-200 rounded-full mb-10 overflow-hidden border-2 border-gray-100 shadow-inner">
+      <div className="w-full max-w-md h-6 bg-gray-200 rounded-full mb-10 overflow-hidden border-2 border-indigo-50 shadow-inner">
         <motion.div
           className="h-full bg-green-500 rounded-full"
           initial={{ width: 0 }}
@@ -172,15 +172,15 @@ export default function ActiveWorkout({
             key="milestone"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-green-500 p-8 rounded-[2rem] shadow-2xl w-full max-w-md text-center text-white border-b-8 border-green-700 mt-10"
+            className="bg-green-500 p-8 rounded-[2rem] shadow-2xl w-full max-w-md text-center text-[var(--color-white)] border-b-8 border-green-700 mt-10"
           >
-            <Trophy size={80} className="mx-auto mb-6 text-yellow-300 drop-shadow-lg" />
+            <Trophy size={80} className="mx-auto mb-6 text-[var(--color-white)] drop-shadow-lg" />
              <h2 className="text-4xl font-black mb-4">Workout Complete!</h2>
             <div className="bg-green-600 rounded-2xl p-4 mb-6 text-left space-y-2">
-              <p className="font-bold text-green-100">Total XP: <span className="text-white">+{summary?.xpEarned || 0}</span></p>
+              <p className="font-bold text-green-100">Total XP: <span className="text-[var(--color-white)]">+{summary?.xpEarned || 0}</span></p>
               {summary?.prs && summary.prs.length > 0 && (
                 <div className="pt-2 border-t border-green-500 text-sm">
-                  <p className="font-bold text-yellow-300 mb-1">🔥 New PRs!</p>
+                  <p className="font-bold text-[var(--color-white)] mb-1">🔥 New PRs!</p>
                   <ul className="list-disc pl-4 text-green-100">
                     {summary.prs.map((pr: string, idx: number) => (
                       <li key={idx}>{pr}</li>
@@ -192,7 +192,7 @@ export default function ActiveWorkout({
             
             <button
               onClick={() => window.location.href = "/dashboard"}
-              className="bg-white text-green-600 font-black text-xl w-full py-4 rounded-2xl shadow-[0_6px_0_0_#dcfce7] active:translate-y-[6px] active:shadow-none transition-all"
+              className="bg-[var(--color-white)] text-green-600 font-black text-xl w-full py-4 rounded-2xl shadow-[0_6px_0_0_#dcfce7] active:translate-y-[6px] active:shadow-none transition-all"
             >
               CONTINUE TO DASHBOARD
             </button>
@@ -204,7 +204,7 @@ export default function ActiveWorkout({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-white p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
+            className="bg-[var(--color-white)] p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
           >
             <Timer size={64} className="text-indigo-500 mb-6" />
             <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center">Rest Timer</h2>
@@ -221,7 +221,7 @@ export default function ActiveWorkout({
               </button>
               <button
                 onClick={() => setRestTimeLeft(0)}
-                className="flex-[2] bg-indigo-500 hover:bg-indigo-400 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:translate-y-[6px] active:shadow-none transition-all flex justify-center items-center gap-2"
+                className="flex-[2] bg-indigo-500 hover:bg-indigo-400 text-[var(--color-white)] font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_var(--color-indigo-600)] active:translate-y-[6px] active:shadow-none transition-all flex justify-center items-center gap-2"
               >
                 <span>SKIP REST</span>
               </button>
@@ -233,7 +233,7 @@ export default function ActiveWorkout({
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            className="bg-white p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
+            className="bg-[var(--color-white)] p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
           >
             <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center">{currentExercise?.name}</h2>
             
@@ -278,10 +278,10 @@ export default function ActiveWorkout({
                       initial={{opacity: 0, y: -10}}
                       animate={{opacity: 1, y: 0}}
                       exit={{opacity: 0, y: -10}}
-                      className="absolute top-full mt-2 w-full bg-slate-800 text-white text-xs p-3 rounded-xl text-center z-10 shadow-lg border border-slate-700 pointer-events-none"
+                      className="absolute top-full mt-2 w-full bg-[var(--color-indigo-600)] text-[var(--color-white)] text-xs p-3 rounded-xl text-center z-10 shadow-lg border border-[var(--color-indigo-700)] pointer-events-none"
                     >
-                      <p className="text-slate-300 font-medium mb-1">Plates/side (20kg bar)</p>
-                      <span className="font-bold text-yellow-300 text-sm">
+                      <p className="text-[var(--color-indigo-100)] font-medium mb-1">Plates/side (20kg bar)</p>
+                      <span className="font-bold text-[var(--color-white)] text-sm">
                         {calculatePlates(Number(currentSet.weight))}
                       </span>
                     </motion.div>
@@ -304,10 +304,10 @@ export default function ActiveWorkout({
             <button
               onClick={handleCompleteSet}
               disabled={isFinishing || currentSetIndex === -1}
-              className={`w-full ${isFinishing ? "bg-indigo-300" : "bg-indigo-500 hover:bg-indigo-400"} text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:shadow-[0_0px_0_0_#2563eb] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2`}
+              className={`w-full ${isFinishing ? "bg-indigo-300" : "bg-indigo-500 hover:bg-indigo-400"} text-[var(--color-white)] font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_var(--color-indigo-600)] active:shadow-[0_0px_0_0_var(--color-indigo-600)] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2`}
             >
               {isFinishing ? (
-                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-4 border-[var(--color-white)] border-t-transparent rounded-full animate-spin"></div>
               ) : (
                 <>
                   <CheckCircle2 size={28} />

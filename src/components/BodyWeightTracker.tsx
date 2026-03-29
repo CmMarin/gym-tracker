@@ -20,7 +20,7 @@ export default function BodyWeightTracker({ data }: { data: { weight: number, da
   };
 
   return (
-    <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-8">
+    <div className="w-full max-w-md bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color--)] border-2 border-indigo-50 mb-8">
       <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
         <Scale className="mr-2 text-indigo-500" size={24} />
         Body Weight
@@ -38,7 +38,7 @@ export default function BodyWeightTracker({ data }: { data: { weight: number, da
         <button
           onClick={handleAdd}
           disabled={loading}
-          className="bg-indigo-500 hover:opacity-90 text-white p-3 rounded-2xl font-bold shadow-[0_4px_0_theme(colors.indigo.200)] active:shadow-none active:translate-y-1 transition-all"
+          className="bg-indigo-500 hover:opacity-90 text-[var(--color-white)] p-3 rounded-2xl font-bold shadow-[0_4px_0_var(--color--)] active:shadow-none active:translate-y-1 transition-all"
         >
           <Plus size={24} />
         </button>

@@ -29,7 +29,7 @@ export default function FriendsList({ initialFriends }: { initialFriends: Friend
 
   if (initialFriends.length === 0) {
     return (
-      <div className="bg-white rounded-3xl p-8 border-2 border-gray-100 shadow-sm text-center">
+      <div className="bg-[var(--color-white)] rounded-3xl p-8 border-2 border-indigo-50 shadow-sm text-center">
         <User className="mx-auto text-slate-300 mb-4" size={48} />
         <h2 className="text-xl font-bold text-slate-800 mb-2">No Friends Yet</h2>
         <p className="text-slate-500 mb-4">Add some friends to see their activity!</p>
@@ -47,19 +47,19 @@ export default function FriendsList({ initialFriends }: { initialFriends: Friend
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setSelectedFriendId(friend.id)}
-            className="bg-white rounded-3xl p-5 border-2 border-gray-100 shadow-sm flex items-center justify-between cursor-pointer group transition-all"
+            className="bg-[var(--color-white)] rounded-3xl p-5 border-2 border-indigo-50 shadow-sm flex items-center justify-between cursor-pointer group transition-all"
           >
             <div className="flex items-center gap-4">
               <div className="relative">
                  {friend.image ? (
-                   <img src={friend.image} className="w-12 h-12 rounded-full border-2 border-gray-100 object-cover" />
+                   <img src={friend.image} className="w-12 h-12 rounded-full border-2 border-indigo-50 object-cover" />
                  ) : (
-                   <div className="w-12 h-12 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center font-bold text-lg">
+                   <div className="w-12 h-12 rounded-full bg-gray-100 border-2 border-[var(--color-white)] flex items-center justify-center font-bold text-lg">
                      {friend.username.charAt(0).toUpperCase()}
                    </div>
                  )}
                  {friend.isOnline && (
-                   <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full animate-pulse"></span>
+                   <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[var(--color-white)] rounded-full animate-pulse"></span>
                  )}
               </div>
               

@@ -39,7 +39,7 @@ export default function TopNav() {
   if (!session) return null;
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-white border-b-2 border-gray-100 flex items-center justify-between px-4 py-3 shadow-sm">
+    <div className="sticky top-0 z-50 w-full bg-[var(--color-white)] border-b-2 border-indigo-50 flex items-center justify-between px-4 py-3 shadow-sm">
       <Link href="/dashboard" className="font-black text-xl text-slate-800 tracking-tight">
         Buff<span className="text-indigo-500">Buddies</span>
       </Link>
@@ -48,7 +48,7 @@ export default function TopNav() {
         <Link href="/notifications" className="relative p-2 text-slate-400 hover:text-slate-600 transition-colors">
           <Bell size={24} strokeWidth={2.5} />
           {unreadCount > 0 && (
-            <span className="absolute top-1 right-1 w-3 h-3 bg-rose-500 rounded-full border-2 border-white"></span>
+            <span className="absolute top-1 right-1 w-3 h-3 bg-rose-500 rounded-full border-2 border-[var(--color-white)]"></span>
           )}
         </Link>
 

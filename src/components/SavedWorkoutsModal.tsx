@@ -45,7 +45,7 @@ export default function SavedWorkoutsModal({
             Cancel
           </button>
           <button 
-            className="px-3 py-1.5 bg-red-500 text-white font-bold rounded-lg text-sm hover:bg-red-600"
+            className="px-3 py-1.5 bg-red-500 text-[var(--color-white)] font-bold rounded-lg text-sm hover:bg-red-600"
             onClick={() => executeClearAll(t.id)}
           >
             Delete All
@@ -57,15 +57,15 @@ export default function SavedWorkoutsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white w-full max-w-lg rounded-3xl p-6 max-h-[85vh] overflow-y-auto no-scrollbar relative animate-in zoom-in-95 duration-200">
-        <div className="sticky top-0 bg-white pb-4 mb-4 border-b border-gray-100 flex items-center justify-between z-10">
+      <div className="bg-[var(--color-white)] w-full max-w-lg rounded-3xl p-6 max-h-[85vh] overflow-y-auto no-scrollbar relative animate-in zoom-in-95 duration-200">
+        <div className="sticky top-0 bg-[var(--color-white)] pb-4 mb-4 border-b border-indigo-50 flex items-center justify-between z-10">
           <h2 className="text-2xl font-black text-slate-800">Saved Routines</h2>
           <div className="flex items-center gap-2">
             {savedWorkouts.length > 0 && (
               <button
                 onClick={handleClearAll}
                 disabled={clearing}
-                className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors font-bold text-sm disabled:opacity-50"
+                className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-bold text-xs disabled:opacity-50"
               >
                 {clearing ? "Clearing..." : (
                   <>
