@@ -22,7 +22,7 @@ export default function BottomNav() {
           href="/dashboard"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
-            isActive('/dashboard') ? 'text-blue-500' : 'text-slate-400'
+            isActive('/dashboard') ? 'text-indigo-500' : 'text-slate-400'
           }`}
         >
           <Home size={26} strokeWidth={isActive('/dashboard') ? 3 : 2} />
@@ -33,7 +33,7 @@ export default function BottomNav() {
           href="/friends"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
-            isActive('/friends') ? 'text-blue-500' : 'text-slate-400'
+            isActive('/friends') ? 'text-indigo-500' : 'text-slate-400'
           }`}
         >
           <Users size={26} strokeWidth={isActive('/friends') ? 3 : 2} />
@@ -42,7 +42,7 @@ export default function BottomNav() {
 
         {/* Floating Action Button for workout */}
         <div className="relative -top-6 mx-2">
-          <Link href="/workout" onClick={() => playPop(false)} className="flex items-center justify-center w-16 h-16 bg-blue-500 rounded-full shadow-[0_6px_0_0_theme(colors.blue.600)] active:shadow-none active:translate-y-[6px] transition-all text-white hover:bg-blue-400 border-4 border-white">
+          <Link href="/workout" onClick={() => playPop(false)} className="flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full shadow-[0_6px_0_0_theme(colors.indigo.600)] active:shadow-none active:translate-y-[6px] transition-all text-white hover:bg-indigo-400 border-4 border-white">
             <Dumbbell size={30} strokeWidth={3} />
           </Link>
         </div>
@@ -51,7 +51,7 @@ export default function BottomNav() {
           href="/progress"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
-            isActive('/progress') ? 'text-blue-500' : 'text-slate-400'
+            isActive('/progress') ? 'text-indigo-500' : 'text-slate-400'
           }`}
         >
           <LineChart size={26} strokeWidth={isActive('/progress') ? 3 : 2} />
@@ -62,7 +62,7 @@ export default function BottomNav() {
           href="/profile"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
-            isActive('/profile') ? 'text-blue-500' : 'text-slate-400'
+            isActive('/profile') ? 'text-indigo-500' : 'text-slate-400'
           }`}
         >
           <User size={26} strokeWidth={isActive('/profile') ? 3 : 2} />

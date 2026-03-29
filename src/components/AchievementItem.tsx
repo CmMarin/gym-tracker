@@ -5,7 +5,7 @@ export default function AchievementItem({ type, achievedAt }: { type: string, ac
 
   switch (type) {
     case "FIRST_WORKOUT":
-      config = { icon: Dumbbell, title: "First Blood", color: "text-blue-500", bg: "bg-blue-100" };
+      config = { icon: Dumbbell, title: "First Blood", color: "text-indigo-500", bg: "bg-indigo-100" };
       break;
     case "STREAK_7_DAYS":
       config = { icon: Flame, title: "7-Day Streak", color: "text-orange-500", bg: "bg-orange-100" };

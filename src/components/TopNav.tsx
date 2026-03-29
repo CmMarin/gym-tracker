@@ -41,7 +41,7 @@ export default function TopNav() {
   return (
     <div className="sticky top-0 z-50 w-full bg-white border-b-2 border-gray-100 flex items-center justify-between px-4 py-3 shadow-sm">
       <Link href="/dashboard" className="font-black text-xl text-slate-800 tracking-tight">
-        Buff<span className="text-blue-500">Buddies</span>
+        Buff<span className="text-indigo-500">Buddies</span>
       </Link>
 
       <div className="flex items-center space-x-3">
@@ -57,7 +57,7 @@ export default function TopNav() {
           <span className="text-lg">{streak}</span>
         </div>
         
-        <div className="flex items-center text-blue-500 font-bold bg-blue-50 px-3 py-1 rounded-xl border-2 border-blue-100">
+        <div className="flex items-center text-indigo-500 font-bold bg-indigo-50 px-3 py-1 rounded-xl border-2 border-indigo-100">
           <Zap fill="currentColor" size={20} className="mr-1 text-yellow-400" />
           <span>{xp}</span>
         </div>

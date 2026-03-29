@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -47,14 +47,14 @@ export default function UploadPdfWidget() {
         type="file"
         accept="application/pdf"
         onChange={(e) => setFile(e.target.files?.[0] || null)}
-        className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4"
+        className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 mb-4"
       />
       <motion.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={handleUpload}
         disabled={!file || loading}
-        className="bg-blue-500 text-white font-bold py-3 px-6 rounded-xl w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-indigo-500 text-white font-bold py-3 px-6 rounded-xl w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? 'Processing with AI...' : 'Upload PDF'}
       </motion.button>

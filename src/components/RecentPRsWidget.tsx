@@ -16,7 +16,7 @@ export default function RecentPRsWidget({ prs }: { prs: any[] }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-white rounded-3xl p-6 shadow-[0_4px_0_theme(colors.gray.200)] border-2 border-gray-100 mb-8"
+      className="bg-white rounded-[2rem] p-6 shadow-sm border-2 border-gray-100 w-full max-w-md"
     >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">

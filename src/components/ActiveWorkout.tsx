@@ -206,7 +206,7 @@ export default function ActiveWorkout({
             exit={{ opacity: 0, scale: 0.95 }}
             className="bg-white p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
           >
-            <Timer size={64} className="text-blue-500 mb-6" />
+            <Timer size={64} className="text-indigo-500 mb-6" />
             <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center">Rest Timer</h2>
             <div className="text-7xl font-black text-slate-700 mb-10 tabular-nums tracking-tighter">
               {Math.floor(restTimeLeft / 60)}:{(restTimeLeft % 60).toString().padStart(2, '0')}
@@ -221,7 +221,7 @@ export default function ActiveWorkout({
               </button>
               <button
                 onClick={() => setRestTimeLeft(0)}
-                className="flex-[2] bg-blue-500 hover:bg-blue-400 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:translate-y-[6px] active:shadow-none transition-all flex justify-center items-center gap-2"
+                className="flex-[2] bg-indigo-500 hover:bg-indigo-400 text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:translate-y-[6px] active:shadow-none transition-all flex justify-center items-center gap-2"
               >
                 <span>SKIP REST</span>
               </button>
@@ -259,7 +259,7 @@ export default function ActiveWorkout({
                   Weight (kg)
                   <button 
                     onClick={() => setShowPlateCalc(!showPlateCalc)}
-                    className="text-blue-400 hover:text-blue-600 transition-colors bg-blue-50 p-1 rounded-md"
+                    className="text-indigo-400 hover:text-indigo-600 transition-colors bg-indigo-50 p-1 rounded-md"
                     title="Calculate Plates"
                   >
                     <Calculator size={14} />
@@ -270,7 +270,7 @@ export default function ActiveWorkout({
                   placeholder="0"
                   value={currentSet?.weight || ""}
                   onChange={(e) => handleUpdateSet("weight", e.target.value)}
-                  className="w-full text-center text-4xl font-black text-slate-700 bg-gray-100 rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-blue-400 transition-all"
+                  className="w-full text-center text-4xl font-black text-slate-700 bg-gray-100 rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all"
                 />
                 <AnimatePresence>
                   {showPlateCalc && currentSet?.weight && (
@@ -295,7 +295,7 @@ export default function ActiveWorkout({
                   placeholder={currentExercise?.targetReps?.toString() || "0"}
                   value={currentSet?.reps || ""}
                   onChange={(e) => handleUpdateSet("reps", e.target.value)}
-                  className="w-full text-center text-4xl font-black text-slate-700 bg-gray-100 rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-blue-400 transition-all"
+                  className="w-full text-center text-4xl font-black text-slate-700 bg-gray-100 rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all"
                 />
               </div>
             </div>
@@ -304,7 +304,7 @@ export default function ActiveWorkout({
             <button
               onClick={handleCompleteSet}
               disabled={isFinishing || currentSetIndex === -1}
-              className={`w-full ${isFinishing ? "bg-blue-300" : "bg-blue-500 hover:bg-blue-400"} text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:shadow-[0_0px_0_0_#2563eb] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2`}
+              className={`w-full ${isFinishing ? "bg-indigo-300" : "bg-indigo-500 hover:bg-indigo-400"} text-white font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_#2563eb] active:shadow-[0_0px_0_0_#2563eb] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2`}
             >
               {isFinishing ? (
                 <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>

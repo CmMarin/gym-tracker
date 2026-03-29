@@ -79,11 +79,11 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search username..."
-            className="flex-1 bg-gray-100 text-slate-700 font-bold p-3 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-400 focus:bg-white transition-all"
+            className="flex-1 bg-gray-100 text-slate-700 font-bold p-3 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:bg-white transition-all"
           />
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-400 text-white font-bold p-3 rounded-2xl shadow-[0_4px_0_0_#2563eb] active:shadow-none active:translate-y-[4px] transition-all"
+            className="bg-indigo-500 hover:bg-indigo-400 text-white font-bold p-3 rounded-2xl shadow-[0_4px_0_0_#2563eb] active:shadow-none active:translate-y-[4px] transition-all"
           >
             <Search size={22} strokeWidth={3} />
           </button>

@@ -131,7 +131,7 @@ export default function WorkoutSelector({
                     setShowCoopModal(true);
                   }}
                   disabled={loadingPlan !== null}
-                  className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-bold p-3 rounded-2xl shadow-sm transition-all flex justify-center items-center"
+                  className="bg-indigo-100 hover:bg-indigo-200 text-indigo-600 font-bold p-3 rounded-2xl shadow-sm transition-all flex justify-center items-center"
                 >
                   <Users size={20} />
                 </button>
@@ -165,7 +165,7 @@ export default function WorkoutSelector({
             >
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2 text-slate-800">
-                  <Users className="text-blue-500" />
+                  <Users className="text-indigo-500" />
                   <h2 className="text-2xl font-black">Co-Op Workout</h2>
                 </div>
                 <button onClick={() => setShowCoopModal(false)} className="p-2 bg-gray-100 rounded-full text-slate-500">
@@ -177,7 +177,7 @@ export default function WorkoutSelector({
                 <button 
                   onClick={handleHostCoop}
                   disabled={isCoopLoading}
-                  className="w-full bg-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_0_theme(colors.blue.600)] active:shadow-none active:translate-y-1"
+                  className="w-full bg-indigo-500 text-white font-bold py-4 rounded-xl shadow-[0_4px_0_theme(colors.indigo.600)] active:shadow-none active:translate-y-1"
                 >
                   {isCoopLoading ? "Starting..." : "Host New Session"}
                 </button>
@@ -194,7 +194,7 @@ export default function WorkoutSelector({
                     placeholder="Enter Invite Code"
                     value={inviteCodeInput}
                     onChange={(e) => setInviteCodeInput(e.target.value)}
-                    className="flex-1 bg-gray-100 rounded-xl px-4 py-3 font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 uppercase"
+                    className="flex-1 bg-gray-100 rounded-xl px-4 py-3 font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 uppercase"
                     maxLength={6}
                   />
                   <button 
