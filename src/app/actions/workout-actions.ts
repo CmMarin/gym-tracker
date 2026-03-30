@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { differenceInCalendarWeeks } from "date-fns";
+import { broadcastToUsers } from "@/lib/server-push";
 
 export async function finishWorkoutAction(workoutData: any) {
   const session = await getServerSession(authOptions);
@@ -222,6 +223,24 @@ export async function finishWorkoutAction(workoutData: any) {
 
           if (finalSession.totalXp >= finalSession.goalXp) {
             totalXpEarned += 200; // Team met the shared goal!
+          }
+
+          // Notify everyone in the session that it's complete!
+          const memberIds = allMembers.map((m: any) => m.userId);
+          await broadcastToUsers(memberIds, {
+            title: "Co-Op Completed!",
+            body: `Your Co-Op team finished the session and earned ${finalSession.totalXp} XP!`,
+            url: "/dashboard"
+          });
+        } else {
+          // Notify others that this user finished
+          const otherMembers = allMembers.filter((m: any) => m.userId !== userId);
+          if (otherMembers.length > 0) {
+            await broadcastToUsers(otherMembers.map((m: any) => m.userId), {
+              title: "Co-Op Update",
+              body: `${user.username} just finished their workout!`,
+              url: "/dashboard"
+            });
           }
         }
       }

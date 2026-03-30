@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendPushNotification } from '@/lib/server-push';
 
 export async function GET(request: Request) {
   // Check for cron token to secure the route if deployed (e.g., Vercel Cron)
@@ -78,6 +79,13 @@ export async function GET(request: Request) {
             title: notifTitle,
             message: notifMessage,
           }
+        });
+
+        // Send a web push notification
+        await sendPushNotification(user.id, {
+          title: notifTitle,
+          body: notifMessage,
+          url: "/dashboard"
         });
 
         if (badgeType && user.weeklyXp > 0) {

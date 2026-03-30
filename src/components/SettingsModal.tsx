@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, X, Volume2, VolumeX, Bell, Moon } from "lucide-react";
 import { signOut } from "next-auth/react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-utils";
 
 export default function SettingsModal({
   isOpen,
@@ -12,7 +13,43 @@ export default function SettingsModal({
   onClose: () => void;
 }) {
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [isChangingPush, setIsChangingPush] = useState(false);
+
+  useEffect(() => {
+    // Check initial notification state when modal opens
+    if (isOpen && "serviceWorker" in navigator && "Notification" in window) {
+      navigator.serviceWorker.ready.then((reg) => {
+        reg.pushManager.getSubscription().then((sub) => {
+          setNotificationsEnabled(!!sub);
+        });
+      });
+    }
+  }, [isOpen]);
+
+  const handleToggleNotifications = async () => {
+    try {
+      setIsChangingPush(true);
+      if (!notificationsEnabled) {
+        // Request permission if needed
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          await subscribeToPush();
+          setNotificationsEnabled(true);
+        } else {
+          alert("You need to allow notifications in your browser settings.");
+        }
+      } else {
+        await unsubscribeFromPush();
+        setNotificationsEnabled(false);
+      }
+    } catch (err) {
+      console.error("Failed to toggle push notifications:", err);
+      alert("Something went wrong toggling notifications.");
+    } finally {
+      setIsChangingPush(false);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -96,30 +133,24 @@ export default function SettingsModal({
                           </div>
                           <div className="text-left">
                             <h4 className="font-bold text-[var(--color-slate-800)]">
-                              Notifications
+                              Push Notifications
                             </h4>
                             <p className="text-[var(--color-slate-500)] text-xs font-medium">
-                              WIP placeholder
+                              Updates and reminders
                             </p>
                           </div>
                         </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
+                        <label className={`relative inline-flex items-center ${isChangingPush ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
                           <input
                             type="checkbox"
                             className="sr-only peer"
                             checked={notificationsEnabled}
-                            onChange={() =>
-                              setNotificationsEnabled(!notificationsEnabled)
-                            }
+                            onChange={handleToggleNotifications}
+                            disabled={isChangingPush}
                           />
                           <div className="w-11 h-6 bg-[var(--color-gray-200)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-indigo-500)]"></div>
                         </label>
                       </div>
-                      {notificationsEnabled && (
-                        <div className="mt-2 text-xs text-orange-500 font-medium bg-orange-50 p-2 rounded-lg border border-orange-100">
-                          Coming soon: Customize push notifications and alerts.
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>

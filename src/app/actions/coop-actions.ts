@@ -3,6 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { broadcastToUsers, sendPushNotification } from "@/lib/server-push";
 
 export async function createCoopSession(workoutPlanId: string) {
   const session = await getServerSession(authOptions);
@@ -58,6 +59,19 @@ export async function joinCoopSession(inviteCode: string) {
         userId: session.user.id,
       },
     });
+
+    // Notify other members
+    const otherMembers = await prisma.coopSessionMember.findMany({
+      where: { sessionId: coopSession.id, userId: { not: session.user.id } },
+    });
+    if (otherMembers.length > 0) {
+      const otherUserIds = otherMembers.map(m => m.userId);
+      await broadcastToUsers(otherUserIds, {
+        title: "Co-Op Update",
+        body: `${session.user.name || "A friend"} joined your Co-Op session!`,
+        url: "/dashboard"
+      });
+    }
   }
 
   return { success: true, sessionId: coopSession.id };
@@ -80,6 +94,19 @@ export async function updateCoopStatus(
       xpContributed: { increment: newXp },
     },
   });
+
+  if (status === "COMPLETED") {
+    const otherMembers = await prisma.coopSessionMember.findMany({
+      where: { sessionId, userId: { not: session.user.id } },
+    });
+    if (otherMembers.length > 0) {
+      await broadcastToUsers(otherMembers.map(m => m.userId), {
+        title: "Co-Op Update",
+        body: `${session.user.name || "A friend"} just finished their workout!`,
+        url: "/dashboard"
+      });
+    }
+  }
 
   if (newXp > 0) {
     await prisma.coopSession.update({
