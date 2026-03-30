@@ -1,18 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { TrendingUp, Activity, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function OneRepMaxWidget({ compoundData }: { compoundData: any[] }) {
+export default function OneRepMaxWidget({
+  compoundData,
+}: {
+  compoundData: any[];
+}) {
   const [selectedExercise, setSelectedExercise] = useState<string>(
-    compoundData?.length > 0 ? compoundData[0].exercise : ""
+    compoundData?.length > 0 ? compoundData[0].exercise : "",
   );
 
   if (!compoundData || compoundData.length === 0) return null;
 
-  const currentData = compoundData.find((d) => d.exercise === selectedExercise)?.data || [];
+  const currentData =
+    compoundData.find((d) => d.exercise === selectedExercise)?.data || [];
 
   return (
     <div className="w-full bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50 mb-8">
@@ -36,19 +48,50 @@ export default function OneRepMaxWidget({ compoundData }: { compoundData: any[] 
               <AreaChart data={currentData}>
                 <defs>
                   <linearGradient id="color1RM" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-rose-500)" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="var(--color-rose-500)" stopOpacity={0} />
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-rose-500)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-rose-500)"
+                      stopOpacity={0}
+                    />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="date" tick={{ fontSize: 12, fill: "var(--color-slate-500)" }} tickLine={false} axisLine={false} />
-                <YAxis domain={['dataMin - 5', 'dataMax + 5']} hide />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 12, fill: "var(--color-slate-500)" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide />
                 <Tooltip
-                  contentStyle={{ borderRadius: "1rem", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)", backgroundColor: "var(--color-white)" }}
-                  labelStyle={{ fontWeight: "bold", color: "var(--color-slate-800)" }}
-                  itemStyle={{ color: "var(--color-rose-500)", fontWeight: "bold" }}
+                  contentStyle={{
+                    borderRadius: "1rem",
+                    border: "none",
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                    backgroundColor: "var(--color-white)",
+                  }}
+                  labelStyle={{
+                    fontWeight: "bold",
+                    color: "var(--color-slate-800)",
+                  }}
+                  itemStyle={{
+                    color: "var(--color-rose-500)",
+                    fontWeight: "bold",
+                  }}
                   formatter={(value: any) => [`${value} kg`, "Est. 1RM"]}
                 />
-                <Area type="monotone" dataKey="oneRM" stroke="var(--color-rose-500)" strokeWidth={3} fillOpacity={1} fill="url(#color1RM)" />
+                <Area
+                  type="monotone"
+                  dataKey="oneRM"
+                  stroke="var(--color-rose-500)"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#color1RM)"
+                />
               </AreaChart>
             </ResponsiveContainer>
           ) : (
@@ -67,7 +110,11 @@ export default function OneRepMaxWidget({ compoundData }: { compoundData: any[] 
             className="bg-[var(--color-gray-100)] text-[var(--color-slate-700)] font-bold rounded-xl px-4 py-2 pr-10 outline-none focus:ring-2 focus:ring-[var(--color-rose-500)] text-sm appearance-none border-2 border-[var(--color-gray-200)] shadow-sm cursor-pointer"
           >
             {compoundData.map((d) => (
-              <option className="bg-[var(--color-white)] text-[var(--color-slate-800)]" key={d.exercise} value={d.exercise}>
+              <option
+                className="bg-[var(--color-white)] text-[var(--color-slate-800)]"
+                key={d.exercise}
+                value={d.exercise}
+              >
                 {d.exercise}
               </option>
             ))}

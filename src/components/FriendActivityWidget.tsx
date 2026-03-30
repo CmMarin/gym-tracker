@@ -7,7 +7,11 @@ type FriendActivity = {
   workoutName: string;
 };
 
-export default function FriendActivityWidget({ activities }: { activities: FriendActivity[] }) {
+export default function FriendActivityWidget({
+  activities,
+}: {
+  activities: FriendActivity[];
+}) {
   if (activities.length === 0) return null;
 
   return (
@@ -32,8 +36,15 @@ export default function FriendActivityWidget({ activities }: { activities: Frien
             >
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <div>
-                <p className="text-sm font-bold text-slate-800">{act.username} <span className="text-slate-500 font-normal">is currently doing</span></p>
-                <p className="text-md font-black text-indigo-500">{act.workoutName}</p>
+                <p className="text-sm font-bold text-slate-800">
+                  {act.username}{" "}
+                  <span className="text-slate-500 font-normal">
+                    is currently doing
+                  </span>
+                </p>
+                <p className="text-md font-black text-indigo-500">
+                  {act.workoutName}
+                </p>
               </div>
             </motion.div>
           ))}

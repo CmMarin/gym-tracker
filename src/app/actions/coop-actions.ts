@@ -9,8 +9,10 @@ export async function createCoopSession(workoutPlanId: string) {
   if (!session?.user) throw new Error("Not authenticated");
 
   const inviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-  
-  const plan = await prisma.workoutPlan.findUnique({ where: { id: workoutPlanId } });
+
+  const plan = await prisma.workoutPlan.findUnique({
+    where: { id: workoutPlanId },
+  });
   if (!plan) throw new Error("Plan not found");
 
   const coopSession = await prisma.coopSession.create({
@@ -20,11 +22,11 @@ export async function createCoopSession(workoutPlanId: string) {
       members: {
         create: {
           userId: session.user.id,
-          status: "IDLE"
-        }
-      }
+          status: "IDLE",
+        },
+      },
     },
-    include: { members: true }
+    include: { members: true },
   });
 
   return { success: true, sessionId: coopSession.id, inviteCode };
@@ -35,7 +37,7 @@ export async function joinCoopSession(inviteCode: string) {
   if (!session?.user) throw new Error("Not authenticated");
 
   const coopSession = await prisma.coopSession.findUnique({
-    where: { inviteCode }
+    where: { inviteCode },
   });
 
   if (!coopSession || coopSession.status !== "ACTIVE") {
@@ -44,38 +46,45 @@ export async function joinCoopSession(inviteCode: string) {
 
   // Check if already a member, if not, add
   const existing = await prisma.coopSessionMember.findUnique({
-    where: { sessionId_userId: { sessionId: coopSession.id, userId: session.user.id } }
+    where: {
+      sessionId_userId: { sessionId: coopSession.id, userId: session.user.id },
+    },
   });
 
   if (!existing) {
     await prisma.coopSessionMember.create({
       data: {
         sessionId: coopSession.id,
-        userId: session.user.id
-      }
+        userId: session.user.id,
+      },
     });
   }
 
   return { success: true, sessionId: coopSession.id };
 }
 
-export async function updateCoopStatus(sessionId: string, status: string, currentExercise: string | null, newXp: number = 0) {
+export async function updateCoopStatus(
+  sessionId: string,
+  status: string,
+  currentExercise: string | null,
+  newXp: number = 0,
+) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return { success: false };
 
   await prisma.coopSessionMember.update({
     where: { sessionId_userId: { sessionId, userId: session.user.id } },
-    data: { 
-      status, 
+    data: {
+      status,
       currentExercise: currentExercise,
-      xpContributed: { increment: newXp }
-    }
+      xpContributed: { increment: newXp },
+    },
   });
 
   if (newXp > 0) {
     await prisma.coopSession.update({
       where: { id: sessionId },
-      data: { totalXp: { increment: newXp } }
+      data: { totalXp: { increment: newXp } },
     });
   }
 
@@ -90,9 +99,9 @@ export async function getCoopSession(sessionId: string) {
     where: { id: sessionId },
     include: {
       members: {
-        include: { user: { select: { username: true, image: true } } }
-      }
-    }
+        include: { user: { select: { username: true, image: true } } },
+      },
+    },
   });
   return session;
 }

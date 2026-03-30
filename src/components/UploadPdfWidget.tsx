@@ -1,7 +1,7 @@
-'use client';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
+"use client";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 export default function UploadPdfWidget() {
   const [file, setFile] = useState<File | null>(null);
@@ -12,37 +12,42 @@ export default function UploadPdfWidget() {
     setLoading(true);
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     const uploadPromise = async () => {
-      const res = await fetch('/api/upload-pdf', {
-        method: 'POST',
-        body: formData
+      const res = await fetch("/api/upload-pdf", {
+        method: "POST",
+        body: formData,
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to import routine');
+        throw new Error(data.error || "Failed to import routine");
       }
       return data;
     };
 
     try {
       await toast.promise(uploadPromise(), {
-        loading: 'Processing with AI...',
-        success: 'Workout plans imported successfully! Refresh to see them.',
-        error: (err: Error) => `Error: ${err.message}`
+        loading: "Processing with AI...",
+        success: "Workout plans imported successfully! Refresh to see them.",
+        error: (err: Error) => `Error: ${err.message}`,
       });
     } catch {
       // Empty
     }
-    
+
     setLoading(false);
   };
 
   return (
     <div className="bg-[var(--color-white)] shadow-[0_4px_0_var(--color-theme-shadow)] rounded-2xl p-6 border-2 border-indigo-50 mt-6 animate-in fade-in duration-300">
-      <h3 className="text-xl font-bold text-slate-800 mb-4">Import Routine (PDF)</h3>
-      <p className="text-sm text-slate-500 mb-4">Upload a PDF of your workout routine and AI will automatically convert it.</p>
+      <h3 className="text-xl font-bold text-slate-800 mb-4">
+        Import Routine (PDF)
+      </h3>
+      <p className="text-sm text-slate-500 mb-4">
+        Upload a PDF of your workout routine and AI will automatically convert
+        it.
+      </p>
       <input
         type="file"
         accept="application/pdf"
@@ -56,7 +61,7 @@ export default function UploadPdfWidget() {
         disabled={!file || loading}
         className="bg-indigo-500 text-[var(--color-white)] font-bold py-3 px-6 rounded-xl w-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Processing with AI...' : 'Upload PDF'}
+        {loading ? "Processing with AI..." : "Upload PDF"}
       </motion.button>
     </div>
   );

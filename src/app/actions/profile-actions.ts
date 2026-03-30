@@ -32,6 +32,7 @@ export async function updateUserImage(imageUrl: string) {
   revalidatePath("/profile");
   return { success: true };
 }
+
 export async function clearAllWorkoutPlans() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error("Not authenticated");
@@ -40,11 +41,11 @@ export async function clearAllWorkoutPlans() {
     await prisma.activeWorkout.deleteMany({
       where: { userId: session.user.id }
     });
-    
+
     await prisma.planExercise.deleteMany({
        where: { workoutPlan: { userId: session.user.id } }
     });
-    
+
     await prisma.workoutPlan.deleteMany({
       where: { userId: session.user.id }
     });
@@ -57,6 +58,7 @@ export async function clearAllWorkoutPlans() {
   revalidatePath("/dashboard");
   return { success: true };
 }
+
 export async function deleteWorkoutPlan(planId: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error("Not authenticated");
@@ -65,11 +67,11 @@ export async function deleteWorkoutPlan(planId: string) {
     await prisma.activeWorkout.deleteMany({
       where: { userId: session.user.id, workoutPlanId: planId }
     });
-    
+
     await prisma.planExercise.deleteMany({
        where: { workoutPlanId: planId }
     });
-    
+
     await prisma.workoutPlan.delete({
       where: { id: planId, userId: session.user.id }
     });
@@ -82,4 +84,50 @@ export async function deleteWorkoutPlan(planId: string) {
   revalidatePath("/workout");
   revalidatePath("/dashboard");
   return { success: true };
+}
+
+export async function saveWorkoutPlan(
+  planId: string | null,
+  name: string,
+  exercises: { exerciseId?: string | null, customExerciseId?: string | null, targetSets: number, targetReps: number }[]
+) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Not authenticated");
+
+  try {
+    let finalPlanId = planId;
+
+    if (planId) {
+      const existing = await prisma.workoutPlan.findUnique({ where: { id: planId, userId: session.user.id } });
+      if (!existing) throw new Error("Plan not found");
+
+      await prisma.workoutPlan.update({ where: { id: planId }, data: { name } });
+      await prisma.planExercise.deleteMany({ where: { workoutPlanId: planId } });
+    } else {
+      const newPlan = await prisma.workoutPlan.create({
+        data: { userId: session.user.id, name }
+      });
+      finalPlanId = newPlan.id;
+    }
+
+    if (exercises.length > 0 && finalPlanId) {
+      await prisma.planExercise.createMany({
+        data: exercises.map(ex => ({
+          workoutPlanId: finalPlanId!,
+          exerciseId: ex.exerciseId || null,
+          customExerciseId: ex.customExerciseId || null,
+          targetSets: ex.targetSets,
+          targetReps: ex.targetReps
+        }))
+      });
+    }
+
+    revalidatePath("/profile");
+    revalidatePath("/workout");
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (err) {
+    console.error("Failed to save workout plan", err);
+    return { success: false, error: "Failed to save workout plan" };
+  }
 }

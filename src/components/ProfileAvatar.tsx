@@ -5,15 +5,21 @@ import { updateUserImage } from "@/app/actions/profile-actions";
 import { Camera, X } from "lucide-react";
 
 const avatars = [
-  "https://api.dicebear.com/8.x/big-smile/svg?seed=Aidan",     // cool guy
-  "https://api.dicebear.com/8.x/big-smile/svg?seed=Brian",      // duck
-  "https://api.dicebear.com/8.x/big-smile/svg?flip=true&seed=Liam",   // cat
-  "https://api.dicebear.com/9.x/toon-head/svg?eyes=happy,humble,wide,wink&mouth=agape,angry,laugh,smile&skinColor=f1c3a5&seed=Valentina",    // dog
-  "https://api.dicebear.com/8.x/big-smile/svg?seed=Sheba",     // girl
-  "https://api.dicebear.com/8.x/big-smile/svg?seed=Bandit",    // boy
+  "https://api.dicebear.com/8.x/big-smile/svg?seed=Aidan", // cool guy
+  "https://api.dicebear.com/8.x/big-smile/svg?seed=Brian", // duck
+  "https://api.dicebear.com/8.x/big-smile/svg?flip=true&seed=Liam", // cat
+  "https://api.dicebear.com/9.x/toon-head/svg?eyes=happy,humble,wide,wink&mouth=agape,angry,laugh,smile&skinColor=f1c3a5&seed=Valentina", // dog
+  "https://api.dicebear.com/8.x/big-smile/svg?seed=Sheba", // girl
+  "https://api.dicebear.com/8.x/big-smile/svg?seed=Bandit", // boy
 ];
 
-export default function ProfileAvatar({ currentImage, username }: { currentImage: string | null; username: string }) {
+export default function ProfileAvatar({
+  currentImage,
+  username,
+}: {
+  currentImage: string | null;
+  username: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +33,7 @@ export default function ProfileAvatar({ currentImage, username }: { currentImage
   return (
     <>
       <div className="relative z-10 w-full mb-6 max-w-sm group">
-        <button 
+        <button
           onClick={() => setIsOpen(true)}
           className="relative inline-block hover:scale-105 transition-transform"
         >
@@ -54,26 +60,35 @@ export default function ProfileAvatar({ currentImage, username }: { currentImage
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-[var(--color-white)] w-full max-w-sm rounded-[2rem] p-6 relative animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-black text-slate-800">Choose Avatar</h2>
-              <button onClick={() => setIsOpen(false)} className="p-2 bg-gray-100 text-slate-500 rounded-full">
+              <h2 className="text-xl font-black text-slate-800">
+                Choose Avatar
+              </h2>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 bg-gray-100 text-slate-500 rounded-full"
+              >
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4">
               {avatars.map((url) => (
                 <button
                   key={url}
                   disabled={loading}
                   onClick={() => selectAvatar(url)}
-                  className={`relative aspect-square rounded-2xl border-4 ${currentImage === url ? 'border-indigo-500 bg-indigo-50' : 'border-indigo-50 bg-gray-50 hover:border-indigo-200'} transition-all overflow-hidden flex items-center justify-center`}
+                  className={`relative aspect-square rounded-2xl border-4 ${currentImage === url ? "border-indigo-500 bg-indigo-50" : "border-indigo-50 bg-gray-50 hover:border-indigo-200"} transition-all overflow-hidden flex items-center justify-center`}
                 >
-                  <img src={url} alt="Avatar option" className="w-full h-full p-2 object-contain" />
+                  <img
+                    src={url}
+                    alt="Avatar option"
+                    className="w-full h-full p-2 object-contain"
+                  />
                 </button>
               ))}
             </div>
-            
-            <button 
+
+            <button
               onClick={() => selectAvatar("")}
               disabled={loading}
               className="mt-6 w-full py-3 bg-gray-100 hover:bg-gray-200 rounded-xl text-slate-600 font-bold transition-colors"

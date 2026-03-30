@@ -1,10 +1,21 @@
 "use client";
 
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { Activity } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function VolumeTracker({ data }: { data: { date: string, volume: number }[] }) {
+export default function VolumeTracker({
+  data,
+}: {
+  data: { date: string; volume: number }[];
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -22,24 +33,57 @@ export default function VolumeTracker({ data }: { data: { date: string, volume: 
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorVolume" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-indigo-500)" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="var(--color-indigo-500)" stopOpacity={0}/>
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-indigo-500)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-indigo-500)"
+                    stopOpacity={0}
+                  />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" tick={{fontSize: 12, fill: 'var(--color-slate-500)'}} tickLine={false} axisLine={false} />
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12, fill: "var(--color-slate-500)" }}
+                tickLine={false}
+                axisLine={false}
+              />
               <YAxis hide />
               <Tooltip
-                contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', backgroundColor: 'var(--color-white)' }}
-                labelStyle={{ fontWeight: 'bold', color: 'var(--color-slate-800)' }}
-                itemStyle={{ color: 'var(--color-indigo-500)', fontWeight: 'bold' }}
-                formatter={(value: any) => [`${value} kg`, 'Volume']}
+                contentStyle={{
+                  borderRadius: "1rem",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                  backgroundColor: "var(--color-white)",
+                }}
+                labelStyle={{
+                  fontWeight: "bold",
+                  color: "var(--color-slate-800)",
+                }}
+                itemStyle={{
+                  color: "var(--color-indigo-500)",
+                  fontWeight: "bold",
+                }}
+                formatter={(value: any) => [`${value} kg`, "Volume"]}
               />
-              <Area type="monotone" dataKey="volume" stroke="var(--color-indigo-500)" strokeWidth={3} fillOpacity={1} fill="url(#colorVolume)" />
+              <Area
+                type="monotone"
+                dataKey="volume"
+                stroke="var(--color-indigo-500)"
+                strokeWidth={3}
+                fillOpacity={1}
+                fill="url(#colorVolume)"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       ) : (
-        <p className="text-center text-slate-500 font-medium py-8">No volume data yet. Go do some workouts!</p>
+        <p className="text-center text-slate-500 font-medium py-8">
+          No volume data yet. Go do some workouts!
+        </p>
       )}
     </motion.div>
   );

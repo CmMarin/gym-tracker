@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { searchUser, sendFriendRequest, acceptFriendRequest } from "@/app/(app)/dashboard/actions";
+import {
+  searchUser,
+  sendFriendRequest,
+  acceptFriendRequest,
+} from "@/app/(app)/dashboard/actions";
 import { Search, UserPlus, Check, UserCheck } from "lucide-react";
 
 type PendingRequest = {
@@ -17,7 +21,11 @@ type SearchResult = {
   sent?: boolean;
 };
 
-export default function FriendsWidget({ pendingRequests }: { pendingRequests: PendingRequest[] }) {
+export default function FriendsWidget({
+  pendingRequests,
+}: {
+  pendingRequests: PendingRequest[];
+}) {
   const [search, setSearch] = useState("");
   const [result, setResult] = useState<SearchResult | null>(null);
   const [error, setError] = useState("");
@@ -31,9 +39,9 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
     setResult(null);
 
     const res = await searchUser(search.trim());
-    if ('error' in res && res.error) {
+    if ("error" in res && res.error) {
       setError(res.error);
-    } else if ('user' in res && res.user) {
+    } else if ("user" in res && res.user) {
       setResult(res.user);
     }
     setLoading(false);
@@ -53,11 +61,18 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
     <div className="w-full max-w-md bg-[var(--color-white)] rounded-[2rem] p-6 shadow-sm border-2 border-indigo-50 flex flex-col space-y-6">
       {pendingRequests.length > 0 && (
         <div>
-          <h3 className="text-xl font-extrabold text-slate-800 mb-3">Pending Invites</h3>
+          <h3 className="text-xl font-extrabold text-slate-800 mb-3">
+            Pending Invites
+          </h3>
           <div className="space-y-3">
             {pendingRequests.map((req) => (
-              <div key={req.friendshipId} className="flex items-center justify-between bg-amber-50 p-3 rounded-2xl border-2 border-amber-100">
-                <div className="font-bold text-slate-800">@{req.user.username}</div>
+              <div
+                key={req.friendshipId}
+                className="flex items-center justify-between bg-amber-50 p-3 rounded-2xl border-2 border-amber-100"
+              >
+                <div className="font-bold text-slate-800">
+                  @{req.user.username}
+                </div>
                 <button
                   onClick={() => handleAccept(req.friendshipId)}
                   className="bg-green-500 hover:bg-green-400 text-[var(--color-white)] rounded-xl p-2 shadow-[0_4px_0_0_#16a34a] active:shadow-none active:translate-y-[4px] transition-all"
@@ -72,7 +87,9 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
       )}
 
       <div>
-        <h3 className="text-xl font-extrabold text-slate-800 mb-4">Add Friends</h3>
+        <h3 className="text-xl font-extrabold text-slate-800 mb-4">
+          Add Friends
+        </h3>
         <form onSubmit={handleSearch} className="flex space-x-2">
           <input
             type="text"
@@ -89,14 +106,26 @@ export default function FriendsWidget({ pendingRequests }: { pendingRequests: Pe
           </button>
         </form>
 
-        {loading && <p className="text-slate-500 font-bold mt-4 text-center">Searching...</p>}
-        {error && <p className="text-red-500 font-bold mt-4 text-center bg-red-50 p-3 rounded-xl border border-red-100">{error}</p>}
-        
+        {loading && (
+          <p className="text-slate-500 font-bold mt-4 text-center">
+            Searching...
+          </p>
+        )}
+        {error && (
+          <p className="text-red-500 font-bold mt-4 text-center bg-red-50 p-3 rounded-xl border border-red-100">
+            {error}
+          </p>
+        )}
+
         {result && (
           <div className="mt-4 flex items-center justify-between bg-gray-50 border-2 border-indigo-50 p-4 rounded-2xl">
-            <div className="font-bold text-slate-800 text-lg">@{result.username}</div>
+            <div className="font-bold text-slate-800 text-lg">
+              @{result.username}
+            </div>
             {result.sent ? (
-              <span className="text-green-500 font-bold flex items-center"><UserCheck size={20} className="mr-1" /> Sent!</span>
+              <span className="text-green-500 font-bold flex items-center">
+                <UserCheck size={20} className="mr-1" /> Sent!
+              </span>
             ) : (
               <button
                 onClick={handleSendRequest}

@@ -10,18 +10,28 @@ export type FriendStats = {
   avatarColor: string;
 };
 
-export default function CompetitionDashboard({ leaderboard }: { leaderboard: FriendStats[] }) {
-  const maxXP = Math.max(...leaderboard.map(f => f.xp), 1);
+export default function CompetitionDashboard({
+  leaderboard,
+}: {
+  leaderboard: FriendStats[];
+}) {
+  const maxXP = Math.max(...leaderboard.map((f) => f.xp), 1);
 
   return (
     <div className="bg-[var(--color-white)] rounded-[2rem] p-6 shadow-sm border-2 border-indigo-50 w-full max-w-md">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-extrabold text-slate-800">Weekly League</h2>
-        <span className="text-sm font-bold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">Live</span>
+        <h2 className="text-2xl font-extrabold text-slate-800">
+          Weekly League
+        </h2>
+        <span className="text-sm font-bold text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">
+          Live
+        </span>
       </div>
 
       {leaderboard.length === 0 ? (
-        <p className="text-center text-slate-500 font-bold py-4">Add friends to compete!</p>
+        <p className="text-center text-slate-500 font-bold py-4">
+          Add friends to compete!
+        </p>
       ) : (
         <div className="space-y-5">
           {leaderboard.map((user, index) => (
@@ -30,11 +40,24 @@ export default function CompetitionDashboard({ leaderboard }: { leaderboard: Fri
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={"flex items-center p-4 rounded-2xl " + (user.username === "You" ? "bg-rose-100 border-2 border-rose-500" : "bg-gray-50 border-2 border-indigo-50")}
+              className={
+                "flex items-center p-4 rounded-2xl " +
+                (user.username === "You"
+                  ? "bg-rose-100 border-2 border-rose-500"
+                  : "bg-gray-50 border-2 border-indigo-50")
+              }
             >
-              <div className="font-black text-xl text-slate-400 w-8">{user.rank}</div>
+              <div className="font-black text-xl text-slate-400 w-8">
+                {user.rank}
+              </div>
 
-              <div className={"w-12 h-12 rounded-full " + user.avatarColor + " border-2 border-[var(--color-white)] shadow-sm flex items-center justify-center text-[var(--color-white)] font-bold text-lg mr-4"}>
+              <div
+                className={
+                  "w-12 h-12 rounded-full " +
+                  user.avatarColor +
+                  " border-2 border-[var(--color-white)] shadow-sm flex items-center justify-center text-[var(--color-white)] font-bold text-lg mr-4"
+                }
+              >
                 {user.username.charAt(0).toUpperCase()}
               </div>
 
@@ -44,13 +67,25 @@ export default function CompetitionDashboard({ leaderboard }: { leaderboard: Fri
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${(user.xp / maxXP) * 100}%` }}
-                    transition={{ type: "spring", stiffness: 40, damping: 10, delay: 0.3 }}
-                    className={"h-full rounded-full " + (user.username === "You" ? "bg-rose-500" : "bg-indigo-500")}
+                    transition={{
+                      type: "spring",
+                      stiffness: 40,
+                      damping: 10,
+                      delay: 0.3,
+                    }}
+                    className={
+                      "h-full rounded-full " +
+                      (user.username === "You"
+                        ? "bg-rose-500"
+                        : "bg-indigo-500")
+                    }
                   />
                 </div>
               </div>
 
-              <div className="ml-4 font-black text-slate-700">{user.xp} <span className="text-xs text-slate-400">XP</span></div>
+              <div className="ml-4 font-black text-slate-700">
+                {user.xp} <span className="text-xs text-slate-400">XP</span>
+              </div>
             </motion.div>
           ))}
         </div>

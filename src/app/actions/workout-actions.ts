@@ -16,26 +16,32 @@ export async function finishWorkoutAction(workoutData: any) {
 
   const activeWk = await prisma.activeWorkout.findUnique({ where: { userId } });
   if (!activeWk) throw new Error("No active workout found");
-  
-  const stateData = activeWk.state ? (typeof activeWk.state === 'string' ? JSON.parse(activeWk.state) : activeWk.state) : {};
+
+  const stateData = activeWk.state
+    ? typeof activeWk.state === "string"
+      ? JSON.parse(activeWk.state)
+      : activeWk.state
+    : {};
   const coopSessionId = stateData.coopSessionId;
-  
+
   let totalXpEarned = 100; // Base completion XP
   const prs: string[] = [];
   let totalVolume = 0;
   let penaltyCount = 0;
-  
+
   // Create workout session first
   const startTime = activeWk.startTime;
-  const durationMinutes = Math.floor((new Date().getTime() - startTime.getTime()) / 60000);
+  const durationMinutes = Math.floor(
+    (new Date().getTime() - startTime.getTime()) / 60000,
+  );
 
   const workoutSession = await prisma.workoutSession.create({
     data: {
       userId,
       workoutPlanId: activeWk.workoutPlanId,
       durationMinutes,
-      totalXpEarned: 0 // Will update later
-    }
+      totalXpEarned: 0, // Will update later
+    },
   });
 
   // evaluate exercises
@@ -49,10 +55,10 @@ export async function finishWorkoutAction(workoutData: any) {
         userId,
         OR: [
           { exercise: { name: ex.name } },
-          { customExercise: { name: ex.name } }
-        ]
+          { customExercise: { name: ex.name } },
+        ],
       },
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
     });
 
     const hasHistory = pastLogsAll.length > 0;
@@ -65,7 +71,10 @@ export async function finishWorkoutAction(workoutData: any) {
     if (hasHistory) {
       // Find all time best
       for (const log of pastLogsAll) {
-        if (log.weight > allTimeBestWeight || (log.weight === allTimeBestWeight && log.reps > allTimeBestReps)) {
+        if (
+          log.weight > allTimeBestWeight ||
+          (log.weight === allTimeBestWeight && log.reps > allTimeBestReps)
+        ) {
           allTimeBestWeight = log.weight;
           allTimeBestReps = log.reps;
         }
@@ -73,10 +82,15 @@ export async function finishWorkoutAction(workoutData: any) {
 
       // Find last session best (for regression deduction)
       const lastSessionDate = pastLogsAll[0].createdAt.toDateString();
-      const lastSessionLogs = pastLogsAll.filter(l => l.createdAt.toDateString() === lastSessionDate);
-      
+      const lastSessionLogs = pastLogsAll.filter(
+        (l) => l.createdAt.toDateString() === lastSessionDate,
+      );
+
       for (const l of lastSessionLogs) {
-        if (l.weight > lastSessionMaxWeight || (l.weight === lastSessionMaxWeight && l.reps > lastSessionMaxReps)) {
+        if (
+          l.weight > lastSessionMaxWeight ||
+          (l.weight === lastSessionMaxWeight && l.reps > lastSessionMaxReps)
+        ) {
           lastSessionMaxWeight = l.weight;
           lastSessionMaxReps = l.reps;
         }
@@ -100,13 +114,20 @@ export async function finishWorkoutAction(workoutData: any) {
       // Only count non-warmup sets for PRs and Performance Tracking
       if (!isWarmup) {
         // Update this session's max stats for deduction check
-        if (weight > thisSessionMaxWeight || (weight === thisSessionMaxWeight && reps > thisSessionMaxReps)) {
+        if (
+          weight > thisSessionMaxWeight ||
+          (weight === thisSessionMaxWeight && reps > thisSessionMaxReps)
+        ) {
           thisSessionMaxWeight = weight;
           thisSessionMaxReps = reps;
         }
 
         // PR Logic: Strictly greater than historical max, AND history must exist
-        if (hasHistory && (weight > allTimeBestWeight || (weight === allTimeBestWeight && reps > allTimeBestReps))) {
+        if (
+          hasHistory &&
+          (weight > allTimeBestWeight ||
+            (weight === allTimeBestWeight && reps > allTimeBestReps))
+        ) {
           isPR = true;
           exercisePr = true;
           allTimeBestWeight = weight; // update it so subsequent sets must beat THIS to be another PR
@@ -130,22 +151,25 @@ export async function finishWorkoutAction(workoutData: any) {
           weight,
           isWarmup,
           isPR,
-          xpEarned: isPR ? 60 : (isWarmup ? 5 : 10)
-        }
+          xpEarned: isPR ? 60 : isWarmup ? 5 : 10,
+        },
       });
     }
 
-    // Performance Deduction Logic: If performed worse than LAST session        
+    // Performance Deduction Logic: If performed worse than LAST session
     if (hasHistory && thisSessionMaxWeight > 0) {
-      if (thisSessionMaxWeight < lastSessionMaxWeight ||
-         (thisSessionMaxWeight === lastSessionMaxWeight && thisSessionMaxReps < lastSessionMaxReps)) {
+      if (
+        thisSessionMaxWeight < lastSessionMaxWeight ||
+        (thisSessionMaxWeight === lastSessionMaxWeight &&
+          thisSessionMaxReps < lastSessionMaxReps)
+      ) {
         totalXpEarned -= 20; // Regression penalty
         penaltyCount += 1;
       }
     }
 
     if (exercisePr) {
-       prs.push(ex.name);
+      prs.push(ex.name);
     }
   }
 
@@ -155,43 +179,47 @@ export async function finishWorkoutAction(workoutData: any) {
   // Update session total XP
   await prisma.workoutSession.update({
     where: { id: workoutSession.id },
-    data: { totalXpEarned }
+    data: { totalXpEarned },
   });
 
   // Clear Active Workout
   await prisma.activeWorkout.delete({
-    where: { userId }
+    where: { userId },
   });
 
   // --- CO-OP GAMEPLAY COMPLETION ---
   if (coopSessionId) {
     try {
-      const coopSession = await prisma.coopSession.findUnique({ where: { id: coopSessionId } });
+      const coopSession = await prisma.coopSession.findUnique({
+        where: { id: coopSessionId },
+      });
       if (coopSession && coopSession.status === "ACTIVE") {
         totalXpEarned += 100; // Bonus for finishing a co-op session!
-        
+
         await prisma.coopSessionMember.update({
           where: { sessionId_userId: { sessionId: coopSessionId, userId } },
-          data: { 
+          data: {
             status: "COMPLETED",
             prsCount: prs.length,
             volume: totalVolume,
-            penalties: penaltyCount
-          }
+            penalties: penaltyCount,
+          },
         });
 
         // Check if all members are completed
         const allMembers = await prisma.coopSessionMember.findMany({
-          where: { sessionId: coopSessionId }
+          where: { sessionId: coopSessionId },
         });
-        const allCompleted = allMembers.every((m: any) => m.status === "COMPLETED");
+        const allCompleted = allMembers.every(
+          (m: any) => m.status === "COMPLETED",
+        );
 
         if (allCompleted) {
           const finalSession = await prisma.coopSession.update({
             where: { id: coopSessionId },
-            data: { status: "COMPLETED", endedAt: new Date() }
+            data: { status: "COMPLETED", endedAt: new Date() },
           });
-          
+
           if (finalSession.totalXp >= finalSession.goalXp) {
             totalXpEarned += 200; // Team met the shared goal!
           }
@@ -211,14 +239,18 @@ export async function finishWorkoutAction(workoutData: any) {
   // Streak logic
   const prevSession = await prisma.workoutSession.findFirst({
     where: { userId, id: { not: workoutSession.id } },
-    orderBy: { completedAt: "desc" }
+    orderBy: { completedAt: "desc" },
   });
 
   let newStreak = user.streakDays || 0;
   if (!prevSession) {
     newStreak = 1;
   } else {
-    const diffWeeks = differenceInCalendarWeeks(workoutSession.completedAt, prevSession.completedAt, { weekStartsOn: 1 });
+    const diffWeeks = differenceInCalendarWeeks(
+      workoutSession.completedAt,
+      prevSession.completedAt,
+      { weekStartsOn: 1 },
+    );
     if (diffWeeks === 1) {
       newStreak += 1;
     } else if (diffWeeks > 1) {
@@ -229,13 +261,15 @@ export async function finishWorkoutAction(workoutData: any) {
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { xp: newXp, weeklyXp: newWeeklyXp, streakDays: newStreak }
+    data: { xp: newXp, weeklyXp: newWeeklyXp, streakDays: newStreak },
   });
 
   // --- ACHIEVEMENTS LOGIC ---
   const earnedAchs: string[] = [];
-  const existingAchs = await prisma.userAchievement.findMany({ where: { userId } });
-  const existingTypes = new Set(existingAchs.map(a => a.type));
+  const existingAchs = await prisma.userAchievement.findMany({
+    where: { userId },
+  });
+  const existingTypes = new Set(existingAchs.map((a) => a.type));
 
   const checkAndAward = async (type: any, condition: boolean) => {
     if (condition && !existingTypes.has(type)) {
@@ -245,11 +279,14 @@ export async function finishWorkoutAction(workoutData: any) {
   };
 
   await checkAndAward("FIRST_WORKOUT", !prevSession);
-  await checkAndAward("NIGHT_OWL", new Date().getHours() >= 22 || new Date().getHours() <= 3);
+  await checkAndAward(
+    "NIGHT_OWL",
+    new Date().getHours() >= 22 || new Date().getHours() <= 3,
+  );
   await checkAndAward("IRON_STREAK", newStreak >= 30);
-  
-  const hit100kg = workoutData.exercises.some((ex: any) => 
-    ex.sets?.some((s: any) => parseFloat(s.weight || "0") >= 100)
+
+  const hit100kg = workoutData.exercises.some((ex: any) =>
+    ex.sets?.some((s: any) => parseFloat(s.weight || "0") >= 100),
   );
   await checkAndAward("CLUB_100_KG", hit100kg);
 
@@ -264,6 +301,6 @@ export async function finishWorkoutAction(workoutData: any) {
     didLevelUp,
     xpEarned: totalXpEarned,
     prs,
-    earnedAchievements: earnedAchs
+    earnedAchievements: earnedAchs,
   };
 }

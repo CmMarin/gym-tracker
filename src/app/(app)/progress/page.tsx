@@ -18,26 +18,26 @@ export default async function ProgressPage() {
 
   const userId = session.user.id;
 
-  // Execute queries in parallel, fetching ONLY the necessary fields to drastically drop load time
-  const [bodyWeightLogs, setLogs, weeklyVolumeData] = await Promise.all([
-    prisma.bodyWeightLog.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'asc' },
-      select: { weight: true, createdAt: true }
-    }),
-    prisma.setLog.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        weight: true,
-        reps: true,
-        createdAt: true,
-        exercise: { select: { name: true } },
-        customExercise: { select: { name: true } }
-      }
-    }),
-    getWeeklyVolumeAnalytics()
-  ]);
+  // Execute queries sequentially to prevent connection pool exhaustion
+  const bodyWeightLogs = await prisma.bodyWeightLog.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'asc' },
+    select: { weight: true, createdAt: true }
+  });
+
+  const setLogs = await prisma.setLog.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      weight: true,
+      reps: true,
+      createdAt: true,
+      exercise: { select: { name: true } },
+      customExercise: { select: { name: true } }
+    }
+  });
+
+  const weeklyVolumeData = await getWeeklyVolumeAnalytics();
 
   // 1. Body weight data
   const weightData = bodyWeightLogs.map(bw => ({

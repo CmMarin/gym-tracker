@@ -44,14 +44,22 @@ export default function RecentPRsWidget({ prs }: { prs: any[] }) {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-800">{pr.isMe ? "You" : pr.username}</span>
+                    <span className="font-bold text-slate-800">
+                      {pr.isMe ? "You" : pr.username}
+                    </span>
                   </div>
-                  <span className="text-sm font-medium text-slate-500">{pr.exercise}</span>
+                  <span className="text-sm font-medium text-slate-500">
+                    {pr.exercise}
+                  </span>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-black text-slate-800 text-lg">{pr.weight}kg</div>
-                <div className="text-xs font-bold text-slate-400">{pr.reps} reps</div>
+                <div className="font-black text-slate-800 text-lg">
+                  {pr.weight}kg
+                </div>
+                <div className="text-xs font-bold text-slate-400">
+                  {pr.reps} reps
+                </div>
               </div>
             </motion.div>
           ))}
@@ -63,9 +71,17 @@ export default function RecentPRsWidget({ prs }: { prs: any[] }) {
             className="mt-2 w-full py-3 bg-gray-50 rounded-2xl font-bold text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center gap-2"
           >
             {isExpanded ? (
-              <>Show Less <ChevronDown className="rotate-180 transition-transform" size={18} /></>
+              <>
+                Show Less{" "}
+                <ChevronDown
+                  className="rotate-180 transition-transform"
+                  size={18}
+                />
+              </>
             ) : (
-              <>View All ({prs.length}) <ChevronDown size={18} /></>
+              <>
+                View All ({prs.length}) <ChevronDown size={18} />
+              </>
             )}
           </button>
         )}

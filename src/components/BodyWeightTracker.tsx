@@ -1,12 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { addBodyWeightLog } from "@/app/actions/profile-actions";
 import { Scale, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function BodyWeightTracker({ data }: { data: { weight: number, date: string }[] }) {
+export default function BodyWeightTracker({
+  data,
+}: {
+  data: { weight: number; date: string }[];
+}) {
   const [weightStr, setWeightStr] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -50,23 +61,53 @@ export default function BodyWeightTracker({ data }: { data: { weight: number, da
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-indigo-500)" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="var(--color-indigo-500)" stopOpacity={0}/>
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-indigo-500)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-indigo-500)"
+                    stopOpacity={0}
+                  />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" tick={{fontSize: 12, fill: 'var(--color-slate-500)'}} tickLine={false} axisLine={false} />
-              <YAxis domain={['dataMin - 2', 'dataMax + 2']} hide />
-              <Tooltip
-                contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', backgroundColor: 'var(--color-white)' }}
-                labelStyle={{ fontWeight: 'bold', color: 'var(--color-slate-800)' }}
-                itemStyle={{ color: 'var(--color-indigo-500)' }}
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12, fill: "var(--color-slate-500)" }}
+                tickLine={false}
+                axisLine={false}
               />
-              <Area type="monotone" dataKey="weight" stroke="var(--color-indigo-500)" strokeWidth={3} fillOpacity={1} fill="url(#colorWeight)" />
+              <YAxis domain={["dataMin - 2", "dataMax + 2"]} hide />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "1rem",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                  backgroundColor: "var(--color-white)",
+                }}
+                labelStyle={{
+                  fontWeight: "bold",
+                  color: "var(--color-slate-800)",
+                }}
+                itemStyle={{ color: "var(--color-indigo-500)" }}
+              />
+              <Area
+                type="monotone"
+                dataKey="weight"
+                stroke="var(--color-indigo-500)"
+                strokeWidth={3}
+                fillOpacity={1}
+                fill="url(#colorWeight)"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       ) : (
-        <p className="text-center text-slate-500 font-medium py-8">No weight data yet.</p>
+        <p className="text-center text-slate-500 font-medium py-8">
+          No weight data yet.
+        </p>
       )}
     </div>
   );

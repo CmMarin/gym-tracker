@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Trash2, Edit2 } from 'lucide-react';
 import { deleteWorkoutPlan } from '@/app/actions/profile-actions';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -10,10 +10,10 @@ type Plan = {
   id: string;
   name: string;
   dayOfWeek: number | null;
-  exercises: { id: string; name: string; targetSets: number; targetReps: number }[];
+  exercises: { id: string; name: string; targetSets: number; targetReps: number; isCustom?: boolean; exerciseId?: string; customExerciseId?: string }[];
 };
 
-export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
+export default function ExpandableWorkoutCard({ plan, onEdit }: { plan: Plan, onEdit?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
@@ -59,32 +59,36 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
   if (isDeleting) return null;
 
   return (
-    <div className="rounded-xl bg-[var(--color-gray-50)] border-2 border-[var(--color-indigo-50)] overflow-hidden">
+    <div className="rounded-2xl bg-[var(--color-white)] border-2 border-[var(--color-gray-100)] shadow-[0_4px_0_var(--color-button-shadow)] overflow-hidden transition-all hover:translate-y-[2px] hover:shadow-[0_2px_0_var(--color-button-shadow)]">
       <div className="w-full p-2 pr-4 flex justify-between items-center group">
-        <button onClick={() => setIsOpen(!isOpen)} className="flex-1 text-left p-2 rounded-lg hover:bg-[var(--color-gray-100)] transition-colors focus:outline-none">
+        <button onClick={() => setIsOpen(!isOpen)} className="flex-1 text-left p-2 rounded-xl hover:bg-[var(--color-gray-50)] transition-colors focus:outline-none">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-bold text-[var(--color-slate-800)]">{plan.name}</h3>
-              {plan.dayOfWeek && (
-                <span className="text-xs font-bold bg-[var(--color-indigo-100)] text-[var(--color-indigo-700)] px-2 py-1 rounded-lg shrink-0 border border-[var(--color-indigo-200)]">
-                  Day {plan.dayOfWeek}
-                </span>
-              )}
+              <h3 className="font-black text-[var(--color-slate-800)] text-lg">{plan.name}</h3>
             </div>
-            <p className="text-sm text-[var(--color-slate-500)] font-medium">
+            <p className="text-sm text-[var(--color-slate-500)] font-bold">
               {plan.exercises.length} exercises
             </p>
           </div>
         </button>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="p-2 text-[var(--color-slate-400)] hover:text-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-50)] rounded-xl transition-colors"
+              title="Edit Routine"
+            >
+              <Edit2 size={18} />
+            </button>
+          )}
           <button
             onClick={handleDelete}
-            className="p-2 text-[var(--color-slate-400)] hover:text-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-50)] rounded-lg transition-colors"
+            className="p-2 text-[var(--color-slate-400)] hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"
             title="Delete Routine"
           >
             <Trash2 size={18} />
           </button>
-          <button onClick={() => setIsOpen(!isOpen)} className="text-[var(--color-slate-400)] p-2 hover:bg-[var(--color-gray-100)] rounded-lg">
+          <button onClick={() => setIsOpen(!isOpen)} className="text-[var(--color-slate-400)] p-2 hover:bg-[var(--color-gray-50)] rounded-xl transition-colors ml-1">
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </button>
         </div>
@@ -96,16 +100,19 @@ export default function ExpandableWorkoutCard({ plan }: { plan: Plan }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="border-t-2 border-[var(--color-indigo-50)]"
+            className="border-t-2 border-[var(--color-gray-100)] bg-[var(--color-gray-50)]"
           >
             <div className="p-4 space-y-2">
               {plan.exercises.map((ex, index) => (
-                <div key={ex.id} className="flex justify-between items-center text-sm p-3 rounded-lg border-b border-[var(--color-gray-100)] last:border-b-0 hover:bg-[var(--color-gray-100)] transition-colors">
+                <div key={ex.id || index} className="flex justify-between items-center text-sm p-3 rounded-xl border border-[var(--color-gray-200)] bg-[var(--color-white)] last:mb-0 hover:border-[var(--color-indigo-200)] transition-colors shadow-sm">
                   <div className="flex items-center gap-3">
-                    <span className="text-[var(--color-slate-400)] font-bold w-4">{index + 1}.</span>
-                    <span className="font-medium text-[var(--color-slate-700)]">{ex.name}</span>
+                    <span className="text-[var(--color-indigo-400)] font-black w-4 text-xs">{index + 1}.</span>
+                    <div>
+                       <span className="font-bold text-[var(--color-slate-700)] block">{ex.name}</span>
+                       {ex.isCustom && <span className="text-[9px] uppercase font-black text-orange-500">Custom</span>}
+                    </div>
                   </div>
-                  <span className="text-[var(--color-slate-500)] font-medium bg-[var(--color-gray-100)] px-2 py-1 rounded-md">
+                  <span className="text-[var(--color-slate-600)] font-black bg-[var(--color-gray-100)] px-2.5 py-1 rounded-lg border border-[var(--color-gray-200)]">
                     {ex.targetSets}x{ex.targetReps}
                   </span>
                 </div>

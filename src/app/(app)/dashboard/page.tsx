@@ -6,6 +6,7 @@ import FriendsWidget from "@/components/FriendsWidget";
 import CurrentWorkoutWidget from "@/components/CurrentWorkoutWidget";
 import FriendActivityWidget from "@/components/FriendActivityWidget";
 import RecentPRsWidget from "@/components/RecentPRsWidget";
+import WeeklyPlannerWidget from "@/components/WeeklyPlannerWidget";
 
 function getColors(username: string) {
   const colors = ["bg-indigo-500", "bg-purple-500", "bg-pink-500", "bg-green-500", "bg-amber-500", "bg-rose-500"];
@@ -22,7 +23,13 @@ export default async function DashboardPage() {
   const userId = session.user.id;
 
   // Run initial independent queries in parallel
-  const [currentUser, friendships, myActiveWorkout] = await Promise.all([
+  const [
+    currentUser, 
+    friendships, 
+    myActiveWorkout, 
+    mySchedule, 
+    mySavedPlans
+  ] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: { id: true, username: true, xp: true, weeklyXp: true },
@@ -39,6 +46,14 @@ export default async function DashboardPage() {
     prisma.activeWorkout.findUnique({
       where: { userId },
       include: { workoutPlan: true }
+    }),
+    prisma.workoutSchedule.findUnique({
+      where: { userId }
+    }),
+    prisma.workoutPlan.findMany({
+      where: { userId },
+      include: { planExercises: true },
+      orderBy: { createdAt: 'desc' }
     })
   ]);
 
@@ -86,7 +101,8 @@ export default async function DashboardPage() {
       },
       include: {
         user: true,
-        exercise: true
+        exercise: true,
+        customExercise: true
       },
       orderBy: { createdAt: 'desc' },
       take: 10
@@ -99,7 +115,7 @@ export default async function DashboardPage() {
   const recentPRs = recentLogsWithPR.map((log: any) => ({
     id: log.id,
     username: log.user.username,
-    exercise: log.exercise.name,
+    exercise: log.exercise?.name || log.customExercise?.name || "Unknown Exercise",
     weight: log.weight,
     reps: log.reps,
     isMe: log.userId === userId,
@@ -110,6 +126,10 @@ export default async function DashboardPage() {
     <div className="min-h-full flex flex-col items-center p-6 space-y-8 pb-32">
       <CompetitionDashboard leaderboard={leaderboard} />
       {myActiveWorkout && <CurrentWorkoutWidget workoutName={myActiveWorkout.workoutPlan?.name || "Custom Workout"} />}
+      <WeeklyPlannerWidget 
+        initialSchedule={mySchedule ? JSON.parse(JSON.stringify(mySchedule)) : null} 
+        savedWorkouts={JSON.parse(JSON.stringify(mySavedPlans))} 
+      />
       <FriendActivityWidget activities={formattedFriendActivity} />
       <RecentPRsWidget prs={recentPRs} />
       <div className="w-full max-w-md">

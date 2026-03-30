@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+  Legend,
+} from "recharts";
 import { PieChart as PieChartIcon } from "lucide-react";
 
 export default function WeeklyVolumeWidget({ initData }: { initData: any[] }) {
@@ -15,7 +22,16 @@ export default function WeeklyVolumeWidget({ initData }: { initData: any[] }) {
   if (!mounted) return null;
 
   // Vibrant game-like colors
-  const COLORS = ["#10b981", "#3b82f6", "#8b5cf6", "#f43f5e", "#f59e0b", "#f97316", "#14b8a6", "#06b6d4"];
+  const COLORS = [
+    "#10b981",
+    "#3b82f6",
+    "#8b5cf6",
+    "#f43f5e",
+    "#f59e0b",
+    "#f97316",
+    "#14b8a6",
+    "#06b6d4",
+  ];
 
   return (
     <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50 mb-6">
@@ -24,8 +40,12 @@ export default function WeeklyVolumeWidget({ initData }: { initData: any[] }) {
           <PieChartIcon size={24} className="stroke-[3]" />
         </div>
         <div>
-          <h2 className="text-xl font-black text-slate-800">Weekly Muscle Volume</h2>
-          <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Measured in Sets</p>
+          <h2 className="text-xl font-black text-slate-800">
+            Weekly Muscle Volume
+          </h2>
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">
+            Measured in Sets
+          </p>
         </div>
       </div>
 
@@ -47,18 +67,25 @@ export default function WeeklyVolumeWidget({ initData }: { initData: any[] }) {
                 dataKey="value"
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
-              <RechartsTooltip 
-                contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+              <RechartsTooltip
+                contentStyle={{
+                  borderRadius: "1rem",
+                  border: "none",
+                  boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                }}
               />
-              <Legend 
+              <Legend
                 iconType="circle"
-                wrapperStyle={{ 
-                  fontFamily: 'inherit',
-                  fontSize: '12px',
-                  fontWeight: '600'
+                wrapperStyle={{
+                  fontFamily: "inherit",
+                  fontSize: "12px",
+                  fontWeight: "600",
                 }}
               />
             </PieChart>
