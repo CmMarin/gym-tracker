@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import ActiveWorkout from '@/components/ActiveWorkout';
@@ -8,6 +8,10 @@ import ActiveWorkout from '@/components/ActiveWorkout';
 jest.mock('@/app/actions/active-workout-actions', () => ({
   updateWorkoutState: jest.fn().mockResolvedValue({}),
   cancelActiveWorkout: jest.fn().mockResolvedValue({}),
+}));
+
+jest.mock('@/app/actions/coop-actions', () => ({
+  updateCoopStatus: jest.fn().mockResolvedValue({}),
 }));
 
 jest.mock('@/app/actions/workout-actions', () => ({

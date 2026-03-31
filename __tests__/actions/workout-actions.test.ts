@@ -39,12 +39,14 @@ describe('Workout Actions - finishWorkoutAction', () => {
     prismaMock.workoutSession.update.mockResolvedValue({});
     prismaMock.activeWorkout.delete.mockResolvedValue({});
     prismaMock.setLog.create.mockResolvedValue({});
+    prismaMock.userAchievement.findMany.mockResolvedValue([]);
+    prismaMock.userAchievement.create.mockResolvedValue({});
   });
 
   it('calculates correct XP and detects PR for a normal session', async () => {
     // History: Max weight was 100x10
     prismaMock.setLog.findMany.mockResolvedValue([
-      { weight: 100, reps: 10, createdAt: new Date(Date.now() - 86400000) } // Yesterday
+      { exerciseId: 'ex-1', weight: 100, reps: 10, createdAt: new Date(Date.now() - 86400000) } // Yesterday
     ]);
 
     const workoutData = {
@@ -85,7 +87,7 @@ describe('Workout Actions - finishWorkoutAction', () => {
     // History: Max weight last session was 100x10
     const yesterday = new Date(Date.now() - 86400000);
     prismaMock.setLog.findMany.mockResolvedValue([
-      { weight: 100, reps: 10, createdAt: yesterday }
+      { exerciseId: 'ex-1', weight: 100, reps: 10, createdAt: yesterday }
     ]);
 
     const workoutData = {
@@ -108,5 +110,40 @@ describe('Workout Actions - finishWorkoutAction', () => {
     // -20 XP for regression penalty
     // Total = 90 XP
     expect(result.xpEarned).toBe(90);
+  });
+
+  it('handles empty exercises without crashing', async () => {
+    prismaMock.setLog.findMany.mockResolvedValue([]);
+    const workoutData = { exercises: [] };
+
+    const result = await finishWorkoutAction(workoutData);
+
+    expect(result.success).toBe(true);
+    expect(result.prs).toHaveLength(0);
+    expect(result.xpEarned).toBeGreaterThanOrEqual(10);
+    expect(prismaMock.setLog.create).not.toHaveBeenCalled();
+  });
+
+  it('skips malformed set entries safely', async () => {
+    prismaMock.setLog.findMany.mockResolvedValue([]);
+
+    const workoutData = {
+      exercises: [
+        {
+          id: 'ex-1',
+          name: 'Bench',
+          sets: [
+            { completed: true, weight: '', reps: '10', isWarmup: false },
+            { completed: true, weight: 'abc', reps: 'xyz', isWarmup: false },
+          ],
+        },
+      ],
+    };
+
+    const result = await finishWorkoutAction(workoutData);
+
+    expect(result.success).toBe(true);
+    expect(prismaMock.setLog.create).not.toHaveBeenCalled();
+    expect(result.xpEarned).toBeGreaterThanOrEqual(10);
   });
 });
