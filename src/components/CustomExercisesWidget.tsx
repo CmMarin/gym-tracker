@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Plus, Dumbbell, Activity, Trash } from "lucide-react";
+import { Plus, Dumbbell, Activity } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useAppSounds } from "@/hooks/useAppSounds";
 
@@ -25,7 +25,7 @@ export default function CustomExercisesWidget() {
   const fetchExercises = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/custom-exercises");
+      const res = await fetch("/api/custom-exercises", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setExercises(data);
@@ -36,9 +36,17 @@ export default function CustomExercisesWidget() {
     setLoading(false);
   };
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    fetchExercises();
+    void fetchExercises();
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  const prefetchExercises = () => {
+    if (loading) return;
+    if (exercises.length > 0) return;
+    void fetchExercises();
+  };
 
   return (
     <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50">
@@ -50,6 +58,8 @@ export default function CustomExercisesWidget() {
           <h2 className="text-xl font-black text-slate-800">My Exercises</h2>
         </div>
         <button
+          onMouseDown={prefetchExercises}
+          onTouchStart={prefetchExercises}
           onClick={() => {
             playPop();
             setHasOpenedModal(true);

@@ -30,19 +30,21 @@ export default function SavedWorkoutsModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [exerciseFilter, setExerciseFilter] = useState<"all" | "standard" | "custom">("all");
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!isOpen) {
       setView("list");
       setIsPicking(false);
     }
   }, [isOpen]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const loadExercises = async () => {
     setLoadingExercises(true);
     try {
       const [stdRes, cstRes] = await Promise.all([
-        fetch("/api/exercises"),
-        fetch("/api/custom-exercises")
+        fetch("/api/exercises", { cache: "no-store" }),
+        fetch("/api/custom-exercises", { cache: "no-store" })
       ]);
       const std = stdRes.ok ? await stdRes.json() : [];
       const cst = cstRes.ok ? await cstRes.json() : [];
@@ -77,6 +79,11 @@ export default function SavedWorkoutsModal({
     setEditName("");
     setEditExercises([]);
     setView("edit");
+  };
+
+  const prefetchExercises = () => {
+    if (loadingExercises || allExercises.length > 0) return;
+    void loadExercises();
   };
 
   const addExerciseToPlan = (ex: any) => {
@@ -182,6 +189,8 @@ export default function SavedWorkoutsModal({
             </div>
             <div className="p-6 flex-1 overflow-y-auto bg-[var(--color-gray-50)] no-scrollbar">
               <button
+                onMouseDown={prefetchExercises}
+                onTouchStart={prefetchExercises}
                 onClick={handleCreateNew}
                 className="w-full bg-[var(--color-indigo-500)] text-[var(--color-white)] p-4 rounded-2xl font-bold flex items-center justify-center gap-2 mb-6 shadow-[0_4px_0_var(--color-button-shadow)] active:translate-y-1 active:shadow-none transition-all"
               >
@@ -296,6 +305,8 @@ export default function SavedWorkoutsModal({
                   </AnimatePresence>
                   
                   <button
+                    onMouseDown={prefetchExercises}
+                    onTouchStart={prefetchExercises}
                     onClick={() => {
                       if (allExercises.length === 0) loadExercises();
                       setIsPicking(true);
@@ -347,8 +358,10 @@ export default function SavedWorkoutsModal({
 
             <div className="flex-1 overflow-y-auto p-4">
               {loadingExercises ? (
-                <div className="flex justify-center py-10">
-                  <div className="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full"></div>
+                <div className="space-y-3">
+                  <div className="animate-pulse h-14 rounded-xl bg-[var(--color-gray-100)]" />
+                  <div className="animate-pulse h-14 rounded-xl bg-[var(--color-gray-100)]" />
+                  <div className="animate-pulse h-14 rounded-xl bg-[var(--color-gray-100)]" />
                 </div>
               ) : (
                 <div className="space-y-2">

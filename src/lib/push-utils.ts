@@ -31,10 +31,21 @@ export async function subscribeToPush() {
 
   const applicationServerKey = urlBase64ToUint8Array(publicKey);
 
-  const subscription = await registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey,
-  });
+  let subscription: PushSubscription;
+  try {
+    subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey,
+    });
+  } catch (err: any) {
+    if (err?.name === "NotAllowedError") {
+      throw new Error("Notifications blocked. Enable in system settings for this PWA.");
+    }
+    if (err?.name === "NotSupportedError") {
+      throw new Error("Push not supported on this browser/device.");
+    }
+    throw err;
+  }
 
   // Save to our backend
   const res = await fetch("/api/web-push/subscribe", {

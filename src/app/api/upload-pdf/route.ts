@@ -4,6 +4,7 @@ import pdfParse from "pdf-parse";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { revalidateTag } from "next/cache";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
@@ -80,6 +81,7 @@ ${pdfText}
     const createdPlans = [];
 
     // Save to database
+    let createdAnyExercise = false;
     for (const plan of parsedPlans) {
       const createdPlan = await prisma.workoutPlan.create({
         data: {
@@ -96,6 +98,7 @@ ${pdfText}
          let globalEx = await prisma.exercise.findFirst({ where: { name } });
          if (!globalEx) {
              globalEx = await prisma.exercise.create({ data: { name } });
+           createdAnyExercise = true;
          }
          const px = await prisma.planExercise.create({
              data: {
@@ -109,6 +112,10 @@ ${pdfText}
       }
       
       createdPlans.push({ ...createdPlan, planExercises: planExercisesData });
+    }
+
+    if (createdAnyExercise) {
+      revalidateTag("global-exercises", "default");
     }
 
     return NextResponse.json({ success: true, data: createdPlans });

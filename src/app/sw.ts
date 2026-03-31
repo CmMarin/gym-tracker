@@ -13,10 +13,12 @@ declare const self: ServiceWorkerGlobalScope;
 
 const customCache: RuntimeCaching[] = [
   {
-    matcher: ({ request, url }) => {
-      const isDashboard = url.pathname === '/dashboard' || url.pathname.startsWith('/dashboard/');
+    matcher: ({ url, request }) => {
+      // Only cache GET API fetches; avoid caching document navigations to prevent stale HTML/JS
       const isApi = url.pathname.startsWith('/api/');
-      return isDashboard || isApi;
+      const isGet = request.method === 'GET';
+      const isNav = request.destination === 'document';
+      return isApi && isGet && !isNav;
     },
     handler: new StaleWhileRevalidate({
       cacheName: 'dashboard-swr-cache',
