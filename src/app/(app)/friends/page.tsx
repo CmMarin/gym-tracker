@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import FriendsList from "./FriendsList";
+import FriendsWidget from "@/components/FriendsWidget";
 
 export default async function FriendsPage() {
   const session = await getServerSession(authOptions);
@@ -18,8 +19,7 @@ export default async function FriendsPage() {
       OR: [
         { userId: userId },
         { friendId: userId }
-      ],
-      status: "ACCEPTED"
+      ]
     },
     include: {
       user: {
@@ -31,10 +31,13 @@ export default async function FriendsPage() {
     }
   });
 
-  const friends = friendships.map((f: any) => {
-    const friendData = f.userId === userId ? f.friend : f.user;
-    return friendData;
-  });
+  const friends = friendships
+    .filter((f: any) => f.status === "ACCEPTED")
+    .map((f: any) => (f.userId === userId ? f.friend : f.user));
+
+  const pendingRequestsToMe = friendships
+    .filter((f: any) => f.status === "PENDING" && f.friendId === userId)
+    .map((f: any) => ({ friendshipId: f.id, user: f.user }));
 
   // Get latest activity for friends
   const activeWorkouts = await prisma.activeWorkout.findMany({
@@ -80,6 +83,9 @@ export default async function FriendsPage() {
     <div className="min-h-screen bg-gray-50 pb-32 pt-8 selection:- selection:-">
       <div className="max-w-xl mx-auto px-4 md:px-0">
         <h1 className="text-3xl font-black text-slate-800 mb-6">Friends</h1>
+        <div className="mb-6">
+          <FriendsWidget pendingRequests={pendingRequestsToMe} />
+        </div>
         <FriendsList initialFriends={friendsData} />
       </div>
     </div>

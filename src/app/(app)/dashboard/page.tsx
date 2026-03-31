@@ -2,7 +2,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import CompetitionDashboard from "@/components/CompetitionDashboard";
-import FriendsWidget from "@/components/FriendsWidget";
 import CurrentWorkoutWidget from "@/components/CurrentWorkoutWidget";
 import FriendActivityWidget from "@/components/FriendActivityWidget";
 import RecentPRsWidget from "@/components/RecentPRsWidget";
@@ -60,17 +59,11 @@ export default async function DashboardPage() {
   if (!currentUser) return null;
 
   const acceptedFriends: UserForLeaderboard[] = [];
-  const pendingRequestsToMe: { friendshipId: string; user: UserForLeaderboard }[] = [];
 
   friendships.forEach((f: any) => {
     if (f.status === "ACCEPTED") {
       const otherUser = f.userId === userId ? f.friend : f.user;
       acceptedFriends.push(otherUser as UserForLeaderboard);
-    } else if (f.status === "PENDING" && f.friendId === userId) {
-      pendingRequestsToMe.push({
-        friendshipId: f.id,
-        user: f.user as UserForLeaderboard
-      });
     }
   });
 
@@ -132,9 +125,6 @@ export default async function DashboardPage() {
       />
       <FriendActivityWidget activities={formattedFriendActivity} />
       <RecentPRsWidget prs={recentPRs} />
-      <div className="w-full max-w-md">
-        <FriendsWidget pendingRequests={pendingRequestsToMe} />
-      </div>
     </div>
   );
 }

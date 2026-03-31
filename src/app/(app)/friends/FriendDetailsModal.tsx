@@ -1,8 +1,8 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { motion } from "framer-motion";
-import { X, Trophy, Dumbbell, Calendar, Flame } from "lucide-react";
-import ProfileAvatar from "@/components/ProfileAvatar";
+import { X, Trophy, Dumbbell, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FriendDetailsModal({
@@ -60,8 +60,20 @@ export default function FriendDetailsModal({
         {/* Scrollable Content */}
         <div className="overflow-y-auto no-scrollbar p-6 space-y-6 bg-gray-50">
           {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="space-y-4">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-24 h-24 rounded-full bg-gray-200 animate-pulse" />
+                <div className="w-32 h-4 rounded-full bg-gray-200 animate-pulse" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="h-16 rounded-2xl bg-gray-200 animate-pulse" />
+                <div className="h-16 rounded-2xl bg-gray-200 animate-pulse" />
+              </div>
+              <div className="space-y-2">
+                <div className="h-4 rounded-full bg-gray-200 animate-pulse w-32" />
+                <div className="h-12 rounded-2xl bg-gray-200 animate-pulse" />
+                <div className="h-12 rounded-2xl bg-gray-200 animate-pulse" />
+              </div>
             </div>
           ) : !data ? (
              <div className="text-center text-slate-500 py-8">Failed to load profile</div>
@@ -70,7 +82,7 @@ export default function FriendDetailsModal({
               {/* Top Section */}
               <div className="flex flex-col items-center mb-6">
                 {data.image ? (
-                  <img src={data.image} className="w-24 h-24 rounded-full border-4 border-indigo-50 shadow-lg object-cover" />
+                  <img src={data.image} alt={data.username} className="w-24 h-24 rounded-full border-4 border-indigo-50 shadow-lg object-cover" />
                 ) : (
                   <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full mx-auto flex items-center justify-center border-4 border-[var(--color-white)] shadow-lg text-[var(--color-white)] font-black text-3xl">
                     {data.username.charAt(0).toUpperCase()}

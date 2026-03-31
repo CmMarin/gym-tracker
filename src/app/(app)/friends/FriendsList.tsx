@@ -1,9 +1,9 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Flame, Activity, Clock, Trophy, Dumbbell } from "lucide-react";
-import ProfileAvatar from "@/components/ProfileAvatar";
+import { User, Flame, Activity, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import dynamic from "next/dynamic";
 
@@ -52,7 +52,7 @@ export default function FriendsList({ initialFriends }: { initialFriends: Friend
             <div className="flex items-center gap-4">
               <div className="relative">
                  {friend.image ? (
-                   <img src={friend.image} className="w-12 h-12 rounded-full border-2 border-indigo-50 object-cover" />
+                   <img src={friend.image} alt={friend.username} className="w-12 h-12 rounded-full border-2 border-indigo-50 object-cover" />
                  ) : (
                    <div className="w-12 h-12 rounded-full bg-gray-100 border-2 border-[var(--color-white)] flex items-center justify-center font-bold text-lg">
                      {friend.username.charAt(0).toUpperCase()}
