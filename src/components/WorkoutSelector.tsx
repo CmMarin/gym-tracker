@@ -2,11 +2,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ActiveWorkout from "./ActiveWorkout";
-import { Dumbbell, Calendar, Play, UploadCloud, Users, X } from "lucide-react";
+import { Calendar, Play, UploadCloud, Users, X, DownloadCloud } from "lucide-react";
 import { startOrResumeWorkout } from "@/app/actions/active-workout-actions";
 import { createCoopSession, joinCoopSession } from "@/app/actions/coop-actions";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { importWorkoutBlueprint } from "@/app/actions/blueprint-actions";
+import { useRouter } from "next/navigation";
 
 type Exercise = {
   id: string;
@@ -32,6 +34,9 @@ export default function WorkoutSelector({
     existingActiveWorkout || null,
   );
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importCode, setImportCode] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
 
   const [showCoopModal, setShowCoopModal] = useState(false);
   const [selectedPlanForCoop, setSelectedPlanForCoop] = useState<Plan | null>(
@@ -39,6 +44,7 @@ export default function WorkoutSelector({
   );
   const [inviteCodeInput, setInviteCodeInput] = useState("");
   const [isCoopLoading, setIsCoopLoading] = useState(false);
+  const router = useRouter();
 
   const handleStart = async (plan: Plan, coopSessionId?: string) => {
     setLoadingPlan(plan.id);
@@ -54,6 +60,29 @@ export default function WorkoutSelector({
     setLoadingPlan(null);
   };
 
+  const handleImportBlueprint = async () => {
+    const code = importCode.trim().toUpperCase();
+    if (!code) {
+      toast.error("Enter a share code");
+      return;
+    }
+    setIsImporting(true);
+    try {
+      const res = await importWorkoutBlueprint(code);
+      if (res?.success) {
+        toast.success("Routine imported!");
+        setShowImportModal(false);
+        setImportCode("");
+        router.refresh();
+      } else {
+        toast.error(res?.error || "Failed to import");
+      }
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to import");
+    }
+    setIsImporting(false);
+  };
+
   const handleHostCoop = async () => {
     if (!selectedPlanForCoop) return;
     setIsCoopLoading(true);
@@ -66,7 +95,8 @@ export default function WorkoutSelector({
         await handleStart(selectedPlanForCoop, res.sessionId);
         setShowCoopModal(false);
       }
-    } catch (e) {
+    } catch (error) {
+      console.error(error);
       toast.error("Failed to create Co-Op session");
     }
     setIsCoopLoading(false);
@@ -104,6 +134,18 @@ export default function WorkoutSelector({
       <p className="text-slate-500 font-medium mb-8">
         Select a routine for today.
       </p>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <button
+          onClick={() => setShowImportModal(true)}
+          className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-[var(--color-indigo-50)] text-[var(--color-indigo-700)] font-bold border-2 border-[var(--color-indigo-100)] hover:border-[var(--color-indigo-200)] shadow-sm"
+        >
+          <DownloadCloud size={18} />
+          Import Split
+        </button>
+        <span className="text-xs font-bold text-[var(--color-slate-400)] uppercase tracking-wider">
+          Share codes import instantly
+        </span>
+      </div>
 
       {plans.length === 0 ? (
         <motion.div
@@ -118,7 +160,7 @@ export default function WorkoutSelector({
             No Routines Yet!
           </h2>
           <p className="text-slate-500 mb-8 max-w-[250px] leading-relaxed font-medium">
-            You don't have any saved workouts. Head over to your profile to
+            You don&apos;t have any saved workouts. Head over to your profile to
             generate a routine from a PDF!
           </p>
           <Link
@@ -240,6 +282,56 @@ export default function WorkoutSelector({
                     Join
                   </button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showImportModal && (
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[90] flex flex-col justify-end sm:justify-center p-4">
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              className="bg-[var(--color-white)] rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-xl w-full max-w-md mx-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center gap-2 text-slate-800">
+                  <DownloadCloud className="text-indigo-500" />
+                  <h2 className="text-2xl font-black">Import Split</h2>
+                </div>
+                <button
+                  onClick={() => setShowImportModal(false)}
+                  className="p-2 bg-gray-100 rounded-full text-slate-500"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-bold text-[var(--color-slate-500)] uppercase tracking-wider mb-2 block">
+                    Share Code
+                  </label>
+                  <input
+                    type="text"
+                    value={importCode}
+                    onChange={(e) => setImportCode(e.target.value.toUpperCase())}
+                    placeholder="e.g. ABC123"
+                    className="w-full bg-gray-100 rounded-xl px-4 py-3 font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 uppercase"
+                    maxLength={10}
+                  />
+                </div>
+
+                <button
+                  onClick={handleImportBlueprint}
+                  disabled={isImporting}
+                  className="w-full bg-indigo-500 text-[var(--color-white)] font-bold py-4 rounded-xl shadow-[0_4px_0_var(--color-button-shadow)] active:shadow-none active:translate-y-1 disabled:opacity-50"
+                >
+                  {isImporting ? "Importing..." : "Import Routine"}
+                </button>
               </div>
             </motion.div>
           </div>

@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Trash2, Edit2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Trash2, Edit2, Share2 } from 'lucide-react';
 import { deleteWorkoutPlan } from '@/app/actions/profile-actions';
+import { createWorkoutBlueprint } from '@/app/actions/blueprint-actions';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
@@ -16,6 +17,7 @@ type Plan = {
 export default function ExpandableWorkoutCard({ plan, onEdit }: { plan: Plan, onEdit?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const router = useRouter();
 
   const executeDelete = async (toastId: string) => {
@@ -36,7 +38,7 @@ export default function ExpandableWorkoutCard({ plan, onEdit }: { plan: Plan, on
     toast((t) => (
       <div className="flex flex-col gap-3">
         <p className="font-medium text-[var(--color-slate-800)]">
-          Delete the routine "{plan.name}"?
+          Delete the routine &quot;{plan.name}&quot;?
         </p>
         <div className="flex justify-end gap-2">
           <button
@@ -57,6 +59,35 @@ export default function ExpandableWorkoutCard({ plan, onEdit }: { plan: Plan, on
   };
 
   if (isDeleting) return null;
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsSharing(true);
+    try {
+      const res = await createWorkoutBlueprint(plan.id);
+      if (res?.success && res.code) {
+        const link = typeof window !== "undefined" ? `${window.location.origin}/share/${res.code}` : res.code;
+        let copied = false;
+        if (navigator?.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(link);
+            copied = true;
+          } catch (copyErr) {
+            copied = false;
+          }
+        }
+        toast.success(copied ? `Share link copied! Code: ${res.code}` : `Share code: ${res.code}\nLink: ${link}`, {
+          duration: 7000,
+        });
+      } else {
+        toast.error("Failed to generate share link");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to generate share link");
+    } finally {
+      setIsSharing(false);
+    }
+  };
 
   return (
     <div className="rounded-2xl bg-[var(--color-white)] border-2 border-[var(--color-gray-100)] shadow-[0_4px_0_var(--color-button-shadow)] overflow-hidden transition-all hover:translate-y-[2px] hover:shadow-[0_2px_0_var(--color-button-shadow)]">
@@ -81,6 +112,14 @@ export default function ExpandableWorkoutCard({ plan, onEdit }: { plan: Plan, on
               <Edit2 size={18} />
             </button>
           )}
+          <button
+            onClick={handleShare}
+            disabled={isSharing}
+            className="p-2 text-[var(--color-slate-400)] hover:text-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-50)] rounded-xl transition-colors disabled:opacity-60"
+            title="Share Routine"
+          >
+            <Share2 size={18} />
+          </button>
           <button
             onClick={handleDelete}
             className="p-2 text-[var(--color-slate-400)] hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors"

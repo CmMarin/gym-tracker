@@ -29,6 +29,7 @@ model User {
   friendOf        Friendship[]      @relation("FriendUsers")
   coopMemberships CoopSessionMember[]
   notifications   Notification[]
+  workoutBlueprints WorkoutBlueprint[]
   
   // Push Notifications
   pushNotificationsEnabled Boolean @default(false)
@@ -63,6 +64,21 @@ model WorkoutPlan {
   workoutSessions WorkoutSession[]
 
   @@index([userId])
+}
+
+model WorkoutBlueprint {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  ownerId   String
+  name      String
+  dayOfWeek Int?
+  data      Json
+  imports   Int      @default(0)
+  createdAt DateTime @default(now())
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId])
 }
 
 model Exercise {
