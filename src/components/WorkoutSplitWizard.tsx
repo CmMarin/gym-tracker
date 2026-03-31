@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Calendar as CalendarIcon, Check, Settings2, Plus, ArrowLeft, RefreshCcw, Save } from "lucide-react";
+import { X, Calendar as CalendarIcon, Check, Settings2, Plus, ArrowLeft, RefreshCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -103,7 +103,8 @@ export default function WorkoutSplitWizard({
       onSaveComplete?.();
       onClose();
       router.refresh();
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       toast.error("Something went wrong");
     } finally {
       setIsSaving(false);
@@ -149,7 +150,7 @@ export default function WorkoutSplitWizard({
           <div className="p-6 flex-1 overflow-y-auto no-scrollbar flex flex-col justify-center bg-[var(--color-white)]">
             <div className="text-center mb-10">
               <h3 className="text-3xl font-black text-[var(--color-slate-800)] mb-3">How many days<br/>do you train?</h3>
-              <p className="text-[var(--color-slate-500)] font-medium">Select your training frequency.<br/>We'll auto-distribute rest days.</p>
+              <p className="text-[var(--color-slate-500)] font-medium">Select your training frequency.<br/>We&apos;ll auto-distribute rest days.</p>
             </div>
 
               <div className="flex flex-wrap justify-center gap-3 max-w-[300px] mx-auto w-full mb-10">

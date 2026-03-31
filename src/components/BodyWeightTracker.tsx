@@ -11,7 +11,6 @@ import {
 } from "recharts";
 import { addBodyWeightLog } from "@/app/actions/profile-actions";
 import { Scale, Plus } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function BodyWeightTracker({
   data,
@@ -105,9 +104,11 @@ export default function BodyWeightTracker({
           </ResponsiveContainer>
         </div>
       ) : (
-        <p className="text-center text-slate-500 font-medium py-8">
-          No weight data yet.
-        </p>
+        <div className="flex flex-col gap-3 py-4">
+          <div className="h-4 w-32 bg-gray-200 rounded-full animate-pulse" />
+          <div className="h-24 w-full bg-gray-100 rounded-2xl animate-pulse" />
+          <p className="text-center text-slate-500 font-medium">No weight data yet.</p>
+        </div>
       )}
     </div>
   );

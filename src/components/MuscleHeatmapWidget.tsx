@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Activity } from "lucide-react";
 
@@ -22,14 +22,9 @@ export default function MuscleHeatmapWidget({
 }: {
   fatigueData: Record<string, number>;
 }) {
-  const [mounted, setMounted] = useState(false);
   const [view, setView] = useState<"anterior" | "posterior">("anterior");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const isClient = typeof window !== "undefined";
+  if (!isClient) return null;
 
   // Let's generate data for react-body-highlighter
   // react-body-highlighter expects an array of exercises:

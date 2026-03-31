@@ -13,22 +13,24 @@ const themes = [
 ];
 
 export default function ThemeSwitcher() {
-  const [currentTheme, setCurrentTheme] = useState("light");
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("theme");
+      if (saved) return saved;
+    }
+    return "light";
+  });
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    if (saved) {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      setCurrentTheme(saved);
-      document.documentElement.setAttribute("data-theme", saved);
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", currentTheme);
     }
-  }, []);
+  }, [currentTheme]);
 
   const changeTheme = (id: string) => {
     setCurrentTheme(id);
-    localStorage.setItem("theme", id);
-    document.documentElement.setAttribute("data-theme", id);
     setIsOpen(false);
   };
 

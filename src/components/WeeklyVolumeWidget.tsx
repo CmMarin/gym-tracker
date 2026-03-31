@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -12,14 +12,7 @@ import {
 import { PieChart as PieChartIcon } from "lucide-react";
 
 export default function WeeklyVolumeWidget({ initData }: { initData: any[] }) {
-  const [data, setData] = useState(initData);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const data = useMemo(() => initData, [initData]);
 
   // Vibrant game-like colors
   const COLORS = [

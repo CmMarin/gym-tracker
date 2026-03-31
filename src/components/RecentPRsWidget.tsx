@@ -30,7 +30,7 @@ export default function RecentPRsWidget({ prs }: { prs: any[] }) {
 
       <div className="flex flex-col gap-3">
         <AnimatePresence>
-          {displayedPrs.map((pr, i) => (
+          {displayedPrs.map((pr) => (
             <motion.div
               key={pr.id}
               initial={{ opacity: 0, height: 0 }}

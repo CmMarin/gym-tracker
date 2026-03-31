@@ -3,12 +3,10 @@
 import { Home, Dumbbell, User, Users, LineChart } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useAppSounds } from "@/hooks/useAppSounds";
 
 export default function BottomNav() {
   const pathname = usePathname();
-  const { data: session } = useSession();
   const { playPop } = useAppSounds();
 
   const isActive = (path: string) => pathname === path;

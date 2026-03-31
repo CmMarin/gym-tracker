@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, CalendarDays, Dumbbell, MoreHorizontal, Settings2, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, CalendarDays, Dumbbell, Settings2, ChevronDown, ChevronUp } from "lucide-react";
 import WorkoutSplitWizard from "./WorkoutSplitWizard";
 
 const DAYS_SHORT = [

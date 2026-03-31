@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FolderHeart, LogOut, Settings } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { FolderHeart, Settings } from "lucide-react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import SettingsModal from "@/components/SettingsModal";

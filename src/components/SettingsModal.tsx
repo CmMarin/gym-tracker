@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, X, Volume2, VolumeX, Bell, Moon } from "lucide-react";
+import { LogOut, X, Volume2, VolumeX, Bell } from "lucide-react";
 import { signOut } from "next-auth/react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { subscribeToPush, unsubscribeFromPush } from "@/lib/push-utils";
@@ -25,7 +25,20 @@ export default function SettingsModal({
         });
       });
     }
+
+    if (isOpen && typeof window !== "undefined") {
+      const stored = window.localStorage.getItem("soundEnabled");
+      setSoundEnabled(stored !== "false");
+    }
   }, [isOpen]);
+
+  const toggleSound = () => {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("soundEnabled", String(next));
+    }
+  };
 
   const handleToggleNotifications = async () => {
     try {
@@ -119,7 +132,7 @@ export default function SettingsModal({
                           type="checkbox"
                           className="sr-only peer"
                           checked={soundEnabled}
-                          onChange={() => setSoundEnabled(!soundEnabled)}
+                          onChange={toggleSound}
                         />
                         <div className="w-11 h-6 bg-[var(--color-gray-200)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-indigo-500)]"></div>
                       </label>

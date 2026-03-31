@@ -250,3 +250,31 @@ html, body {
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100%;
 }
+
+/* Scrollbar styling: subtle, theme-aligned */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-indigo-300) var(--color-gray-100);
+}
+body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+body::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+}
+body::-webkit-scrollbar-thumb {
+  background: var(--color-indigo-300);
+  border-radius: 9999px;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-indigo-400);
+}
+
+/* Hide scrollbar on main app tabs for a cleaner mobile look */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

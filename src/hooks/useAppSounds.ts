@@ -11,6 +11,12 @@ const POP_SOUND_URL = "/pop.mp3";
 const DING_SOUND_URL = "/ding.wav";
 const BUZZER_SOUND_URL = "/buzzer.wav";
 
+const isSoundEnabled = () => {
+  if (typeof window === "undefined") return true;
+  const stored = window.localStorage.getItem("soundEnabled");
+  return stored !== "false";
+};
+
 export function useAppSounds() {
   const [playPopSound] = useSound(POP_SOUND_URL, { volume: 0.5 });
   const [playDingSound] = useSound(DING_SOUND_URL, { volume: 0.5 });
@@ -18,21 +24,26 @@ export function useAppSounds() {
 
   const triggerVibration = (pattern: number | number[]) => {
     if (typeof window !== "undefined" && navigator.vibrate) {
-      try { navigator.vibrate(pattern); } catch (e) {}
+      try { navigator.vibrate(pattern); } catch {
+        // ignore vibration failures
+      }
     }
   };
 
   const playPop = (vibrate = true) => {
+    if (!isSoundEnabled()) return;
     playPopSound();
     if (vibrate) triggerVibration(50);
   };
 
   const playDing = () => {
+    if (!isSoundEnabled()) return;
     playDingSound();
     triggerVibration([50, 100, 50]);
   };
 
   const playBuzzer = () => {
+    if (!isSoundEnabled()) return;
     playBuzzerSound();
     triggerVibration([100, 50, 100]);
   };
