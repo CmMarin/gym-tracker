@@ -3,14 +3,7 @@
 import { useEffect, useState } from "react";
 import { getCoopSession } from "@/app/actions/coop-actions";
 import { motion } from "framer-motion";
-import {
-  Trophy,
-  Dumbbell,
-  Zap,
-  Skull,
-  TrendingUp,
-  PartyPopper,
-} from "lucide-react";
+import { Dumbbell, Skull, TrendingUp, PartyPopper } from "lucide-react";
 
 export default function CoopWorkoutReview({
   sessionId,
@@ -20,8 +13,6 @@ export default function CoopWorkoutReview({
   const [sessionData, setSessionData] = useState<any>(null);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-
     const fetchSession = async () => {
       const data = await getCoopSession(sessionId);
       if (data) {
@@ -34,7 +25,7 @@ export default function CoopWorkoutReview({
 
     fetchSession();
 
-    interval = setInterval(fetchSession, 3000);
+    const interval = setInterval(fetchSession, 3000);
     return () => clearInterval(interval);
   }, [sessionId]);
 

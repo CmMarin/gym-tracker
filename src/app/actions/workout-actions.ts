@@ -25,6 +25,37 @@ export async function finishWorkoutAction(workoutData: any) {
     : {};
   const coopSessionId = stateData.coopSessionId;
 
+  // Batch collect exercise ids for historical lookups (avoid per-exercise queries)
+  const exerciseIds: string[] = [];
+  const customExerciseIds: string[] = [];
+  for (const ex of workoutData.exercises || []) {
+    if (!ex?.id) continue;
+    if (ex.isCustom) {
+      customExerciseIds.push(ex.id);
+    } else {
+      exerciseIds.push(ex.id);
+    }
+  }
+
+  const historyFilters = [] as any[];
+  if (exerciseIds.length) historyFilters.push({ exerciseId: { in: exerciseIds } });
+  if (customExerciseIds.length) historyFilters.push({ customExerciseId: { in: customExerciseIds } });
+
+  const pastLogsAll = historyFilters.length
+    ? await prisma.setLog.findMany({
+        where: { userId, OR: historyFilters },
+        orderBy: { createdAt: "desc" },
+      })
+    : [];
+
+  const logsByKey: Record<string, any[]> = {};
+  for (const log of pastLogsAll) {
+    const key = log.exerciseId ? `ex:${log.exerciseId}` : log.customExerciseId ? `cx:${log.customExerciseId}` : "";
+    if (!key) continue;
+    if (!logsByKey[key]) logsByKey[key] = [];
+    logsByKey[key].push(log);
+  }
+
   let totalXpEarned = 100; // Base completion XP
   const prs: string[] = [];
   let totalVolume = 0;
@@ -50,19 +81,9 @@ export async function finishWorkoutAction(workoutData: any) {
     if (!ex.id) continue;
     let exercisePr = false;
 
-    // Get previous logs to check TRUE PRs cross-referencing by name
-    const pastLogsAll = await prisma.setLog.findMany({
-      where: {
-        userId,
-        OR: [
-          { exercise: { name: ex.name } },
-          { customExercise: { name: ex.name } },
-        ],
-      },
-      orderBy: { createdAt: "desc" },
-    });
-
-    const hasHistory = pastLogsAll.length > 0;
+    const key = ex.isCustom ? `cx:${ex.id}` : `ex:${ex.id}`;
+    const pastLogs = key ? logsByKey[key] || [] : [];
+    const hasHistory = pastLogs.length > 0;
 
     let allTimeBestWeight = 0;
     let allTimeBestReps = 0;
@@ -71,7 +92,7 @@ export async function finishWorkoutAction(workoutData: any) {
 
     if (hasHistory) {
       // Find all time best
-      for (const log of pastLogsAll) {
+      for (const log of pastLogs) {
         if (
           log.weight > allTimeBestWeight ||
           (log.weight === allTimeBestWeight && log.reps > allTimeBestReps)
@@ -82,8 +103,8 @@ export async function finishWorkoutAction(workoutData: any) {
       }
 
       // Find last session best (for regression deduction)
-      const lastSessionDate = pastLogsAll[0].createdAt.toDateString();
-      const lastSessionLogs = pastLogsAll.filter(
+      const lastSessionDate = pastLogs[0].createdAt.toDateString();
+      const lastSessionLogs = pastLogs.filter(
         (l) => l.createdAt.toDateString() === lastSessionDate,
       );
 
@@ -107,6 +128,7 @@ export async function finishWorkoutAction(workoutData: any) {
 
       const weight = parseFloat(set.weight);
       const reps = parseInt(set.reps, 10);
+      if (Number.isNaN(weight) || Number.isNaN(reps)) continue;
       const isWarmup = set.isWarmup || false;
       let isPR = false;
 

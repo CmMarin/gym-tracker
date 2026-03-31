@@ -3,7 +3,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { broadcastToUsers, sendPushNotification } from "@/lib/server-push";
+import { broadcastToUsers } from "@/lib/server-push";
 
 export async function createCoopSession(workoutPlanId: string) {
   const session = await getServerSession(authOptions);

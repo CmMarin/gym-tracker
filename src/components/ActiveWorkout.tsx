@@ -16,7 +16,6 @@ import {
   cancelActiveWorkout,
 } from "@/app/actions/active-workout-actions";
 import { updateCoopStatus } from "@/app/actions/coop-actions";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAppSounds } from "@/hooks/useAppSounds";
 import CoopPanel from "./CoopPanel";
@@ -32,7 +31,6 @@ export default function ActiveWorkout({
   planName: string;
   initialState: any;
 }) {
-  const router = useRouter();
   const { playBuzzer, playDing, playPop } = useAppSounds();
   const [workoutState, setWorkoutState] = useState(initialState);
   const [showMilestone, setShowMilestone] = useState(false);

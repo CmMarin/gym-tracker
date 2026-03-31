@@ -3,39 +3,28 @@
 import { useEffect, useState } from "react";
 import { getCoopSession } from "@/app/actions/coop-actions";
 import { motion } from "framer-motion";
-import { Users, Zap, CheckCircle2 } from "lucide-react";
+import { Users, Zap } from "lucide-react";
 
-export default function CoopPanel({
-  sessionId,
-  currentExercise,
-}: {
-  sessionId: string;
-  currentExercise: string;
-}) {
+export default function CoopPanel({ sessionId }: { sessionId: string; currentExercise?: string }) {
   const [sessionData, setSessionData] = useState<any>(null);
 
   useEffect(() => {
-    let interval: any;
-
     const fetchCoopData = async () => {
       try {
         const data = await getCoopSession(sessionId);
         setSessionData(data);
-      } catch (e) {}
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchCoopData();
-    interval = setInterval(fetchCoopData, 3000);
+    const interval = setInterval(fetchCoopData, 3000);
 
     return () => clearInterval(interval);
   }, [sessionId]);
 
   if (!sessionData) return null;
-
-  const progress = Math.min(
-    (sessionData.totalXp / sessionData.goalXp) * 100,
-    100,
-  );
 
   return (
     <div className="w-full max-w-md bg-[var(--color-white)] border-2 border-indigo-100 rounded-3xl p-5 mb-6 shadow-[0_4px_0_0_var(--color-theme-shadow)]">
