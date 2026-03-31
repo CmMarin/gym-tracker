@@ -16,7 +16,7 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!jose|next-auth)/',
+    '/node_modules/(?!jose|next-auth|openid-client)/',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
 };
