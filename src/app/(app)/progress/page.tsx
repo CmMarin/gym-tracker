@@ -9,6 +9,7 @@ import WeeklyVolumeWidget from "@/components/WeeklyVolumeWidget";
 import OneRepMaxWidget from "@/components/OneRepMaxWidget";
 import { format } from "date-fns";
 import { getWeeklyVolumeAnalytics } from "@/app/actions/analytics-actions";
+import ExerciseHistoryWidget from "@/components/ExerciseHistoryWidget";
 
 export default async function ProgressPage() {
   const session = await getServerSession(authOptions);
@@ -130,6 +131,7 @@ export default async function ProgressPage() {
 
       <div className="container mx-auto px-4 w-full max-w-md">
         <div className="flex flex-col gap-6">
+          <ExerciseHistoryWidget />
           <OneRepMaxWidget compoundData={oneRMData} />
           <VolumeTracker data={volumeData} />
           <WeeklyVolumeWidget initData={weeklyVolumeData} />

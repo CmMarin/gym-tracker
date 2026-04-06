@@ -75,6 +75,8 @@ function resolveMuscleGroups(
     name.includes("sit up")
   )
     return ["Core"];
+  if (name.includes("calf") || name.includes("calves")) return ["Calves"];
+  if (name.includes("forearm") || name.includes("wrist")) return ["Forearms"];
   if (
     name.includes("lateral") ||
     name.includes("raise") ||
