@@ -542,23 +542,41 @@ export default function ActiveWorkout({
             {currentSetIndex !== -1 && (
               <div className="w-full flex gap-4 mb-4">
                 <div className="flex-1 relative">
-                  <label className="flex items-center justify-center gap-1 text-sm font-bold text-slate-400 uppercase mb-2 text-center">
+                  <label className="flex items-center justify-center gap-1 text-sm font-bold text-[var(--color-slate-400)] uppercase mb-2 text-center w-full">
                     Weight (kg)
                     <button
                       onClick={() => setShowPlateCalc(!showPlateCalc)}
-                      className="text-indigo-400 hover:text-indigo-600 transition-colors bg-indigo-50 p-1 rounded-md"
+                      className="text-[var(--color-indigo-400)] hover:text-[var(--color-indigo-600)] transition-colors bg-[var(--color-indigo-50)] p-1 rounded-md"
                       title="Calculate Plates"
                     >
                       <Calculator size={14} />
                     </button>
                   </label>
-                  <input
-                    type="number"
-                    placeholder="0"
-                    value={currentSet?.weight || ""}
-                    onChange={(e) => handleUpdateSet("weight", e.target.value)}
-                    className="w-full text-center text-4xl font-black text-slate-700 bg-gray-100 rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all"
-                  />
+                  <div className="flex items-stretch bg-[var(--color-gray-100)] rounded-2xl overflow-hidden border-2 border-[var(--color-gray-100)] focus-within:border-[var(--color-indigo-400)] transition-all h-[72px]">
+                    {currentSetIndex !== -1 && (
+                      <button
+                        onClick={() => handleUpdateSet("weight", Math.max(0, Number(currentSet?.weight || 0) - 2.5))}
+                        className="w-10 sm:w-12 bg-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-400)] text-[var(--color-white)] text-sm font-black active:bg-[var(--color-indigo-600)] transition-colors flex items-center justify-center shrink-0 border-r border-[var(--color-indigo-400)]"
+                      >
+                        -2.5
+                      </button>
+                    )}
+                    <input
+                      type="number"
+                      placeholder="0"
+                      value={currentSet?.weight || ""}
+                      onChange={(e) => handleUpdateSet("weight", e.target.value)}
+                      className="w-full min-w-0 text-center text-2xl sm:text-3xl font-black text-[var(--color-slate-700)] bg-transparent focus:outline-none"
+                    />
+                    {currentSetIndex !== -1 && (
+                      <button
+                        onClick={() => handleUpdateSet("weight", Number(currentSet?.weight || 0) + 2.5)}
+                        className="w-10 sm:w-12 bg-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-400)] text-[var(--color-white)] text-sm font-black active:bg-[var(--color-indigo-600)] transition-colors flex items-center justify-center shrink-0 border-l border-[var(--color-indigo-400)]"
+                      >
+                        +2.5
+                      </button>
+                    )}
+                  </div>
                   <AnimatePresence>
                     {showPlateCalc && currentSet?.weight && (
                       <motion.div
@@ -578,7 +596,7 @@ export default function ActiveWorkout({
                   </AnimatePresence>
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-bold text-slate-400 uppercase mb-2 text-center">
+                  <label className="block text-sm font-bold text-[var(--color-slate-400)] uppercase mb-2 text-center">
                     Reps
                   </label>
                   <input
@@ -586,7 +604,7 @@ export default function ActiveWorkout({
                     placeholder={currentExercise?.targetReps?.toString() || "0"}
                     value={currentSet?.reps || ""}
                     onChange={(e) => handleUpdateSet("reps", e.target.value)}
-                    className="w-full text-center text-4xl font-black text-slate-700 bg-gray-100 rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all"
+                    className="w-full h-[72px] text-center text-3xl font-black text-[var(--color-slate-700)] bg-[var(--color-gray-100)] border-2 border-[var(--color-gray-100)] rounded-2xl focus:outline-none focus:border-[var(--color-indigo-400)] transition-all"
                   />
                 </div>
               </div>
