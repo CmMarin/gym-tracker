@@ -123,7 +123,13 @@ export async function finishWorkoutAction(workoutData: any) {
     let thisSessionMaxReps = 0;
 
     for (let i = 0; i < ex.sets.length; i++) {
-      const set = ex.sets[i];
+      const set = ex.sets[i];        
+        if (set.isSkipped) {
+          totalXpEarned -= 5;
+          // Ensure we don't drop below 0 if they skip early
+          if (totalXpEarned < 0) totalXpEarned = 0;
+          continue; // Don't log skipped sets
+        }
       if (!set.completed || !set.reps || !set.weight) continue;
 
       const weight = parseFloat(set.weight);

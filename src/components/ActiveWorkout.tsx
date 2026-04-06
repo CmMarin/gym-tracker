@@ -104,6 +104,49 @@ export default function ActiveWorkout({
     setRestTimeLeft(null); // Cancel any active rest timer
   };
 
+  const handleSkipSet = async () => {
+    if (currentSetIndex === -1) return;
+    const newState = { ...workoutState };
+    const set = newState.exercises[currentExerciseIndex].sets[currentSetIndex];
+    set.completed = true;
+    set.isSkipped = true;
+
+    const nextSetIndex = newState.exercises[
+      currentExerciseIndex
+    ].sets.findIndex((s: any) => !s.completed);
+
+    if (nextSetIndex === -1) {
+      if (currentExerciseIndex < exercises.length - 1) {
+        newState.currentExerciseIndex += 1;
+      }
+    }
+    setWorkoutState(newState);
+
+    updateWorkoutState(newState).catch(console.error);
+
+    const isWorkoutFinished =
+      newState.currentExerciseIndex === exercises.length - 1 &&
+      newState.exercises[newState.currentExerciseIndex].sets.findIndex(
+        (s: any) => !s.completed,
+      ) === -1;
+
+    if (isWorkoutFinished) {
+      setIsFinishing(true);
+      try {
+        const result = await finishWorkoutAction(newState);
+        setSummary(result);
+        window.dispatchEvent(new CustomEvent("user-stats-updated"));
+        setShowMilestone(true);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsFinishing(false);
+      }
+    } else {
+      setRestTimeLeft(null); // No rest for skipped sets
+    }
+  };
+
   const handleCompleteSet = async () => {
     if (currentSetIndex === -1) return;
 
@@ -418,22 +461,38 @@ export default function ActiveWorkout({
               </div>
             )}
 
-            <button
-              onClick={handleCompleteSet}
-              disabled={isFinishing || currentSetIndex === -1}
-              className={`w-full ${isFinishing ? "bg-indigo-300" : "bg-indigo-500 hover:bg-indigo-400"} text-[var(--color-white)] font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_var(--color-indigo-600)] active:shadow-[0_0px_0_0_var(--color-indigo-600)] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2`}
-            >
-              {isFinishing ? (
-                <div className="w-6 h-6 border-4 border-[var(--color-white)] border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <CheckCircle2 size={28} />
-                  <span>
-                    {currentSetIndex !== -1 ? "COMPLETE SET" : "EXERCISE DONE"}
-                  </span>
-                </>
+            <div className="flex w-full gap-3">
+              <button
+                onClick={handleCompleteSet}
+                disabled={isFinishing || currentSetIndex === -1}
+                className={`flex-[3] ${isFinishing ? "bg-indigo-300" : "bg-indigo-500 hover:bg-indigo-400"} text-[var(--color-white)] font-black text-xl py-5 rounded-2xl shadow-[0_6px_0_0_var(--color-indigo-600)] active:shadow-[0_0px_0_0_var(--color-indigo-600)] active:translate-y-[6px] transition-all flex justify-center items-center space-x-2`}
+              >
+                {isFinishing ? (
+                  <div className="w-6 h-6 border-4 border-[var(--color-white)] border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    <CheckCircle2 size={28} />
+                    <span>
+                      {currentSetIndex !== -1 ? "COMPLETE SET" : "EXERCISE DONE"} 
+                    </span>
+                  </>
+                )}
+              </button>
+              {currentSetIndex !== -1 && (
+                <button
+                  onClick={() => {
+                    if (confirm("Are you sure you want to skip this set? You will lose 5 XP.")) {
+                      handleSkipSet();
+                    }
+                  }}
+                  disabled={isFinishing}
+                  className="flex-1 flex justify-center items-center bg-gray-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 font-bold rounded-2xl shadow-[0_6px_0_0_var(--color-gray-300)] active:shadow-[0_0px_0_0_var(--color-gray-300)] active:translate-y-[6px] transition-all border-2 border-transparent hover:border-rose-200"
+                  title="Skip Set"
+                >
+                  SKIP
+                </button>
               )}
-            </button>
+            </div>
 
             {isLastSet && nextExercise && (
               <div className="w-full mt-6 bg-indigo-50 border-2 border-dashed border-indigo-200 p-4 rounded-2xl flex items-center justify-between">
