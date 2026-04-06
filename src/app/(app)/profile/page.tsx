@@ -52,7 +52,10 @@ export default async function ProfilePage() {
          id: exercise?.id || "",
          name: exercise?.name || "Unknown Exercise",
          targetSets: px.targetSets,
-         targetReps: px.targetReps
+         targetReps: px.targetReps,
+         exerciseId: px.exerciseId,
+         customExerciseId: px.customExerciseId,
+         isCustom: !!px.customExerciseId
        };
     })
   }));
