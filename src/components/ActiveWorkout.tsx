@@ -9,6 +9,7 @@ import {
   Calculator,
   Flame,
   X,
+  ChevronLeft
 } from "lucide-react";
 import { finishWorkoutAction } from "@/app/actions/workout-actions";
 import {
@@ -88,6 +89,19 @@ export default function ActiveWorkout({
     newState.exercises[currentExerciseIndex].sets[currentSetIndex][field] =
       value;
     setWorkoutState(newState);
+  };
+
+  const handlePreviousExercise = () => {
+    if (currentExerciseIndex === 0) return;
+    const newState = { ...workoutState };
+    newState.currentExerciseIndex -= 1;
+    // Mark the very last set of the previous exercise as incomplete so user can edit it
+    const prevEx = newState.exercises[newState.currentExerciseIndex];
+    if (prevEx.sets.length > 0) {
+      prevEx.sets[prevEx.sets.length - 1].completed = false;
+    }
+    setWorkoutState(newState);
+    setRestTimeLeft(null); // Cancel any active rest timer
   };
 
   const handleCompleteSet = async () => {
@@ -170,6 +184,13 @@ export default function ActiveWorkout({
     currentSetIndex !== -1 && currentExercise
       ? currentExercise.sets[currentSetIndex]
       : null;
+
+  const isLastSet =
+    currentSetIndex !== -1 &&
+    currentExercise &&
+    currentSetIndex === currentExercise.sets.length - 1;
+  const nextExercise = exercises[currentExerciseIndex + 1];
+  const hasPreviousExercise = currentExerciseIndex > 0;
 
   if (showCancelConfirm) {
     return (
@@ -413,6 +434,28 @@ export default function ActiveWorkout({
                 </>
               )}
             </button>
+
+            {isLastSet && nextExercise && (
+              <div className="w-full mt-6 bg-indigo-50 border-2 border-dashed border-indigo-200 p-4 rounded-2xl flex items-center justify-between">
+                <div className="flex-1">
+                  <p className="text-[10px] font-black uppercase text-indigo-400 mb-0.5 tracking-wider">Up Next</p>
+                  <p className="font-bold text-indigo-900 leading-tight pr-2">{nextExercise.name}</p>
+                </div>
+                <div className="text-right whitespace-nowrap bg-indigo-200/50 px-3 py-1 rounded-xl">
+                  <span className="font-black text-indigo-700">{nextExercise.sets.length}</span>
+                  <span className="text-[10px] font-bold uppercase text-indigo-500 ml-1">Sets</span>
+                </div>
+              </div>
+            )}
+
+            {hasPreviousExercise && (
+              <button
+                onClick={handlePreviousExercise}
+                className="mt-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors flex items-center justify-center gap-1 w-full p-2"
+              >
+                <ChevronLeft size={16} /> Previous Exercise
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
