@@ -4,6 +4,20 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { sendPushNotification } from "@/lib/server-push";
+
+export async function sendHypeNotification(targetUserId: string, prExercise: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Not authenticated");
+
+  await sendPushNotification(targetUserId, {
+    title: "🔥 You got HYPED!",
+    body: `${session.user.username || "Someone"} hyped your PR on ${prExercise}! Keep it up!`,
+    url: "/dashboard"
+  });
+
+  return { success: true };
+}
 
 export async function addBodyWeightLog(weight: number) {
   const session = await getServerSession(authOptions);

@@ -9,7 +9,9 @@ import {
   Calculator,
   Flame,
   X,
-  ChevronLeft
+  ChevronLeft,
+  List,
+  Check
 } from "lucide-react";
 import { finishWorkoutAction } from "@/app/actions/workout-actions";
 import {
@@ -38,6 +40,8 @@ export default function ActiveWorkout({
   const [isFinishing, setIsFinishing] = useState(false);
   const [summary, setSummary] = useState<any>(null);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showSkipConfirm, setShowSkipConfirm] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(false);
 
   const [restTimeLeft, setRestTimeLeft] = useState<number | null>(null);
   const [showPlateCalc, setShowPlateCalc] = useState(false);
@@ -91,15 +95,27 @@ export default function ActiveWorkout({
     setWorkoutState(newState);
   };
 
-  const handlePreviousExercise = () => {
-    if (currentExerciseIndex === 0) return;
+  const handleGoBack = () => {
     const newState = { ...workoutState };
-    newState.currentExerciseIndex -= 1;
-    // Mark the very last set of the previous exercise as incomplete so user can edit it
-    const prevEx = newState.exercises[newState.currentExerciseIndex];
-    if (prevEx.sets.length > 0) {
-      prevEx.sets[prevEx.sets.length - 1].completed = false;
+    
+    if (currentSetIndex > 0) {
+      // Go back to the previous set in the current exercise
+      const prevSet = newState.exercises[currentExerciseIndex].sets[currentSetIndex - 1];
+      prevSet.completed = false;
+      prevSet.isSkipped = false;
+    } else if (currentExerciseIndex > 0) {
+      // Go back to the last set of the previous exercise
+      newState.currentExerciseIndex -= 1;
+      const prevEx = newState.exercises[newState.currentExerciseIndex];
+      if (prevEx.sets.length > 0) {
+        const lastSet = prevEx.sets[prevEx.sets.length - 1];
+        lastSet.completed = false;
+        lastSet.isSkipped = false;
+      }
+    } else {
+      return; // Already at the very first set of the workout
     }
+    
     setWorkoutState(newState);
     setRestTimeLeft(null); // Cancel any active rest timer
   };
@@ -159,6 +175,15 @@ export default function ActiveWorkout({
     }
 
     set.completed = true;
+
+    if (set.isWarmup) {
+      // Add a replacement uncompleted working set so the total working sets remain unchanged
+      newState.exercises[currentExerciseIndex].sets.push({
+        reps: set.reps, // Optional default starting point
+        weight: set.weight,
+        completed: false,
+      });
+    }
 
     // Advance Logic
     const nextSetIndex = newState.exercises[
@@ -228,12 +253,22 @@ export default function ActiveWorkout({
       ? currentExercise.sets[currentSetIndex]
       : null;
 
+  const previousWorkingSets =
+    currentExercise && currentSetIndex !== -1
+      ? currentExercise.sets.slice(0, currentSetIndex).filter((s: any) => !s.isWarmup && !s.isSkipped).length
+      : 0;
+
+  const totalWorkingSets =
+    currentExercise
+      ? currentExercise.sets.filter((s: any) => !s.isWarmup && !s.isSkipped).length
+      : 0;
+
   const isLastSet =
     currentSetIndex !== -1 &&
     currentExercise &&
     currentSetIndex === currentExercise.sets.length - 1;
   const nextExercise = exercises[currentExerciseIndex + 1];
-  const hasPreviousExercise = currentExerciseIndex > 0;
+  const hasPreviousSet = currentExerciseIndex > 0 || currentSetIndex > 0;
 
   if (showCancelConfirm) {
     return (
@@ -267,9 +302,55 @@ export default function ActiveWorkout({
     );
   }
 
+  if (showSkipConfirm) {
+    return (
+      <div className="min-h-full flex flex-col items-center justify-start pt-20 p-4 absolute inset-0 z-50 bg-[var(--color-gray-50)]/90 backdrop-blur-sm">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="bg-[var(--color-white)] rounded-3xl p-8 max-w-sm w-full text-center shadow-xl border-2 border-[var(--color-indigo-50)]"
+        >
+          <h2 className="text-2xl font-black text-[var(--color-slate-800)] mb-4">
+            Skip Set?
+          </h2>
+          <p className="text-[var(--color-slate-500)] mb-8 font-medium">
+            Are you sure you want to skip this set? You will lose <strong className="text-[var(--color-rose-500)]">5 XP</strong>.
+          </p>
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => {
+                setShowSkipConfirm(false);
+                handleSkipSet();
+              }}
+              className="w-full py-4 bg-[var(--color-rose-500)] text-[var(--color-white)] rounded-xl font-bold shadow-[0_4px_0_var(--color-button-shadow)] active:translate-y-1 active:shadow-none hover:bg-[var(--color-rose-600)] transition-all"
+            >
+              Yes, Skip Set
+            </button>
+            <button
+              onClick={() => setShowSkipConfirm(false)}
+              className="w-full py-4 bg-[var(--color-gray-100)] text-[var(--color-slate-700)] rounded-xl font-bold border-2 border-[var(--color-gray-200)] hover:bg-[var(--color-gray-200)] transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-full h-full bg-transparent flex flex-col p-6 items-center relative">
       <div className="w-full max-w-md flex justify-center items-center mb-8 relative">
+        <button
+          onClick={() => setShowTimeline(!showTimeline)}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 p-3 rounded-xl transition-all border border-[var(--color-gray-200)] shadow-[0_4px_0_var(--color-button-shadow)] ${
+            showTimeline
+              ? "bg-[var(--color-indigo-100)] text-[var(--color-indigo-600)]"
+              : "bg-[var(--color-gray-100)] text-[var(--color-slate-500)] hover:text-[var(--color-indigo-500)] hover:scale-110"
+          }`}
+        >
+          <List size={24} />
+        </button>
         <h1 className="font-bold text-2xl text-[var(--color-slate-800)] text-center px-16">
           {planName}
         </h1>
@@ -296,7 +377,55 @@ export default function ActiveWorkout({
       </div>
 
       <AnimatePresence mode="wait">
-        {showMilestone ? (
+        {showTimeline ? (
+          <motion.div
+            key="timeline"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="w-full max-w-md bg-[var(--color-white)] rounded-[2rem] p-6 shadow-xl border-b-4 border-gray-200 mb-20 overflow-y-auto max-h-[70vh]"
+          >
+            <h2 className="text-xl font-bold text-[var(--color-slate-800)] mb-6 flex items-center justify-between">
+              Workout Timeline
+              <div className="text-sm font-normal text-slate-500 bg-gray-100 px-3 py-1 rounded-full">
+                {exercises.length} Exercises
+              </div>
+            </h2>
+            <div className="space-y-4">
+              {exercises.map((ex, exIdx) => {
+                const isCurrent = exIdx === currentExerciseIndex;
+                const isCompleted = exIdx < currentExerciseIndex || showMilestone;
+                return (
+                  <div key={ex.id} className="flex gap-4 items-start">
+                    <div className="flex flex-col items-center mt-1">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-sm ${isCompleted ? 'bg-green-500 text-[var(--color-white)]' : isCurrent ? 'bg-[var(--color-indigo-500)] text-[var(--color-white)] ring-4 ring-indigo-100' : 'bg-gray-200 text-gray-500'}`}>
+                        {isCompleted ? <Check size={16} /> : exIdx + 1}
+                      </div>
+                      {exIdx < exercises.length - 1 && (
+                        <div className={`w-1 h-12 mt-2 rounded-full ${isCompleted ? 'bg-green-500' : 'bg-gray-200'}`} />
+                      )}
+                    </div>
+                    <div className={`flex-1 pb-4 ${isCompleted ? 'opacity-50' : 'opacity-100'}`}>
+                      <h3 className={`font-bold text-lg leading-tight mb-1 ${isCurrent ? 'text-[var(--color-indigo-600)]' : 'text-slate-700'}`}>{ex.name}</h3>
+                      <p className="text-sm font-medium text-slate-500">{ex.sets.length} sets planned</p>
+                      {currentExerciseIndex === exIdx && !showMilestone && (
+                        <div className="mt-3 bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-2 rounded-lg inline-block border border-indigo-100">
+                          Current Exercise &bull; {currentSet?.isWarmup ? "Warm-up" : `Set ${previousWorkingSets + 1} / ${totalWorkingSets}`}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <button
+               onClick={() => setShowTimeline(false)}
+               className="mt-6 w-full bg-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-400)] text-[var(--color-white)] shadow-[0_4px_0_0_var(--color-indigo-600)] active:translate-y-[4px] active:shadow-none font-bold py-4 rounded-xl transition-all"
+            >
+              RESUME WORKOUT
+            </button>
+          </motion.div>
+        ) : showMilestone ? (
           coopSessionId ? (
             <CoopWorkoutReview sessionId={coopSessionId} />
           ) : (
@@ -387,7 +516,9 @@ export default function ActiveWorkout({
             <div className="flex flex-col items-center justify-center gap-3 mb-8 w-full">
               <p className="text-slate-500 font-medium">
                 {currentSetIndex !== -1
-                  ? `Set ${currentSetIndex + 1} of ${currentExercise?.targetSets}`
+                  ? currentSet?.isWarmup
+                    ? "Warm-up Set"
+                    : `Set ${previousWorkingSets + 1} of ${totalWorkingSets}`
                   : "All sets done!"}
               </p>
               {currentSetIndex !== -1 && (
@@ -480,11 +611,7 @@ export default function ActiveWorkout({
               </button>
               {currentSetIndex !== -1 && (
                 <button
-                  onClick={() => {
-                    if (confirm("Are you sure you want to skip this set? You will lose 5 XP.")) {
-                      handleSkipSet();
-                    }
-                  }}
+                  onClick={() => setShowSkipConfirm(true)}
                   disabled={isFinishing}
                   className="flex-1 flex justify-center items-center bg-gray-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 font-bold rounded-2xl shadow-[0_6px_0_0_var(--color-gray-300)] active:shadow-[0_0px_0_0_var(--color-gray-300)] active:translate-y-[6px] transition-all border-2 border-transparent hover:border-rose-200"
                   title="Skip Set"
@@ -507,12 +634,12 @@ export default function ActiveWorkout({
               </div>
             )}
 
-            {hasPreviousExercise && (
+            {hasPreviousSet && (
               <button
-                onClick={handlePreviousExercise}
+                onClick={handleGoBack}
                 className="mt-6 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors flex items-center justify-center gap-1 w-full p-2"
               >
-                <ChevronLeft size={16} /> Previous Exercise
+                <ChevronLeft size={16} /> Go Back
               </button>
             )}
           </motion.div>

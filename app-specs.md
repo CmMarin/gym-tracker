@@ -19,6 +19,8 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 ### 1. Active Workout Engine (`ActiveWorkout.tsx`)
 - **State Management:** The current workout state (sets, reps, weight) is kept in a React state `workoutState`. 
 - **Auto-Advancement:** When a user completes a set, `handleCompleteSet` marks `set.completed = true;` and automatically calculates the `nextSetIndex`. If all sets in an exercise are done, it increments the `currentExerciseIndex`.
+- **Warm-up Set Logic:** If a user completes a set marked as a "warm-up", the system dynamically pushes a new, uncompleted working set to the end of the exercise array. This ensures warm-ups are recorded but do not consume the allocated working set slots (e.g., staying on Set 1/3).
+- **Navigation:** Users can go back to previous exercises and even revert individual previous sets safely using the `handleGoBack` function.
 - **⚠️ CRITICAL RULE:** *Never accidentally delete state mutation logic when adding secondary effects.* Specifically, when injecting sounds or toasts, ensure the baseline app flow (incrementing indexes, setting completeds) remains perfectly intact.
 - **Background Sync:** UI updates happen instantly; database saves (`updateWorkoutState`) happen silently in the background. Does not block the user.
 
@@ -46,6 +48,7 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 ### 2. Animations (`Framer Motion`)
 - Every page is wrapped in `<PageTransition>` for native-like fading/sliding between tabs.
 - Modals, popups, and milestones use `<AnimatePresence>` to slide in/out naturally.
+- **Replacing Native Alerts:** We strictly avoid using native browser alerts (e.g., `window.confirm` or `alert()`). Instead, we use custom Framer Motion modals (like the Skip Set confirmation) to maintain a premium feel.
 
 ### 3. Audio Cues (`useAppSounds`)
 - `playPop()`: Used for standard clicks, tab navigation, and completing a normal set.
@@ -74,8 +77,21 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [COMPLETED] Badges & Achievements Dashboard: Create a system of unlockable achievements tied to milestones (e.g., “100kg Club” for bench press, “Night Owl” for workouts after 10 PM, “Iron Streak” for a 30-day streak)  
 - [COMPLETED] Co-op Workouts: Allow users to link workout sessions with friends where sets completed and XP earned contribute to a shared experience pool in real time  
 - [COMPLETED] Warm-up Sets Toggle: Add a toggle option (e.g., 🔥 icon) to mark sets as warm-ups, ensuring they are excluded from PR calculations and fatigue tracking  
-- [PENDING] Push Notifications: Implement web push notifications (PWA) to remind users about expiring streaks or notify them when friends complete workouts  
+- [COMPLETED] Push Notifications: Implement web push notifications (PWA) to remind users about expiring streaks or notify them when friends complete workouts (Hype button implemented)  
 - [COMPLETED] 1RM (One Rep Max) Predictions: Build a smart calculation system that estimates a user’s true 1-rep max from higher-rep sets (e.g., 8–12 reps) for key lifts like bench press, squat, and deadlift  
+
+### QoL & UI Polish Roadmap (HELL YEAH Tier):
+- [PENDING] Visual "Barbell" Plate Calculator: Upgrade the plate calculator in ActiveWorkout to visually render a 2D/3D barbell with colored plates stacked on the sleeve instead of just text output.
+- [PENDING] "Workout Wrapped" Card: At the end of a workout, generate a beautiful, trading-card-style summary (Muscle Heatmap, total KG lifted, XP, and Hypes received) that is saveable direct to the phone gallery.
+- [PENDING] Smart Progressive Overload Auto-Fill: Predict the next workout target by auto-suggesting +2.5kg if last week's targets were hit comfortably. Display a "📈 Progression Suggested" badge when starting.
+- [PENDING] "Zen Mode" Breathing Rest Timer: Convert the active workout rest countdown into a breathing circle (Inhale 4s, Hold 4s, Exhale 4s) using Framer Motion to actively lower heart rate between sets.
+- [PENDING] "Trophy Case" Revamp: Re-design the profile achievements into a dedicated Trophy Case with greyed-out silhouettes that light up with glossy, animated gradients when unlocked.
+- [PENDING] "Iron Grid" Activity Calendar: Add a GitHub-style 365-square contribution graph to the profile that lights up in theme colors based on daily workout volume or XP.
+- [PENDING] "Bench is Taken" Swapper: Add an "Alternate" icon next to exercises. Opens a sleek modal to quickly swap to 3 muscle-equivalent alternatives just for today's session.
+- [PENDING] The "+2.5kg" Progression Pill: Render a stylish quick-tap "+2.5" bubble next to weight inputs to instantly bump the weight by the smallest increment.
+- [PENDING] Odometer "Slot Machine" Tickers: Use Framer Motion to make numbers (XP, Timers, Volume) physically roll up and click into place like a slot machine whenever they change.
+- [PENDING] Frosted Glass (Backdrop-Blur) Everywhere: Give the TopNav, BottomNav, and overlapping Modals the iOS frosted-glass treatment (`backdrop-blur-lg`), letting background components pass cleanly underneath.
+- [PENDING] Liquid Gradient "Flow State" Backgrounds: Add a massive, blurred, slow-moving CSS radial gradient to the Active Workout background that shifts from calm Indigo to Purple to Green as the workout progresses from 0% to 100%.
 
 ### Optimizations Roadmap:
 - [COMPLETED] Dynamic Imports (Code Splitting): Implement lazy loading for non-critical components (e.g., SavedWorkoutsModal, heavy chart components), ensuring they are only loaded when triggered by user interaction rather than included in the initial bundle  

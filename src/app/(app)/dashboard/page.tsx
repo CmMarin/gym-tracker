@@ -107,6 +107,7 @@ export default async function DashboardPage() {
   // Get recent PRs for the competition aspect
   const recentPRs = recentLogsWithPR.map((log: any) => ({
     id: log.id,
+    userId: log.userId,
     username: log.user.username,
     exercise: log.exercise?.name || log.customExercise?.name || "Unknown Exercise",
     weight: log.weight,
