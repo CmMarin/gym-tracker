@@ -80,7 +80,7 @@ export default function SettingsModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-[var(--color-white)] w-full max-w-md rounded-[32px] overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh]"
+            className="bg-[var(--color-white)]/85 backdrop-blur-3xl w-full max-w-md rounded-[32px] overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh]"
           >
             <div className="bg-[var(--color-slate-800)] text-[var(--color-white)] p-6 relative flex-shrink-0">
               <button

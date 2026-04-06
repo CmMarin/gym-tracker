@@ -12,7 +12,7 @@ export default function BottomNav() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="fixed bottom-0 w-full bg-[var(--color-white)] border-t-2 border-indigo-50 pb-safe z-50">
+    <div className="fixed bottom-0 w-full bg-[var(--color-white)]/85 backdrop-blur-md border-t-2 border-indigo-50 pb-safe z-50">
       <div className="flex justify-around items-center h-20 max-w-xl mx-auto px-4">
         <Link
           href="/dashboard"

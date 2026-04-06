@@ -175,7 +175,7 @@ export default function SavedWorkoutsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div className="bg-[var(--color-white)] w-full max-w-lg rounded-[32px] flex flex-col h-[85vh] sm:h-[600px] sm:max-h-[85vh] overflow-hidden relative animate-in zoom-in-95 duration-200 shadow-2xl">
+        <div className="bg-[var(--color-white)]/85 backdrop-blur-3xl w-full max-w-lg rounded-[32px] flex flex-col h-[85vh] sm:h-[600px] sm:max-h-[85vh] overflow-hidden relative animate-in zoom-in-95 duration-200 shadow-2xl">
         {view === "list" && (
           <>
             <div className="p-6 bg-[var(--color-slate-800)] text-[var(--color-white)] shrink-0 flex items-center justify-between">

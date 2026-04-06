@@ -37,7 +37,7 @@ export default function TopNav() {
   }, [session]);
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-[var(--color-white)] border-b-2 border-indigo-50 flex items-center justify-between px-4 py-3 shadow-sm">
+    <div className="sticky top-0 z-50 w-full bg-[var(--color-white)]/85 backdrop-blur-md border-b-2 border-indigo-50 flex items-center justify-between px-4 py-3 shadow-sm">
       <Link
         href="/dashboard"
         className="font-black text-xl text-slate-800 tracking-tight"

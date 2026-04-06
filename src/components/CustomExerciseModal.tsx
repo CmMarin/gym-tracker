@@ -74,9 +74,9 @@ export default function CustomExerciseModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-[var(--color-white)] rounded-[2rem] shadow-xl w-full max-w-md overflow-hidden flex flex-col border border-[var(--color-gray-100)]"
+            className="bg-[var(--color-white)]/85 backdrop-blur-3xl rounded-[2rem] shadow-xl w-full max-w-md overflow-hidden flex flex-col border border-[var(--color-gray-100)]"
           >
-            <div className="p-6 border-b border-[var(--color-gray-100)] flex justify-between items-center bg-[var(--color-white)]">
+            <div className="p-6 border-b border-[var(--color-gray-100)] flex justify-between items-center bg-transparent">
               <h2 className="text-2xl font-black text-[var(--color-slate-800)]">
                 New Exercise
               </h2>
@@ -88,7 +88,7 @@ export default function CustomExerciseModal({
               </button>
             </div>
 
-            <div className="p-6 space-y-5 overflow-y-auto max-h-[60vh] md:max-h-[70vh] bg-[var(--color-white)]">
+            <div className="p-6 space-y-5 overflow-y-auto max-h-[60vh] md:max-h-[70vh] bg-transparent">
               <div>
                 <label className="block text-sm font-bold text-[var(--color-slate-500)] mb-2">
                   Exercise Name
