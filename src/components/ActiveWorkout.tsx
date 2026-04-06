@@ -642,7 +642,13 @@ export default function ActiveWorkout({
                 <div className="flex-1 relative">
                   <label className="flex items-center justify-center gap-1 text-sm font-bold text-[var(--color-slate-400)] uppercase mb-2 text-center w-full">
                     Weight (kg)
-
+                    <button
+                      onClick={() => setShowPlateCalc(!showPlateCalc)}
+                      className={`transition-colors p-1 rounded-md ${showPlateCalc ? 'bg-[var(--color-indigo-500)] text-[var(--color-white)] shadow-sm' : 'text-[var(--color-indigo-400)] hover:text-[var(--color-indigo-600)] bg-[var(--color-indigo-50)]'}`}
+                      title="Calculate Plates"
+                    >
+                      <Calculator size={14} />
+                    </button>
                   </label>
                   <div className="flex items-stretch bg-[var(--color-gray-100)] rounded-2xl overflow-hidden border-2 border-[var(--color-gray-100)] focus-within:border-[var(--color-indigo-400)] transition-all h-[72px]">
                     {currentSetIndex !== -1 && (
@@ -684,7 +690,7 @@ export default function ActiveWorkout({
                 </div>
               </div>
             )}
-            {currentSet?.weight && Number(currentSet.weight) > 0 && (
+            {showPlateCalc && currentSet?.weight && Number(currentSet.weight) > 0 && (
               <div className="mb-4 w-full bg-[var(--color-slate-50)] pt-3 pb-2 rounded-2xl text-center border-2 border-[var(--color-slate-100)] overflow-hidden">
                 <p className="text-[var(--color-slate-400)] text-[10px] uppercase font-black tracking-widest mb-1 z-10 relative">
                   Plates per side (20kg bar)
