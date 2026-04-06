@@ -81,17 +81,17 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [COMPLETED] 1RM (One Rep Max) Predictions: Build a smart calculation system that estimates a user’s true 1-rep max from higher-rep sets (e.g., 8–12 reps) for key lifts like bench press, squat, and deadlift  
 
 ### QoL & UI Polish Roadmap (HELL YEAH Tier):
-- [PENDING] Visual "Barbell" Plate Calculator: Upgrade the plate calculator in ActiveWorkout to visually render a 2D/3D barbell with colored plates stacked on the sleeve instead of just text output.
+- [COMPLETED] Visual "Barbell" Plate Calculator: Upgrade the plate calculator in ActiveWorkout to visually render a 2D/3D barbell with colored plates stacked on the sleeve instead of just text output.
 - [PENDING] "Workout Wrapped" Card: At the end of a workout, generate a beautiful, trading-card-style summary (Muscle Heatmap, total KG lifted, XP, and Hypes received) that is saveable direct to the phone gallery.
 - [PENDING] Smart Progressive Overload Auto-Fill: Predict the next workout target by auto-suggesting +2.5kg if last week's targets were hit comfortably. Display a "📈 Progression Suggested" badge when starting.
 - [PENDING] "Zen Mode" Breathing Rest Timer: Convert the active workout rest countdown into a breathing circle (Inhale 4s, Hold 4s, Exhale 4s) using Framer Motion to actively lower heart rate between sets.
 - [PENDING] "Trophy Case" Revamp: Re-design the profile achievements into a dedicated Trophy Case with greyed-out silhouettes that light up with glossy, animated gradients when unlocked.
 - [PENDING] "Iron Grid" Activity Calendar: Add a GitHub-style 365-square contribution graph to the profile that lights up in theme colors based on daily workout volume or XP.
 - [PENDING] "Bench is Taken" Swapper: Add an "Alternate" icon next to exercises. Opens a sleek modal to quickly swap to 3 muscle-equivalent alternatives just for today's session.
-- [PENDING] The "+2.5kg" Progression Pill: Render a stylish quick-tap "+2.5" bubble next to weight inputs to instantly bump the weight by the smallest increment.
-- [PENDING] Odometer "Slot Machine" Tickers: Use Framer Motion to make numbers (XP, Timers, Volume) physically roll up and click into place like a slot machine whenever they change.
-- [PENDING] Frosted Glass (Backdrop-Blur) Everywhere: Give the TopNav, BottomNav, and overlapping Modals the iOS frosted-glass treatment (`backdrop-blur-lg`), letting background components pass cleanly underneath.
-- [PENDING] Liquid Gradient "Flow State" Backgrounds: Add a massive, blurred, slow-moving CSS radial gradient to the Active Workout background that shifts from calm Indigo to Purple to Green as the workout progresses from 0% to 100%.
+- [COMPLETED] The "+2.5kg" Progression Pill: Render a stylish quick-tap "+2.5" bubble next to weight inputs to instantly bump the weight by the smallest increment. (Implemented as a full native +/- 2.5 stepper)
+- [COMPLETED] Odometer "Slot Machine" Tickers: Use Framer Motion to make numbers (XP, Timers, Volume) physically roll up and click into place like a slot machine whenever they change.
+- [COMPLETED] Frosted Glass (Backdrop-Blur) Everywhere: Give the TopNav, BottomNav, and overlapping Modals the iOS frosted-glass treatment (`backdrop-blur-lg`), letting background components pass cleanly underneath.
+- [CANCELLED] Liquid Gradient "Flow State" Backgrounds: Add a massive, blurred, slow-moving CSS radial gradient to the Active Workout background that shifts from calm Indigo to Purple to Green as the workout progresses from 0% to 100%. (Dropped - buggy/invisible on mobile)
 
 ### Optimizations Roadmap:
 - [COMPLETED] Dynamic Imports (Code Splitting): Implement lazy loading for non-critical components (e.g., SavedWorkoutsModal, heavy chart components), ensuring they are only loaded when triggered by user interaction rather than included in the initial bundle  
