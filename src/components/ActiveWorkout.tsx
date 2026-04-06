@@ -23,9 +23,122 @@ import toast from "react-hot-toast";
 import { useAppSounds } from "@/hooks/useAppSounds";
 import CoopPanel from "./CoopPanel";
 import CoopWorkoutReview from "./CoopWorkoutReview";
+import NumberTicker from "@/components/NumberTicker";
 
 const BARBELL_WEIGHT = 20;
 const AVAILABLE_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25];
+
+const VisualBarbell = ({ weight }: { weight: number }) => {
+  const getPlatesArray = (w: number) => {
+    let remaining = (w - BARBELL_WEIGHT) / 2;
+    if (remaining <= 0) return [];
+    
+    const plates: number[] = [];
+    AVAILABLE_PLATES.forEach((plate) => {
+      while (remaining >= plate) {
+        plates.push(plate);
+        remaining -= plate;
+        remaining = Math.round(remaining * 100) / 100; // Fix JS float math
+      }
+    });
+    return plates;
+  };
+
+  const plates = getPlatesArray(weight);
+
+  const getPlateStyle = (w: number) => {
+    switch (w) {
+      case 25: return "bg-rose-500 h-28 w-6 border-l-2 border-rose-400";
+      case 20: return "bg-blue-500 h-28 w-6 border-l-2 border-blue-400";
+      case 15: return "bg-yellow-400 h-24 w-6 border-l-2 border-yellow-300";
+      case 10: return "bg-emerald-500 h-16 w-5 border-l-2 border-emerald-400";
+      case 5: return "bg-[var(--color-white)] h-12 w-4 border-l-2 border-gray-200";
+      case 2.5: return "bg-[var(--color-slate-800)] h-10 w-3 border-l border-slate-600";
+      case 1.25: return "bg-[var(--color-slate-400)] h-8 w-2.5 border-l border-slate-300";
+      default: return "bg-gray-500 h-12 w-4";
+    }
+  };
+
+  if (plates.length === 0) {
+    return <div className="text-center text-sm font-bold text-[var(--color-indigo-200)] my-6">Empty Bar (20kg)</div>;
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full mt-4 overflow-[visible] rounded-xl pt-4 pb-6 relative">
+       <div className="relative flex items-center justify-center w-full h-32 ml-4">
+         {/* Left Collars & Plates */}
+         <div className="flex items-center justify-end gap-[1px] -mr-[2px] z-30 h-full scale-x-[-1]">
+           {plates.map((plate, idx) => (
+             <motion.div
+               key={`L-${plate}-${idx}`}
+               initial={{ x: 100, opacity: 0, rotateY: 45 }}
+               animate={{ x: 0, opacity: 1, rotateY: 0 }}
+               transition={{ delay: idx * 0.05, type: "spring", stiffness: 400, damping: 25 }}
+               className={`rounded-[2px] flex items-center justify-center relative shadow-sm ${getPlateStyle(plate)}`}
+             >
+               <span className={`text-[10px] font-black tracking-tighter -rotate-90 absolute ${plate === 5 || plate === 1.25 ? 'text-slate-800' : 'text-[var(--color-white)]'}`}>
+                 {plate}
+               </span>
+             </motion.div>
+           ))}
+           {/* Left Clip */}
+           <motion.div
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: plates.length * 0.05, type: "spring", stiffness: 400, damping: 30 }}
+              className="w-3 h-8 ml-1 bg-[var(--color-slate-800)] rounded-sm border-x border-[var(--color-slate-700)] flex items-center justify-center shadow-lg"
+           >
+             <div className="w-full h-1.5 bg-slate-400" />
+           </motion.div>
+         </div>
+
+         {/* Left Collar */}
+         <div className="w-5 h-14 bg-gradient-to-b from-slate-200 to-slate-400 rounded-sm shrink-0 shadow-md z-20 scale-x-[-1]" />
+         
+         {/* Left Sleeve */}
+         <div className="absolute right-[50%] w-[1000px] h-4 bg-gradient-to-b from-slate-200 to-slate-400 border-y border-slate-400 top-1/2 -translate-y-1/2 z-0 scale-x-[-1]" />
+         
+         {/* Center shaft - full width span under collars */}
+         <div className="absolute left-[-1000px] right-[-1000px] h-4 bg-gradient-to-b from-slate-300 to-slate-400 border-y border-slate-500 top-1/2 -translate-y-1/2 z-0" />
+         
+         {/* Center visual shaft snippet (visible part) */}
+         <div className="w-16 h-4 bg-gradient-to-b from-slate-300 to-slate-400 border-y border-slate-500 shrink-0 z-10" />
+         
+         {/* Right Collar */}
+         <div className="w-5 h-14 bg-gradient-to-b from-slate-200 to-slate-400 rounded-sm shrink-0 shadow-md z-20" />
+         
+         {/* Right Sleeve */}
+         <div className="absolute left-[50%] w-[1000px] h-4 bg-gradient-to-b from-slate-200 to-slate-400 border-y border-slate-400 top-1/2 -translate-y-1/2 z-0" />
+         
+         {/* Right Plates container */}
+         <div className="flex items-center justify-start gap-[1px] -ml-[2px] z-30 h-full">
+           {plates.map((plate, idx) => (
+             <motion.div
+               key={`R-${plate}-${idx}`}
+               initial={{ x: 100, opacity: 0, rotateY: 45 }}
+               animate={{ x: 0, opacity: 1, rotateY: 0 }}
+               transition={{ delay: idx * 0.05, type: "spring", stiffness: 400, damping: 25 }}
+               className={`rounded-[2px] flex items-center justify-center relative shadow-sm ${getPlateStyle(plate)}`}
+             >
+               <span className={`text-[10px] font-black tracking-tighter -rotate-90 absolute ${plate === 5 || plate === 1.25 ? 'text-slate-800' : 'text-[var(--color-white)]'}`}>
+                 {plate}
+               </span>
+             </motion.div>
+           ))}
+           {/* Right Clip / Collar */}
+           <motion.div
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: plates.length * 0.05, type: "spring", stiffness: 400, damping: 30 }}
+              className="w-3 h-8 ml-1 bg-[var(--color-slate-800)] rounded-sm border-x border-[var(--color-slate-700)] flex items-center justify-center shadow-lg"
+           >
+             <div className="w-full h-1.5 bg-slate-400" />
+           </motion.div>
+         </div>
+       </div>
+    </div>
+  );
+};
 
 export default function ActiveWorkout({
   planName,
@@ -231,21 +344,6 @@ export default function ActiveWorkout({
     } else {
       setRestTimeLeft(set.isWarmup ? 30 : 90);
     }
-  };
-
-  const calculatePlates = (weight: number) => {
-    let remaining = (weight - BARBELL_WEIGHT) / 2;
-    if (remaining <= 0) return "Bar empty";
-    const plates: string[] = [];
-    AVAILABLE_PLATES.forEach((plate) => {
-      let count = 0;
-      while (remaining >= plate) {
-        count++;
-        remaining -= plate;
-      }
-      if (count > 0) plates.push(`${count}x${plate}kg`);
-    });
-    return plates.join(", ");
   };
 
   const currentSet =
@@ -478,12 +576,12 @@ export default function ActiveWorkout({
             className="bg-[var(--color-white)] p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
           >
             <Timer size={64} className="text-indigo-500 mb-6" />
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center">
+            <h2 className="text-3xl font-extrabold text-[var(--color-slate-800)] mb-2 text-center">
               Rest Timer
             </h2>
-            <div className="text-7xl font-black text-slate-700 mb-10 tabular-nums tracking-tighter">
-              {Math.floor(restTimeLeft / 60)}:
-              {(restTimeLeft % 60).toString().padStart(2, "0")}
+            <div className="text-7xl font-black text-[var(--color-slate-700)] mb-10 tabular-nums tracking-tighter flex items-center justify-center">
+              <NumberTicker value={Math.floor(restTimeLeft / 60)} />:
+              <NumberTicker value={(restTimeLeft % 60).toString().padStart(2, "0")} />
             </div>
 
             <div className="flex w-full gap-4">
@@ -544,13 +642,7 @@ export default function ActiveWorkout({
                 <div className="flex-1 relative">
                   <label className="flex items-center justify-center gap-1 text-sm font-bold text-[var(--color-slate-400)] uppercase mb-2 text-center w-full">
                     Weight (kg)
-                    <button
-                      onClick={() => setShowPlateCalc(!showPlateCalc)}
-                      className="text-[var(--color-indigo-400)] hover:text-[var(--color-indigo-600)] transition-colors bg-[var(--color-indigo-50)] p-1 rounded-md"
-                      title="Calculate Plates"
-                    >
-                      <Calculator size={14} />
-                    </button>
+
                   </label>
                   <div className="flex items-stretch bg-[var(--color-gray-100)] rounded-2xl overflow-hidden border-2 border-[var(--color-gray-100)] focus-within:border-[var(--color-indigo-400)] transition-all h-[72px]">
                     {currentSetIndex !== -1 && (
@@ -577,23 +669,6 @@ export default function ActiveWorkout({
                       </button>
                     )}
                   </div>
-                  <AnimatePresence>
-                    {showPlateCalc && currentSet?.weight && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="absolute top-full mt-2 w-full bg-[var(--color-indigo-600)] text-[var(--color-white)] text-xs p-3 rounded-xl text-center z-10 shadow-lg border border-[var(--color-indigo-700)] pointer-events-none"
-                      >
-                        <p className="text-[var(--color-indigo-100)] font-medium mb-1">
-                          Plates/side (20kg bar)
-                        </p>
-                        <span className="font-bold text-[var(--color-white)] text-sm">
-                          {calculatePlates(Number(currentSet.weight))}
-                        </span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-bold text-[var(--color-slate-400)] uppercase mb-2 text-center">
@@ -609,7 +684,14 @@ export default function ActiveWorkout({
                 </div>
               </div>
             )}
-
+            {currentSet?.weight && Number(currentSet.weight) > 0 && (
+              <div className="mb-4 w-full bg-[var(--color-slate-50)] pt-3 pb-2 rounded-2xl text-center border-2 border-[var(--color-slate-100)] overflow-hidden">
+                <p className="text-[var(--color-slate-400)] text-[10px] uppercase font-black tracking-widest mb-1 z-10 relative">
+                  Plates per side (20kg bar)
+                </p>
+                <VisualBarbell weight={Number(currentSet.weight)} />
+              </div>
+            )}
             <div className="flex w-full gap-3">
               <button
                 onClick={handleCompleteSet}
@@ -666,3 +748,4 @@ export default function ActiveWorkout({
     </div>
   );
 }
+
