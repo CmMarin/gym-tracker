@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { Flame, Zap, Bell } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import NumberTicker from "@/components/NumberTicker";
 
 export default function TopNav() {
   const { data: session } = useSession();
@@ -58,12 +59,12 @@ export default function TopNav() {
 
         <div className="flex items-center text-orange-500 font-bold">
           <Flame fill="currentColor" size={24} className="mr-1" />
-          <span className="text-lg">{streak}</span>
+          <span className="text-lg"><NumberTicker value={streak} /></span>
         </div>
 
         <div className="flex items-center text-indigo-500 font-bold bg-indigo-50 px-3 py-1 rounded-xl border-2 border-indigo-100">
           <Zap fill="currentColor" size={20} className="mr-1 text-yellow-400" />
-          <span>{xp}</span>
+          <span><NumberTicker value={xp} /></span>
         </div>
       </div>
     </div>

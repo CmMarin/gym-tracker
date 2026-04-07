@@ -72,7 +72,7 @@ export default function ExpandableWorkoutCard({ plan, onEdit }: { plan: Plan, on
           try {
             await navigator.clipboard.writeText(link);
             copied = true;
-          } catch (copyErr) {
+          } catch {
             copied = false;
           }
         }

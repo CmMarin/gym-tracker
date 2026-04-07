@@ -36,7 +36,7 @@ describe('active-workout-actions - startOrResumeWorkout', () => {
     const res = await startOrResumeWorkout('plan-1');
 
     expect(res.success).toBe(true);
-    expect(res.activeWorkout.state.exercises).toHaveLength(0);
+    expect((res.activeWorkout.state as any).exercises).toHaveLength(0);
     expect(prismaMock.activeWorkout.create).toHaveBeenCalled();
   });
 

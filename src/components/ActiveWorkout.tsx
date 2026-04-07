@@ -490,7 +490,7 @@ export default function ActiveWorkout({
               </div>
             </h2>
             <div className="space-y-4">
-              {exercises.map((ex, exIdx) => {
+              {exercises.map((ex: any, exIdx: number) => {
                 const isCurrent = exIdx === currentExerciseIndex;
                 const isCompleted = exIdx < currentExerciseIndex || showMilestone;
                 return (
