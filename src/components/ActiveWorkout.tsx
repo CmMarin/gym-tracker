@@ -24,6 +24,7 @@ import { useAppSounds } from "@/hooks/useAppSounds";
 import CoopPanel from "./CoopPanel";
 import CoopWorkoutReview from "./CoopWorkoutReview";
 import NumberTicker from "@/components/NumberTicker";
+import WorkoutWrappedCard from "./WorkoutWrappedCard";
 
 const BARBELL_WEIGHT = 20;
 const AVAILABLE_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25];
@@ -527,45 +528,11 @@ export default function ActiveWorkout({
           coopSessionId ? (
             <CoopWorkoutReview sessionId={coopSessionId} />
           ) : (
-            <motion.div
-              key="milestone"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="bg-green-500 p-8 rounded-[2rem] shadow-2xl w-full max-w-md text-center text-[var(--color-white)] border-b-8 border-green-700 mt-10"
-            >
-              <Trophy
-                size={80}
-                className="mx-auto mb-6 text-[var(--color-white)] drop-shadow-lg"
-              />
-              <h2 className="text-4xl font-black mb-4">Workout Complete!</h2>
-              <div className="bg-green-600 rounded-2xl p-4 mb-6 text-left space-y-2">
-                <p className="font-bold text-green-100">
-                  Total XP:{" "}
-                  <span className="text-[var(--color-white)]">
-                    +{summary?.xpEarned || 0}
-                  </span>
-                </p>
-                {summary?.prs && summary.prs.length > 0 && (
-                  <div className="pt-2 border-t border-green-500 text-sm">
-                    <p className="font-bold text-[var(--color-white)] mb-1">
-                      🔥 New PRs!
-                    </p>
-                    <ul className="list-disc pl-4 text-green-100">
-                      {summary.prs.map((pr: string, idx: number) => (
-                        <li key={idx}>{pr}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => (window.location.href = "/dashboard")}
-                className="bg-[var(--color-white)] text-green-600 font-black text-xl w-full py-4 rounded-2xl shadow-[0_6px_0_0_#dcfce7] active:translate-y-[6px] active:shadow-none transition-all"
-              >
-                CONTINUE TO DASHBOARD
-              </button>
-            </motion.div>
+            <WorkoutWrappedCard 
+              summary={summary} 
+              workoutState={workoutState} 
+              onClose={() => (window.location.href = "/dashboard")} 
+            />
           )
         ) : restTimeLeft !== null && restTimeLeft > 0 ? (
           <motion.div

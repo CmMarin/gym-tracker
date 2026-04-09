@@ -347,6 +347,7 @@ export async function finishWorkoutAction(workoutData: any) {
     newLevel,
     didLevelUp,
     xpEarned: totalXpEarned,
+    durationMinutes,
     prs,
     earnedAchievements: earnedAchs,
   };

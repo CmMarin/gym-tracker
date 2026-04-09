@@ -82,7 +82,7 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 
 ### QoL & UI Polish Roadmap (HELL YEAH Tier):
 - [COMPLETED] Visual "Barbell" Plate Calculator: Upgrade the plate calculator in ActiveWorkout to visually render a 2D/3D barbell with colored plates stacked on the sleeve instead of just text output.
-- [PENDING] "Workout Wrapped" Card: At the end of a workout, generate a beautiful, trading-card-style summary (Muscle Heatmap, total KG lifted, XP, and Hypes received) that is saveable direct to the phone gallery.
+- [COMPLETED] "Workout Wrapped" Card: At the end of a workout, generate a beautiful, trading-card-style summary (Muscle Heatmap, total KG lifted, XP, and Hypes received) that is saveable direct to the phone gallery.
 - [PENDING] Smart Progressive Overload Auto-Fill: Predict the next workout target by auto-suggesting +2.5kg if last week's targets were hit comfortably. Display a "📈 Progression Suggested" badge when starting.
 - [PENDING] "Zen Mode" Breathing Rest Timer: Convert the active workout rest countdown into a breathing circle (Inhale 4s, Hold 4s, Exhale 4s) using Framer Motion to actively lower heart rate between sets.
 - [COMPLETED] "Trophy Case" Revamp: Re-design the profile achievements into a dedicated Trophy Case with greyed-out silhouettes that light up with glossy, animated gradients when unlocked.
