@@ -8,7 +8,8 @@ import UploadPdfWidget from "@/components/UploadPdfWidget";
 import CustomExercisesWidget from "@/components/CustomExercisesWidget";
 import AchievementItem from "@/components/AchievementItem";
 import MuscleHeatmapWidget from "@/components/MuscleHeatmapWidget";
-import { getMuscleFatigue } from "@/app/actions/analytics-actions";
+import IronGridCalendar from "@/components/IronGridCalendar";
+import { getMuscleFatigue, getIronGridData } from "@/app/actions/analytics-actions";
 import { Trophy } from "lucide-react";
 
 export default async function ProfilePage() {
@@ -19,7 +20,7 @@ export default async function ProfilePage() {
 
   const username = session.user.name as string;
 
-  const [user, fatigueData] = await Promise.all([
+  const [user, fatigueData, ironGridData] = await Promise.all([
     prisma.user.findUnique({
       where: { username },
       include: {
@@ -35,7 +36,8 @@ export default async function ProfilePage() {
         }
       }
     }),
-    getMuscleFatigue()
+    getMuscleFatigue(),
+    getIronGridData()
   ]);
 
   if (!user) {
@@ -101,6 +103,8 @@ export default async function ProfilePage() {
               </div>
             )}
           </div>
+
+          <IronGridCalendar data={ironGridData} />
 
           <MuscleHeatmapWidget fatigueData={fatigueData} />
           <CustomExercisesWidget />

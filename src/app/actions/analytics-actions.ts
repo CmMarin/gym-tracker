@@ -191,3 +191,50 @@ export async function getMuscleFatigue() {
 
   return loadPerMuscleTracker;
 }
+
+export async function getIronGridData() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) throw new Error("Unauthorized");
+
+  const today = new Date();
+  // Get exactly 371 days (53 weeks * 7 days) to ensure full grid
+  const cutoff = subDays(today, 371);
+
+  const workouts = await prisma.workoutSession.findMany({
+    where: {
+      userId: session.user.id,
+      completedAt: { gte: cutoff },
+    },
+    select: {
+      completedAt: true,
+      totalXpEarned: true,
+    },
+  });
+
+  const dayMap = new Map<string, number>();
+  
+  // Aggregate XP per day
+  for (const session of workouts) {
+    const dStr = session.completedAt.toISOString().split("T")[0];
+    const existing = dayMap.get(dStr) || 0;
+    dayMap.set(dStr, existing + session.totalXpEarned);
+  }
+
+  // Fill in the array from `today` going back 371 days
+  const gridData = [];
+  for (let i = 0; i < 371; i++) {
+    const dDate = subDays(today, i);
+    const dStr = dDate.toISOString().split("T")[0];
+    const xp = dayMap.get(dStr) || 0;
+
+    let level = 0;
+    if (xp > 0 && xp < 200) level = 1;
+    else if (xp >= 200 && xp < 500) level = 2;
+    else if (xp >= 500 && xp < 1000) level = 3;
+    else if (xp >= 1000) level = 4;
+
+    gridData.push({ date: dStr, count: xp, level });
+  }
+
+  return gridData;
+}

@@ -70,7 +70,7 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [COMPLETED] Interactive Muscle Heatmap: Add a visual 3D model or 2D body graphic on the profile tab where muscle groups highlight in red/orange when fatigued from recent workouts and gradually transition to green as they recover  
 
 - [COMPLETED] Weekly Leaderboard Reset: Implement automatic weekly leaderboard resets, including user notifications and profile rewards such as badges or placements based on ranking  
-- [PENDING] Shareable Workout Blueprints: Enable users to generate unique links or codes for custom workout splits (e.g., Push Day, Pull Day) that others can instantly import into their app  
+- [COMPLETED] Shareable Workout Blueprints: Enable users to generate unique links or codes for custom workout splits (e.g., Push Day, Pull Day) that others can instantly import into their app  
 - [COMPLETED] Built-in Rest Timer: Add a countdown timer (e.g., 60s, 90s, 120s) that automatically starts after a user marks a set as complete, including an audible alert or buzzer when rest time ends
 - [COMPLETED] Plate Calculator Utility: Add a quick-access tool next to weight input fields where users can input a total weight (e.g., 100kg) and receive exact plate distribution per side of the barbell
 
