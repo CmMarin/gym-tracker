@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import { Download, X, Target, Zap, Trophy, TrendingUp } from "lucide-react";
 import dynamic from "next/dynamic";
 
@@ -67,20 +67,19 @@ export default function WorkoutWrappedCard({ summary, workoutState, onClose }: W
     if (!cardRef.current) return;
     setDownloading(true);
     try {
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#0f172a", // Match card background
-        logging: false, // Prevents excessive console logs from html2canvas
-        allowTaint: true,
+      const dataUrl = await toPng(cardRef.current, {
+        pixelRatio: 3,
+        style: {
+          backgroundColor: "#0f172a",
+        },
+        skipFonts: true, // Fix for oklch parser bug in library fonts
       });
-      const dataUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = `workout-wrapped-${new Date().toISOString().split("T")[0]}.png`;
       link.href = dataUrl;
       link.click();
     } catch (e) {
-      console.error("html2canvas error", e);
+      console.error("image generation error", e);
     }
     setDownloading(false);
   };
@@ -120,10 +119,10 @@ export default function WorkoutWrappedCard({ summary, workoutState, onClose }: W
                   <span className="text-4xl mt-1">Wrapped</span>
                 </h2>
                 <div className="flex items-center justify-center gap-2 mt-2">
-                  <span className="text-slate-400 font-semibold px-3 py-1 bg-slate-800 rounded-full text-xs">
+                  <span className="text-[#94a3b8] font-semibold px-3 py-1 bg-slate-800 rounded-full text-xs">
                     {workoutState.name || "Custom Workout"}
                   </span>
-                  <span className="text-slate-400 font-semibold px-3 py-1 bg-slate-800 rounded-full text-xs flex items-center gap-1">
+                  <span className="text-[#94a3b8] font-semibold px-3 py-1 bg-slate-800 rounded-full text-xs flex items-center gap-1">
                     ⏱️ {durationMin} min
                   </span>
                 </div>
@@ -131,40 +130,40 @@ export default function WorkoutWrappedCard({ summary, workoutState, onClose }: W
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
+                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
                   <Zap className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] mb-2" size={24} />
                   <div className="text-2xl font-black tabular-nums tracking-tight">{totalVolume.toLocaleString()}</div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Total Vol (kg)</div>
+                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1">Total Vol (kg)</div>
                 </div>
                 
-                <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
+                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
                   <Target className="text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)] mb-2" size={24} />
                   <div className="text-2xl font-black tabular-nums tracking-tight">{totalSets}</div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Sets Done</div>
+                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1">Sets Done</div>
                 </div>
 
-                <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
+                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
                   <TrendingUp className="text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)] mb-2" size={24} />
-                  <div className="text-2xl font-black tabular-nums tracking-tight text-blue-100">+{summary?.xpEarned || 0}</div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">XP Earned</div>
+                  <div className="text-2xl font-black tabular-nums tracking-tight text-[#dbeafe]">+{summary?.xpEarned || 0}</div>
+                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1">XP Earned</div>
                 </div>
 
-                <div className="bg-slate-800/80 backdrop-blur-md rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
+                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
                   <Trophy className="text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.5)] mb-2 relative z-10" size={24} />
-                  <div className="text-2xl font-black tabular-nums tracking-tight relative z-10">{summary?.prs || 0}</div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1 relative z-10">New PRs</div>
-                  {summary?.prs > 0 && (
+                  <div className="text-2xl font-black tabular-nums tracking-tight relative z-10">{summary?.prs?.length || 0}</div>
+                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1 relative z-10">New PRs</div>
+                  {summary?.prs?.length > 0 && (
                     <div className="absolute inset-0 bg-purple-500/10 blur-xl z-0 pointer-events-none animate-pulse" />
                   )}
                 </div>
               </div>
               {/* Heatmap Mini */}
-              <div className="relative z-10 bg-slate-800/80 backdrop-blur-md flex justify-center items-center rounded-2xl p-4 border border-slate-700/50 h-40 overflow-hidden mb-6 shadow-inner">
+              <div className="relative z-10 bg-[#1e293b] flex justify-center items-center rounded-2xl p-4 border border-slate-700/50 h-56 overflow-hidden mb-6 shadow-inner">
                  {mockHeatmapData.length > 0 ? (
-                   <div className="transform scale-75 opacity-90 pointer-events-none">
-                     <Model 
-                        data={mockHeatmapData} 
-                        style={{ width: "12rem" }} 
+                   <div className="transform scale-[0.85] opacity-95 pointer-events-none mt-10">
+                     <Model
+                        data={mockHeatmapData}
+                        style={{ width: "16rem", color: "inherit" }}
                         highlightedColors={["#3b82f6", "#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899"]}
                      />
                    </div>
@@ -227,3 +226,8 @@ export default function WorkoutWrappedCard({ summary, workoutState, onClose }: W
     </AnimatePresence>
   );
 }
+
+
+
+
+
