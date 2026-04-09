@@ -6,13 +6,15 @@ import ProfileClient from "./ProfileClient";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import UploadPdfWidget from "@/components/UploadPdfWidget";
 import CustomExercisesWidget from "@/components/CustomExercisesWidget";
-import AchievementItem from "@/components/AchievementItem";
+import TrophyCaseWidget from "@/components/TrophyCaseWidget";
 import MuscleHeatmapWidget from "@/components/MuscleHeatmapWidget";
 import IronGridCalendar from "@/components/IronGridCalendar";
 import { getMuscleFatigue, getIronGridData } from "@/app/actions/analytics-actions";
-import { Trophy } from "lucide-react";
+import { syncUserAchievements } from "@/app/actions/achievement-actions";
 
 export default async function ProfilePage() {
+  await syncUserAchievements();
+  
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     redirect("/login");
@@ -78,34 +80,8 @@ export default async function ProfilePage() {
       <div className="container mx-auto px-4 w-full max-w-md">
         <div className="flex flex-col gap-4">
 
-          {/* Achievements Section */}
-          <div className="bg-[var(--color-white)] rounded-3xl p-6 shadow-[0_4px_0_var(--color-theme-shadow)] border-2 border-indigo-50 mb-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-yellow-100 text-yellow-600 rounded-xl">
-                <Trophy size={24} />
-              </div>
-              <h2 className="text-xl font-black text-slate-800">Achievements</h2>
-            </div>
-
-            {user.achievements.length > 0 ? (
-              <div className="grid grid-cols-1 gap-3">
-                {user.achievements.map((ach) => (
-                  <AchievementItem 
-                    key={ach.id} 
-                    type={ach.type} 
-                    achievedAt={ach.achievedAt} 
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <p className="text-slate-400 font-bold text-sm">No achievements yet. Keep training!</p>
-              </div>
-            )}
-          </div>
-
-          <IronGridCalendar data={ironGridData} />
-
+            <TrophyCaseWidget userAchievements={user.achievements} />
+            <IronGridCalendar data={ironGridData} />
           <MuscleHeatmapWidget fatigueData={fatigueData} />
           <CustomExercisesWidget />
           <ProfileClient savedWorkouts={mappedWorkoutPlans} />
