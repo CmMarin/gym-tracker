@@ -85,8 +85,8 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [PENDING] "Workout Wrapped" Card: At the end of a workout, generate a beautiful, trading-card-style summary (Muscle Heatmap, total KG lifted, XP, and Hypes received) that is saveable direct to the phone gallery.
 - [PENDING] Smart Progressive Overload Auto-Fill: Predict the next workout target by auto-suggesting +2.5kg if last week's targets were hit comfortably. Display a "📈 Progression Suggested" badge when starting.
 - [PENDING] "Zen Mode" Breathing Rest Timer: Convert the active workout rest countdown into a breathing circle (Inhale 4s, Hold 4s, Exhale 4s) using Framer Motion to actively lower heart rate between sets.
-- [PENDING] "Trophy Case" Revamp: Re-design the profile achievements into a dedicated Trophy Case with greyed-out silhouettes that light up with glossy, animated gradients when unlocked.
-- [PENDING] "Iron Grid" Activity Calendar: Add a GitHub-style 365-square contribution graph to the profile that lights up in theme colors based on daily workout volume or XP.
+- [COMPLETED] "Trophy Case" Revamp: Re-design the profile achievements into a dedicated Trophy Case with greyed-out silhouettes that light up with glossy, animated gradients when unlocked.
+- [COMPLETED] "Iron Grid" Activity Calendar: Add a GitHub-style 365-square contribution graph to the profile that lights up in theme colors based on daily workout volume or XP.
 - [PENDING] "Bench is Taken" Swapper: Add an "Alternate" icon next to exercises. Opens a sleek modal to quickly swap to 3 muscle-equivalent alternatives just for today's session.
 - [COMPLETED] The "+2.5kg" Progression Pill: Render a stylish quick-tap "+2.5" bubble next to weight inputs to instantly bump the weight by the smallest increment. (Implemented as a full native +/- 2.5 stepper)
 - [COMPLETED] Odometer "Slot Machine" Tickers: Use Framer Motion to make numbers (XP, Timers, Volume) physically roll up and click into place like a slot machine whenever they change.
