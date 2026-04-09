@@ -11,7 +11,8 @@ import {
   X,
   ChevronLeft,
   List,
-  Check
+  Check,
+  Sparkles
 } from "lucide-react";
 import { finishWorkoutAction } from "@/app/actions/workout-actions";
 import {
@@ -574,14 +575,19 @@ export default function ActiveWorkout({
             exit={{ opacity: 0, x: -50 }}
             className="bg-[var(--color-white)] p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
           >
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center flex flex-col items-center gap-2">
-              {currentExercise?.name}
+            <div className="flex flex-col items-center gap-2 mb-2 text-center">
+              <h2 className="text-3xl font-extrabold text-slate-800">
+                {currentExercise?.name}
+              </h2>
               {currentExercise?.isProgressionSuggested && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
-                  <span className="mr-1">📈</span> Progression Auto-Applied (+2.5kg)
-                </span>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-green-50 text-green-700 border border-green-200">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span className="text-xs font-semibold">
+                      Overload Applied (+2.5kg)
+                    </span>
+                  </div>
               )}
-            </h2>
+            </div>
 
             <div className="flex flex-col items-center justify-center gap-3 mb-8 w-full">
               <p className="text-slate-500 font-medium">

@@ -55,24 +55,42 @@ export async function startOrResumeWorkout(
 
   const pastLogsData = await Promise.all([
     exerciseIds.length > 0
-      ? prisma.setLog.groupBy({
-          by: ["exerciseId"],
+      ? prisma.setLog.findMany({
           where: { userId, exerciseId: { in: exerciseIds } },
-          _max: { weight: true, reps: true },
+          orderBy: { createdAt: "desc" },
+          take: 200, // Get enough to find the most recent session's stats
         })
       : Promise.resolve([]),
     customExerciseIds.length > 0
-      ? prisma.setLog.groupBy({
-          by: ["customExerciseId"],
+      ? prisma.setLog.findMany({
           where: { userId, customExerciseId: { in: customExerciseIds } },
-          _max: { weight: true, reps: true },
+          orderBy: { createdAt: "desc" },
+          take: 200,
         })
       : Promise.resolve([]),
   ]);
 
+  // Group by exercise and find the max weight and its reps from the *most recent session* only
+  const getRecentStats = (logs: any[], idField: "exerciseId" | "customExerciseId") => {
+    const stats: Record<string, { maxWeight: number; maxReps: number }> = {};
+    for (const log of logs) {
+      const id = log[idField];
+      if (!id) continue;
+      
+      // If we haven't seen this exercise yet, track its session
+      if (!stats[id]) {
+        // Find all logs for THIS exactly recent session
+        const sessionLogs = logs.filter(l => l[idField] === id && l.sessionId === log.sessionId);
+        const maxWeightLog = sessionLogs.reduce((max, current) => current.weight > max.weight ? current : max, sessionLogs[0]);
+        stats[id] = { maxWeight: maxWeightLog.weight, maxReps: maxWeightLog.reps };
+      }
+    }
+    return Object.entries(stats).map(([id, s]) => ({ id, _max: { weight: s.maxWeight, reps: s.maxReps } }));
+  };
+
   const allPastLogs = {
-    exercises: pastLogsData[0],
-    customExercises: pastLogsData[1],
+    exercises: getRecentStats(pastLogsData[0], "exerciseId"),
+    customExercises: getRecentStats(pastLogsData[1], "customExerciseId"),
   };
 
   const state = {
@@ -82,10 +100,8 @@ export async function startOrResumeWorkout(
       const exercise = px.exercise || px.customExercise;
 
       const pastLog = px.customExerciseId
-        ? allPastLogs.customExercises.find(
-            (l) => l.customExerciseId === px.customExerciseId,
-          )
-        : allPastLogs.exercises.find((l) => l.exerciseId === px.exerciseId);
+        ? allPastLogs.customExercises.find((l) => l.id === px.customExerciseId)
+        : allPastLogs.exercises.find((l) => l.id === px.exerciseId);
 
       let suggestedWeight = pastLog?._max?.weight || 0;
       const pastMaxReps = pastLog?._max?.reps || 0;
