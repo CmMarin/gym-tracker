@@ -87,15 +87,27 @@ export async function startOrResumeWorkout(
           )
         : allPastLogs.exercises.find((l) => l.exerciseId === px.exerciseId);
 
+      let suggestedWeight = pastLog?._max?.weight || 0;
+      const pastMaxReps = pastLog?._max?.reps || 0;
+      let isProgressionSuggested = false;
+
+      // Smart Progressive Overload Auto-Fill
+      // If they comfortably hit the target reps (or higher) with their previous max weight, suggest +2.5kg
+      if (suggestedWeight > 0 && pastMaxReps >= px.targetReps) {
+        suggestedWeight += 2.5;
+        isProgressionSuggested = true;
+      }
+
       return {
         id: px.exerciseId || px.customExerciseId,
         name: exercise?.name || "Unknown",
         isCustom: !!px.customExerciseId,
         targetSets: px.targetSets,
         targetReps: px.targetReps,
+        isProgressionSuggested,
         sets: Array.from({ length: px.targetSets }).map(() => ({
-          reps: pastLog?._max?.reps?.toString() || "",
-          weight: pastLog?._max?.weight?.toString() || "",
+          reps: pastMaxReps ? pastMaxReps.toString() : "",
+          weight: suggestedWeight ? suggestedWeight.toString() : "",
           completed: false,
         })),
       };

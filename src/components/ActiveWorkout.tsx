@@ -574,8 +574,13 @@ export default function ActiveWorkout({
             exit={{ opacity: 0, x: -50 }}
             className="bg-[var(--color-white)] p-8 rounded-[2rem] shadow-xl w-full max-w-md border-b-4 border-gray-200 flex flex-col items-center"
           >
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center">
+            <h2 className="text-3xl font-extrabold text-slate-800 mb-2 text-center flex flex-col items-center gap-2">
               {currentExercise?.name}
+              {currentExercise?.isProgressionSuggested && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
+                  <span className="mr-1">📈</span> Progression Auto-Applied (+2.5kg)
+                </span>
+              )}
             </h2>
 
             <div className="flex flex-col items-center justify-center gap-3 mb-8 w-full">
