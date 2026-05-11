@@ -39,7 +39,7 @@ export default function TopNav() {
 
   return (
     <div className="sticky top-0 z-50 w-full bg-[var(--color-white)]/85 backdrop-blur-md border-b-2 border-indigo-50 flex items-center justify-between px-4 py-3 shadow-sm">
-      <Link
+      <Link prefetch={false}
         href="/dashboard"
         className="font-black text-xl text-slate-800 tracking-tight"
       >
@@ -47,7 +47,7 @@ export default function TopNav() {
       </Link>
 
       <div className="flex items-center space-x-3">
-        <Link
+        <Link prefetch={false}
           href="/notifications"
           className="relative p-2 text-slate-400 hover:text-slate-600 transition-colors"
         >

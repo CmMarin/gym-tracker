@@ -71,10 +71,18 @@ export async function broadcastToUsers(
   userIds: string[],
   payload: { title: string; body: string; url?: string; [key: string]: any }
 ) {
-  const chunks = [];
-  // basic chunking if there are many users
-  for (const userId of userIds) {
-    chunks.push(sendPushNotification(userId, payload));
+  const CHUNK_SIZE = 50;
+  for (let i = 0; i < userIds.length; i += CHUNK_SIZE) {
+    const chunk = userIds.slice(i, i + CHUNK_SIZE);
+    
+    // Process chunk elements concurrently
+    await Promise.allSettled(
+      chunk.map(userId => sendPushNotification(userId, payload))
+    );
+    
+    // Small delay between chunks to avoid rate limiting from push services
+    if (i + CHUNK_SIZE < userIds.length) {
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
   }
-  await Promise.all(chunks);
 }

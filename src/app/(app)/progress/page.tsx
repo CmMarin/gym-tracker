@@ -20,10 +20,12 @@ export default async function ProgressPage() {
   const userId = session.user.id;
 
   // Execute queries sequentially to prevent connection pool exhaustion
+  // Hard limits added to prevent memory leaks/crash on heavy users
   const bodyWeightLogs = await prisma.bodyWeightLog.findMany({
     where: { userId },
     orderBy: { createdAt: 'asc' },
-    select: { weight: true, createdAt: true }
+    select: { weight: true, createdAt: true },
+    take: 100
   });
 
   const setLogs = await prisma.setLog.findMany({
@@ -35,7 +37,8 @@ export default async function ProgressPage() {
       createdAt: true,
       exercise: { select: { name: true } },
       customExercise: { select: { name: true } }
-    }
+    },
+    take: 1500
   });
 
   const weeklyVolumeData = await getWeeklyVolumeAnalytics();

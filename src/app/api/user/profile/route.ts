@@ -34,12 +34,15 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  // Calculate current weekly leaderboard rank
-  const allUsers = await prisma.user.findMany({
-    orderBy: { weeklyXp: 'desc' },
-    select: { id: true }
+  // Calculate current weekly leaderboard rank efficiently without unbounded findMany
+  const usersAboveMe = await prisma.user.count({
+    where: {
+      weeklyXp: {
+        gt: user.weeklyXp
+      }
+    }
   });
-  const rank = allUsers.findIndex(u => u.id === userId) + 1;
+  const rank = usersAboveMe + 1;
 
   return NextResponse.json({
     success: true,

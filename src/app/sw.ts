@@ -21,11 +21,11 @@ const customCache: RuntimeCaching[] = [
       return isApi && isGet && !isNav;
     },
     handler: new StaleWhileRevalidate({
-      cacheName: 'dashboard-swr-cache',
+      cacheName: 'api-swr-cache',
       plugins: [
         new ExpirationPlugin({
           maxEntries: 50,
-          maxAgeSeconds: 60 * 60 * 24, // 24 hours
+          maxAgeSeconds: 60 * 10, // 10 minutes cache TTL for live data
         }),
       ],
     }),

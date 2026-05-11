@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   title: "BuffBuddies",
   description: "Level up your workouts",
   icons: {
-    icon: '/site-icon.ico',
-    apple: '/site-icon.ico'
+    icon: '/icon-192x192.png',
+    apple: '/apple-touch-icon.png'
   },
   appleWebApp: {
     capable: true,
@@ -31,11 +31,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f8fafc",
+  themeColor: "#4f46e5",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

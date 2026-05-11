@@ -84,10 +84,10 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 - [COMPLETED] Visual "Barbell" Plate Calculator: Upgrade the plate calculator in ActiveWorkout to visually render a 2D/3D barbell with colored plates stacked on the sleeve instead of just text output.
 - [COMPLETED] "Workout Wrapped" Card: At the end of a workout, generate a beautiful, trading-card-style summary (Muscle Heatmap, total KG lifted, XP, and Hypes received) that is saveable direct to the phone gallery.
 - [COMPLETED] Smart Progressive Overload Auto-Fill: Predict the next workout target by auto-suggesting +2.5kg if last week's targets were hit comfortably. Display a "📈 Progression Suggested" badge when starting.
-- [PENDING] "Zen Mode" Breathing Rest Timer: Convert the active workout rest countdown into a breathing circle (Inhale 4s, Hold 4s, Exhale 4s) using Framer Motion to actively lower heart rate between sets.
+- [TEMPORARILY CANCELLED] "Zen Mode" Breathing Rest Timer: Convert the active workout rest countdown into a breathing circle (Inhale 4s, Hold 4s, Exhale 4s) using Framer Motion to actively lower heart rate between sets.
 - [COMPLETED] "Trophy Case" Revamp: Re-design the profile achievements into a dedicated Trophy Case with greyed-out silhouettes that light up with glossy, animated gradients when unlocked.
 - [COMPLETED] "Iron Grid" Activity Calendar: Add a GitHub-style 365-square contribution graph to the profile that lights up in theme colors based on daily workout volume or XP.
-- [PENDING] "Bench is Taken" Swapper: Add an "Alternate" icon next to exercises. Opens a sleek modal to quickly swap to 3 muscle-equivalent alternatives just for today's session.
+- [COMPLETED] "Bench is Taken" Swapper: Add an "Alternate" icon next to exercises. Opens a sleek modal to quickly swap to 3 muscle-equivalent alternatives just for today's session.
 - [COMPLETED] The "+2.5kg" Progression Pill: Render a stylish quick-tap "+2.5" bubble next to weight inputs to instantly bump the weight by the smallest increment. (Implemented as a full native +/- 2.5 stepper)
 - [COMPLETED] Odometer "Slot Machine" Tickers: Use Framer Motion to make numbers (XP, Timers, Volume) physically roll up and click into place like a slot machine whenever they change.
 - [COMPLETED] Frosted Glass (Backdrop-Blur) Everywhere: Give the TopNav, BottomNav, and overlapping Modals the iOS frosted-glass treatment (`backdrop-blur-lg`), letting background components pass cleanly underneath.
@@ -96,4 +96,8 @@ BuffBuddies is a mobile-first, highly animated Progressive Web App (PWA) built f
 ### Optimizations Roadmap:
 - [COMPLETED] Dynamic Imports (Code Splitting): Implement lazy loading for non-critical components (e.g., SavedWorkoutsModal, heavy chart components), ensuring they are only loaded when triggered by user interaction rather than included in the initial bundle  
 - [COMPLETED] In-Memory Caching: Wrap infrequently changing queries (such as global exercise definitions or friend lists) using Next.js unstable_cache to significantly reduce database reads and improve performance  
-- [COMPLETED] Service Worker Caching Strategies: Optimize the PWA service worker (Serwist) by applying a stale-while-revalidate caching strategy for the dashboard, enabling instant loading from local cache while fetching and updating fresh data in the background  
+- [COMPLETED] Service Worker Caching Strategies: Optimize the PWA service worker (Serwist) by applying a stale-while-revalidate caching strategy for the dashboard, enabling instant loading from local cache while fetching and updating fresh data in the background
+- [COMPLETED] Next.js Link Prefetching Optimization: Add `prefetch={false}` to all `<Link>` components (especially BottomNav) to prevent massive redundant API/DB calls on hover/scroll in the iOS PWA.
+- [COMPLETED] Prisma Unbounded Queries Fix: Implement pagination (take/skip) or hard limits on unbounded queries (e.g., `findMany` in `/progress` and notifications) that crash the server under load.
+- [COMPLETED] Bcrypt Event Loop Blocking: Replace `bcryptjs` with the native C++ `bcrypt` module to prevent login password hashing from blocking the Node.js main thread and freezing the app for active users.
+- [COMPLETED] Prisma Connection Pooling: Configure PgBouncer or adjust Prisma connection limits to prevent exhaustion when multiple users (e.g., >5) use the app concurrently.

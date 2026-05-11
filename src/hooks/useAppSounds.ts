@@ -1,7 +1,5 @@
 "use client";
 
-import useSound from "use-sound";
-
 // To pick your sounds:
 // Go to mixkit.co or zapsplat.com and download 3 .mp3 files.
 // Place them in the "public" folder of your app.
@@ -17,11 +15,17 @@ const isSoundEnabled = () => {
   return stored !== "false";
 };
 
-export function useAppSounds() {
-  const [playPopSound] = useSound(POP_SOUND_URL, { volume: 0.5 });
-  const [playDingSound] = useSound(DING_SOUND_URL, { volume: 0.5 });
-  const [playBuzzerSound] = useSound(BUZZER_SOUND_URL, { volume: 0.5 });
+const playNativeSound = (url: string, volume: number = 0.5) => {
+  if (typeof window !== "undefined") {
+    const audio = new Audio(url);
+    audio.volume = volume;
+    audio.play().catch(() => {
+      // Silently ignore auto-play restrictions or missing file errors
+    });
+  }
+};
 
+export function useAppSounds() {
   const triggerVibration = (pattern: number | number[]) => {
     if (typeof window !== "undefined" && navigator.vibrate) {
       try { navigator.vibrate(pattern); } catch {
@@ -32,19 +36,19 @@ export function useAppSounds() {
 
   const playPop = (vibrate = true) => {
     if (!isSoundEnabled()) return;
-    playPopSound();
+    playNativeSound(POP_SOUND_URL, 0.5);
     if (vibrate) triggerVibration(50);
   };
 
   const playDing = () => {
     if (!isSoundEnabled()) return;
-    playDingSound();
+    playNativeSound(DING_SOUND_URL, 0.5);
     triggerVibration([50, 100, 50]);
   };
 
   const playBuzzer = () => {
     if (!isSoundEnabled()) return;
-    playBuzzerSound();
+    playNativeSound(BUZZER_SOUND_URL, 0.5);
     triggerVibration([100, 50, 100]);
   };
 

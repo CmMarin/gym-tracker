@@ -14,7 +14,7 @@ export default function BottomNav() {
   return (
     <div className="fixed bottom-0 w-full bg-[var(--color-white)]/85 backdrop-blur-md border-t-2 border-indigo-50 pb-safe z-50">
       <div className="flex justify-around items-center h-20 max-w-xl mx-auto px-4">
-        <Link
+        <Link prefetch={false}
           href="/dashboard"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
@@ -25,7 +25,7 @@ export default function BottomNav() {
           <span className="text-[10px] uppercase font-bold mt-1">Home</span>
         </Link>
 
-        <Link
+        <Link prefetch={false}
           href="/friends"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
@@ -38,7 +38,7 @@ export default function BottomNav() {
 
         {/* Floating Action Button for workout */}
         <div className="relative -top-6 mx-2">
-          <Link
+          <Link prefetch={false}
             href="/workout"
             onClick={() => playPop(false)}
             className="flex items-center justify-center w-16 h-16 bg-indigo-500 rounded-full shadow-[0_6px_0_0_var(--color-button-shadow)] active:shadow-none active:translate-y-[6px] transition-all text-[var(--color-white)] hover:bg-indigo-400 border-4 border-[var(--color-white)]"
@@ -47,7 +47,7 @@ export default function BottomNav() {
           </Link>
         </div>
 
-        <Link
+        <Link prefetch={false}
           href="/progress"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${
@@ -58,7 +58,7 @@ export default function BottomNav() {
           <span className="text-[10px] uppercase font-bold mt-1">Progress</span>
         </Link>
 
-        <Link
+        <Link prefetch={false}
           href="/profile"
           onClick={() => playPop(false)}
           className={`flex flex-col items-center justify-center w-14 h-full transition-colors ${

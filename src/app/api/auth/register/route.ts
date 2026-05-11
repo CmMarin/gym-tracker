@@ -1,14 +1,28 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
 
+    // Comprehensive Username vs Password Validation
     if (!username || !password || password.length < 6) {
       return NextResponse.json(
         { error: "Invalid username or password (min 6 characters)" },
+        { status: 400 }
+      );
+    }
+    
+    if (password.length > 128) {
+      return NextResponse.json({ error: "Password too long (max 128 characters)" }, { status: 400 });
+    }
+
+    // Username constraints: 3-20 chars, alphanumeric+underscores only
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+    if (!usernameRegex.test(username)) {
+      return NextResponse.json(
+        { error: "Username must be 3-20 characters long and contain only letters, numbers, and underscores." },
         { status: 400 }
       );
     }

@@ -168,3 +168,64 @@ export async function cancelActiveWorkout() {
   revalidatePath("/dashboard");
   return { success: true };
 }
+export async function getAlternativeExercises(exerciseId: string, isCustom: boolean) {
+  try {
+    let category = null;
+    let fallbackName = null;
+
+    if (isCustom) {
+      const ex = await prisma.customExercise.findUnique({
+        where: { id: exerciseId },
+        select: { category: true, name: true, targetMuscles: true }
+      });
+      category = ex?.category || (ex?.targetMuscles && ex.targetMuscles[0]) || null;
+      fallbackName = ex?.name;
+    } else {
+      const ex = await prisma.exercise.findUnique({
+        where: { id: exerciseId },
+        select: { category: true, name: true }
+      });
+      category = ex?.category;
+      fallbackName = ex?.name;
+    }
+
+    if (!category && !fallbackName) return { success: true, alternatives: [] };
+
+    // Find 3 other exercises with the same category (default exercises only for simplicity)
+    let alternatives: any[] = [];
+    
+    if (category) {
+      alternatives = await prisma.exercise.findMany({
+        where: {
+          category,
+          id: { not: exerciseId }
+        },
+        take: 20
+      });
+    }
+
+    // If category didn't yield enough results, try fuzzy name matching
+    if (alternatives.length < 3 && fallbackName) {
+      const mainKeyword = fallbackName.split(" ").filter((w: string) => w.length > 3)[0];
+      if (mainKeyword) {
+         const nameMatches = await prisma.exercise.findMany({
+           where: {
+             name: { contains: mainKeyword, mode: "insensitive" },
+             id: { not: exerciseId }
+           },
+           take: 10
+         });
+         alternatives = [...alternatives, ...nameMatches];
+         // Deduplicate
+         alternatives = Array.from(new Map(alternatives.map((item: any) => [item.id, item])).values());
+      }
+    }
+
+    // Randomize 3
+    const shuffled = alternatives.sort(() => 0.5 - Math.random());
+    return { success: true, alternatives: shuffled.slice(0, 3) };
+  } catch (error) {
+    console.error("Error fetching alternatives:", error);
+    return { success: false, alternatives: [] };
+  }
+}

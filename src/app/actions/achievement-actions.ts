@@ -58,8 +58,8 @@ export async function syncUserAchievements() {
     
     // Total Volume > 1000kg
     const sessionVolume = session.setLogs.reduce((acc, set) => acc + (set.weight * set.reps), 0);
-    if (sessionVolume >= 1000 && !unlocked.has("LIFT_1000_KG" as AchievementType)) {
-      addAchievement("LIFT_1000_KG" as AchievementType, d);
+    if (sessionVolume >= 9000 && !unlocked.has("LIFT_9000_KG" as AchievementType)) {
+      addAchievement("LIFT_9000_KG" as AchievementType, d);
     }
 
     // Night Owl / Early Bird (Based on UTC / server localized approx)
