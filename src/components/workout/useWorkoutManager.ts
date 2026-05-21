@@ -171,10 +171,21 @@ export function useWorkoutManager(initialState: any) {
     if (currentSetIndex === -1) return;
 
     const newState = { ...workoutState };
-    const set = newState.exercises[currentExerciseIndex].sets[currentSetIndex];
-    if (!set.reps || !set.weight) {
+    const exercise = newState.exercises[currentExerciseIndex];
+    const set = exercise.sets[currentSetIndex];
+    
+    // Check if cardio exercise to loosen validation
+    const isCardio = exercise.category === 'Cardio';
+
+    if (!isCardio && (!set.reps || !set.weight)) {
       playBuzzer();
       toast.error("Enter weight and reps!");
+      return;
+    }
+
+    if (isCardio && !set.duration) {
+      playBuzzer();
+      toast.error("Enter duration!");
       return;
     }
 
@@ -184,6 +195,10 @@ export function useWorkoutManager(initialState: any) {
       newState.exercises[currentExerciseIndex].sets.push({
         reps: set.reps,
         weight: set.weight,
+        duration: set.duration,
+        speed: set.speed,
+        incline: set.incline,
+        level: set.level,
         completed: false,
       });
     }

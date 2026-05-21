@@ -1,18 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  
-  
-  
-  
-  X,
-  
-  List,
-  
-  
-  
-} from "lucide-react";
+import { Menu, X, List } from "lucide-react";
 import CoopPanel from "./CoopPanel";
 import CoopWorkoutReview from "./CoopWorkoutReview";
 
@@ -73,7 +62,13 @@ export default function ActiveWorkout({
   if (!exercises || exercises.length === 0) return <div>No exercises.</div>;
 
     return (
-    <div className="min-h-full h-full bg-transparent flex flex-col p-6 items-center relative">
+    <div className="min-h-[100dvh] h-full bg-[var(--color-gray-50)] flex flex-col px-6 pt-6 pb-2 items-center relative font-sans selection:bg-[var(--color-indigo-500)]/30 overflow-y-auto">
+      {/* Subtle Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-5%] left-[-10%] w-[70vw] h-[70vw] max-w-[400px] max-h-[400px] bg-[var(--color-indigo-500)] opacity-[0.07] blur-[80px] rounded-full" />
+        <div className="absolute bottom-[20%] right-[-10%] w-[60vw] h-[60vw] max-w-[300px] max-h-[300px] bg-[var(--color-indigo-400)] opacity-[0.05] blur-[80px] rounded-full" />
+      </div>
+
       <WorkoutModals 
         showSwapModal={showSwapModal}
         setShowSwapModal={setShowSwapModal}
@@ -87,41 +82,54 @@ export default function ActiveWorkout({
         handleSkipSet={handleSkipSet}
       />
       
-      <div className="w-full max-w-md flex justify-center items-center mb-8 relative">
+      <div className="w-full max-w-md flex justify-between items-start mb-6 mt-2 relative z-10">
         <button
           onClick={() => setShowTimeline(!showTimeline)}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 p-3 rounded-xl transition-all border border-[var(--color-gray-200)] shadow-[0_4px_0_var(--color-button-shadow)] ${
-            showTimeline
-              ? "bg-[var(--color-indigo-100)] text-[var(--color-indigo-600)]"
-              : "bg-[var(--color-gray-100)] text-[var(--color-slate-500)] hover:text-[var(--color-indigo-500)] hover:scale-110"
-          }`}
+          className="p-3 bg-[var(--color-white)]/60 backdrop-blur-xl border border-[var(--color-white)]/50 rounded-2xl text-[var(--color-slate-400)] hover:text-[var(--color-indigo-500)] hover:scale-105 active:scale-95 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
         >
-          <List size={24} />
+          <Menu className="w-5 h-5" />
         </button>
-        <h1 className="font-bold text-2xl text-[var(--color-slate-800)] text-center px-16">
-          {planName}
-        </h1>
+        <div className="flex flex-col items-center justify-center pt-1 overflow-hidden px-4 text-center">
+            <span className="text-[10px] text-[var(--color-indigo-500)] font-bold tracking-widest uppercase mb-0.5">Active Workout</span>
+            <h1 className="font-bold text-[13px] text-[var(--color-slate-700)] truncate max-w-full w-full">
+              {planName}
+            </h1>
+        </div>
         <button
           onClick={() => setShowCancelConfirm(true)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 text-[var(--color-slate-500)] hover:text-[var(--color-rose-500)] p-3 bg-[var(--color-gray-100)] rounded-xl hover:scale-110 transition-all border border-[var(--color-gray-200)] shadow-[0_4px_0_var(--color-button-shadow)]"
+          className="p-3 bg-[var(--color-white)]/60 backdrop-blur-xl border border-[var(--color-white)]/50 rounded-2xl text-[var(--color-slate-400)] hover:text-[var(--color-rose-500)] hover:scale-105 active:scale-95 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
         >
-          <X size={24} />
+          <X className="w-5 h-5" />
         </button>
       </div>
+
       {coopSessionId && (
-        <CoopPanel
-          sessionId={coopSessionId}
-          currentExercise={currentExercise?.name}
-        />
+        <div className="mb-4">
+          <CoopPanel
+            sessionId={coopSessionId}
+            currentExercise={currentExercise?.name}
+          />
+        </div>
       )}
-      <div className="w-full max-w-md h-6 bg-gray-200 rounded-full mb-10 overflow-hidden border-2 border-indigo-50 shadow-inner">
-        <motion.div
-          className="h-full bg-green-500 rounded-full"
-          initial={{ width: 0 }}
-          animate={{ width: `${progressPercent}%` }}
-          transition={{ type: "spring", stiffness: 50 }}
-        />
-      </div>
+
+      {!showTimeline && !showMilestone && (!restTimeLeft || restTimeLeft === 0) && (
+        <>
+          <div className="w-full max-w-md flex items-center justify-between mb-2">
+            <span className="text-[var(--color-slate-500)] text-xs font-bold">Progress</span>
+            <span className="text-[var(--color-slate-500)] text-xs font-bold">
+              {currentExerciseIndex !== -1 ? `Exercise ${currentExerciseIndex + 1} / ${exercises.length}` : 'Done'}
+            </span>
+          </div>
+          <div className="w-full max-w-md h-[4px] bg-[var(--color-gray-200)] rounded-full mb-10 overflow-hidden relative border-none">
+            <motion.div
+              className="h-full rounded-full absolute left-0 top-0 bg-[var(--color-indigo-500)]"
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercent}%` }}
+              transition={{ type: "spring", stiffness: 50 }}
+            />
+          </div>
+        </>
+      )}
 
       <AnimatePresence mode="wait">
         {showTimeline ? (

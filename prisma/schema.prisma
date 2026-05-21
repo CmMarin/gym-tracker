@@ -148,6 +148,13 @@ model SetLog {
   xpEarned         Int      @default(0)
   createdAt        DateTime @default(now())
 
+  // Cardio Fields
+  duration         Int?     // Duration in seconds
+  distance         Float?   // Distance in km or miles
+  speed            Float?   // Speed (generic or km/h)
+  incline          Float?   // Incline level
+  level            Int?     // Intensity level (e.g., Stairmaster)
+
   user           User            @relation(fields: [userId], references: [id])
   session        WorkoutSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   exercise       Exercise?       @relation(fields: [exerciseId], references: [id])

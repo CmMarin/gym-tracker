@@ -117,6 +117,7 @@ export async function startOrResumeWorkout(
       return {
         id: px.exerciseId || px.customExerciseId,
         name: exercise?.name || "Unknown",
+        category: (exercise as any)?.category,
         isCustom: !!px.customExerciseId,
         targetSets: px.targetSets,
         targetReps: px.targetReps,
@@ -124,6 +125,10 @@ export async function startOrResumeWorkout(
         sets: Array.from({ length: px.targetSets }).map(() => ({
           reps: pastMaxReps ? pastMaxReps.toString() : "",
           weight: suggestedWeight ? suggestedWeight.toString() : "",
+          duration: "",
+          speed: "",
+          incline: "",
+          level: "",
           completed: false,
         })),
       };

@@ -130,13 +130,64 @@ export async function finishWorkoutAction(workoutData: any) {
           if (totalXpEarned < 0) totalXpEarned = 0;
           continue; // Don't log skipped sets
         }
-      if (!set.completed || !set.reps || !set.weight) continue;
+      if (!set.completed) continue;
 
-      const weight = parseFloat(set.weight);
-      const reps = parseInt(set.reps, 10);
-      if (Number.isNaN(weight) || Number.isNaN(reps)) continue;
+      const isCardio = ex.category === 'Cardio' || !!set.duration;
+
+      const weight = parseFloat(set.weight || "0");
+      const reps = parseInt(set.reps || "0", 10);
       const isWarmup = set.isWarmup || false;
       let isPR = false;
+      
+      let setXpEarned = 0;
+
+      if (isCardio) {
+        // Cardio XP calculation
+        const duration = parseInt(set.duration || "0", 10);
+        const speed = parseFloat(set.speed || "0");
+        const incline = parseFloat(set.incline || "0");
+        const level = parseInt(set.level || "0", 10);
+
+        if (duration > 0) {
+          // Base: 1 XP per minute
+          let cardioXp = Math.floor(duration / 60);
+          
+          // Intensity multiplier
+          const intensity = speed + incline + level;
+          if (intensity > 0) {
+            // Rough multiplier based on intensity
+            cardioXp += Math.floor((duration / 60) * (intensity * 0.1));
+          }
+          
+          setXpEarned = Math.max(5, cardioXp);
+          totalXpEarned += setXpEarned;
+        } else {
+            setXpEarned = 5;
+            totalXpEarned += 5;
+        }
+
+        await prisma.setLog.create({
+          data: {
+            userId,
+            sessionId: workoutSession.id,
+            exerciseId: ex.isCustom ? null : ex.id,
+            customExerciseId: ex.isCustom ? ex.id : null,
+            setNumber: i + 1,
+            reps: 0,
+            weight: 0,
+            duration,
+            speed,
+            incline,
+            level,
+            isWarmup: false,
+            isPR: false,
+            xpEarned: setXpEarned,
+          },
+        });
+        continue; // Skip the regular weights logic
+      }
+
+      if (Number.isNaN(weight) || Number.isNaN(reps)) continue;
 
       totalVolume += weight * reps;
 

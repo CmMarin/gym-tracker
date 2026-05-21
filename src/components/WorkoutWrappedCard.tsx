@@ -90,137 +90,153 @@ export default function WorkoutWrappedCard({ summary, workoutState, onClose }: W
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[99999] flex flex-col items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-hidden"
+        className="fixed inset-0 z-[99999] flex flex-col items-center justify-center p-2 sm:p-6 bg-[var(--color-gray-50)]/90 backdrop-blur-xl overflow-y-auto"
       >
-        {/* Full screen flipping container */}
-        <motion.div
-            initial={{ scale: 0.8, rotateY: 90 }}
-            animate={{ scale: 1, rotateY: 0 }}
-            exit={{ scale: 0.8, rotateY: -90 }}
-            transition={{ type: "spring", damping: 15, stiffness: 80 }}
-            className="w-full max-w-sm flex-1 flex flex-col justify-center"
-        >
-          {/* Card Element to Capture */}
-          <div 
-            ref={cardRef}
-            className="relative bg-slate-900 rounded-3xl p-6 shadow-2xl overflow-hidden border border-slate-700 w-full text-white"
-            style={{ minHeight: '520px' }}
+        {/* Responsive, scrollable container if height is short */}
+        <div className="w-full max-w-sm min-h-max flex flex-col justify-center py-4 sm:py-6">
+          <motion.div
+              initial={{ scale: 0.8, rotateY: 90 }}
+              animate={{ scale: 1, rotateY: 0 }}
+              exit={{ scale: 0.8, rotateY: -90 }}
+              transition={{ type: "spring", damping: 15, stiffness: 80 }}
+              className="w-full flex-1 flex flex-col items-center justify-center"
           >
-            {/* Background Decor */}
-            <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-40 mix-blend-screen" />
-            <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-30 mix-blend-screen" />
+            {/* Card Element to Capture */}
+            <div 
+              ref={cardRef}
+              className="relative bg-[var(--color-white)]/80 backdrop-blur-2xl rounded-[2rem] p-5 sm:p-6 shadow-2xl overflow-hidden border border-[var(--color-white)] w-full text-[var(--color-slate-800)] flex flex-col shrink-0 scale-95 sm:scale-100 origin-center"
+              style={{ minHeight: 'max-content' }}
+            >
+              {/* Background Decor - utilizing theme colors */}
+              <div className="absolute -top-32 -right-32 w-64 h-64 bg-[var(--color-indigo-400)] rounded-full blur-[80px] opacity-20 pointer-events-none" />
+              <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[var(--color-indigo-500)] rounded-full blur-[80px] opacity-20 pointer-events-none" />
 
-            {/* Content Container */}
-            <div className="relative z-10 flex flex-col h-full">
-              {/* Header */}
-              <div className="text-center mb-6 pt-4">
-                <h2 className="text-3xl font-black italic tracking-tighter bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent uppercase flex flex-col items-center leading-none">
-                  <span>Workout</span>
-                  <span className="text-4xl mt-1">Wrapped</span>
-                </h2>
-                <div className="flex items-center justify-center gap-2 mt-2">
-                  <span className="text-[#94a3b8] font-semibold px-3 py-1 bg-slate-800 rounded-full text-xs">
-                    {workoutState.name || "Custom Workout"}
-                  </span>
-                  <span className="text-[#94a3b8] font-semibold px-3 py-1 bg-slate-800 rounded-full text-xs flex items-center gap-1">
-                    ⏱️ {durationMin} min
-                  </span>
-                </div>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
-                  <Zap className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] mb-2" size={24} />
-                  <div className="text-2xl font-black tabular-nums tracking-tight">{totalVolume.toLocaleString()}</div>
-                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1">Total Vol (kg)</div>
-                </div>
-                
-                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
-                  <Target className="text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)] mb-2" size={24} />
-                  <div className="text-2xl font-black tabular-nums tracking-tight">{totalSets}</div>
-                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1">Sets Done</div>
+              {/* Content Container */}
+              <div className="relative z-10 flex flex-col h-full gap-4">
+                {/* Header */}
+                <div className="text-center pt-1">
+                  <h2 className="text-[2rem] sm:text-[2.2rem] font-black italic tracking-tighter text-[var(--color-indigo-500)] flex flex-col items-center leading-[0.85] mb-3">
+                    <span className="text-[var(--color-slate-800)]">WORKOUT</span>
+                    <span>WRAPPED</span>
+                  </h2>
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-[var(--color-slate-600)] font-bold px-4 py-1.5 bg-[var(--color-gray-100)] rounded-xl text-xs uppercase tracking-wide">
+                      {workoutState.name || "Custom Workout"}
+                    </span>
+                    <span className="text-[var(--color-slate-600)] font-bold px-4 py-1.5 bg-[var(--color-gray-100)] rounded-xl text-xs flex items-center gap-1 uppercase tracking-wide">
+                      ⏱️ {durationMin} MIN
+                    </span>
+                  </div>
                 </div>
 
-                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner">
-                  <TrendingUp className="text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)] mb-2" size={24} />
-                  <div className="text-2xl font-black tabular-nums tracking-tight text-[#dbeafe]">+{summary?.xpEarned || 0}</div>
-                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1">XP Earned</div>
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <div className="bg-[var(--color-white)]/80 backdrop-blur-md rounded-[1.25rem] p-3 border border-[var(--color-white)] flex flex-col items-center justify-center text-center shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mb-1.5 shadow-inner">
+                      <Zap className="text-yellow-500" size={16} strokeWidth={3} />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-black text-[var(--color-slate-800)] tracking-tight">{totalVolume.toLocaleString()}</div>
+                    <div className="text-[9px] sm:text-[10px] text-[var(--color-slate-400)] uppercase tracking-widest font-bold mt-0.5">Total Vol (kg)</div>
+                  </div>
+                  
+                  <div className="bg-[var(--color-white)]/80 backdrop-blur-md rounded-[1.25rem] p-3 border border-[var(--color-white)] flex flex-col items-center justify-center text-center shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center mb-1.5 shadow-inner">
+                      <Target className="text-emerald-500" size={16} strokeWidth={3} />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-black text-[var(--color-slate-800)] tracking-tight">{totalSets}</div>
+                    <div className="text-[9px] sm:text-[10px] text-[var(--color-slate-400)] uppercase tracking-widest font-bold mt-0.5">Sets Done</div>
+                  </div>
+
+                  <div className="bg-[var(--color-white)]/80 backdrop-blur-md rounded-[1.25rem] p-3 border border-[var(--color-white)] flex flex-col items-center justify-center text-center shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mb-1.5 shadow-inner">
+                      <TrendingUp className="text-blue-500" size={16} strokeWidth={3} />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-black text-[var(--color-indigo-500)] tracking-tight">+{summary?.xpEarned || 0}</div>
+                    <div className="text-[9px] sm:text-[10px] text-[var(--color-slate-400)] uppercase tracking-widest font-bold mt-0.5">XP Earned</div>
+                  </div>
+
+                  <div className="bg-[var(--color-white)]/80 backdrop-blur-md rounded-[1.25rem] p-3 border border-[var(--color-white)] flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden">
+                    <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mb-1.5 shadow-inner relative z-10">
+                      <Trophy className="text-purple-500" size={16} strokeWidth={3} />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-black text-[var(--color-slate-800)] tracking-tight relative z-10">{summary?.prs?.length || 0}</div>
+                    <div className="text-[9px] sm:text-[10px] text-[var(--color-slate-400)] uppercase tracking-widest font-bold mt-0.5 relative z-10">New PRs</div>
+                    {summary?.prs?.length > 0 && (
+                      <div className="absolute inset-0 bg-purple-100/30 blur-xl z-0 pointer-events-none animate-pulse" />
+                    )}
+                  </div>
                 </div>
 
-                <div className="bg-[#1e293b] rounded-2xl p-4 border border-slate-700 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
-                  <Trophy className="text-purple-400 drop-shadow-[0_0_8px_rgba(192,132,252,0.5)] mb-2 relative z-10" size={24} />
-                  <div className="text-2xl font-black tabular-nums tracking-tight relative z-10">{summary?.prs?.length || 0}</div>
-                  <div className="text-[10px] text-[#94a3b8] uppercase tracking-widest font-bold mt-1 relative z-10">New PRs</div>
-                  {summary?.prs?.length > 0 && (
-                    <div className="absolute inset-0 bg-purple-500/10 blur-xl z-0 pointer-events-none animate-pulse" />
+                {/* Heatmap Mini */}
+                <div className="relative z-10 bg-[var(--color-white)]/50 flex justify-center items-center rounded-[1.25rem] p-2 border border-[var(--color-white)] h-32 sm:h-36 overflow-hidden shadow-sm">
+                   {mockHeatmapData.length > 0 ? (
+                     <div className="transform scale-[0.55] sm:scale-[0.60] opacity-90 pointer-events-none mt-6 sm:mt-8 w-full flex justify-center">
+                       <Model
+                          data={mockHeatmapData}
+                          style={{ width: "16rem", color: "inherit" }}
+                          highlightedColors={["var(--color-indigo-200)", "var(--color-indigo-300)", "var(--color-indigo-400)", "var(--color-indigo-500)"]}
+                       />
+                     </div>
+                   ) : (
+                      <div className="text-[var(--color-slate-400)] font-bold text-xs uppercase tracking-widest">No fatigue data</div>
+                   )}
+                </div>
+
+                {/* Achievements & Level Up */}
+                <div className="flex-1 flex flex-col justify-end gap-3 shrink-0">
+                  {summary?.didLevelUp && (
+                    <motion.div 
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className="relative bg-orange-50 border border-orange-200 rounded-[1.25rem] p-3 flex items-center justify-center gap-3 shadow-sm"
+                    >
+                      <span className="text-2xl animate-bounce">🔥</span>
+                      <div className="text-left">
+                        <div className="text-orange-600 font-black leading-tight uppercase tracking-wide">Level Up!</div>
+                        <div className="text-orange-500/80 text-xs font-bold">You reached Level {summary.newLevel}!</div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {summary?.earnedAchievements?.length > 0 && (
+                    <motion.div 
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.7 }}
+                      className="flex items-center justify-center gap-2 text-sm font-bold text-[var(--color-indigo-600)] bg-[var(--color-indigo-50)] border border-[var(--color-indigo-100)] rounded-[1.25rem] py-3 px-4 shadow-sm backdrop-blur-sm"
+                    >
+                      <Trophy size={16} className="text-[var(--color-indigo-500)]" strokeWidth={3} />
+                      Unlocked {summary.earnedAchievements.length} new {summary.earnedAchievements.length === 1 ? 'trophy' : 'trophies'}!
+                    </motion.div>
                   )}
                 </div>
               </div>
-              {/* Heatmap Mini */}
-              <div className="relative z-10 bg-[#1e293b] flex justify-center items-center rounded-2xl p-4 border border-slate-700/50 h-56 overflow-hidden mb-6 shadow-inner">
-                 {mockHeatmapData.length > 0 ? (
-                   <div className="transform scale-[0.85] opacity-95 pointer-events-none mt-10">
-                     <Model
-                        data={mockHeatmapData}
-                        style={{ width: "16rem", color: "inherit" }}
-                        highlightedColors={["#3b82f6", "#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899"]}
-                     />
-                   </div>
-                 ) : (
-                    <div className="text-slate-500 font-medium text-sm">No fatigue data</div>
-                 )}
-              </div>
-              {/* Achievements & Level Up */}
-              <div className="flex-1 flex flex-col justify-end gap-3 mb-2">
-                {summary?.didLevelUp && (
-                  <motion.div 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="relative bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/40 rounded-xl p-3 flex items-center justify-center gap-3 backdrop-blur-sm"
-                  >
-                    <span className="text-2xl">🔥</span>
-                    <div className="text-left">
-                      <div className="text-yellow-400 font-bold leading-tight">Level Up!</div>
-                      <div className="text-yellow-200/80 text-xs font-semibold">You reached Level {summary.newLevel}!</div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {summary?.earnedAchievements?.length > 0 && (
-                  <motion.div 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.7 }}
-                    className="flex items-center justify-center gap-2 text-sm font-bold text-purple-200 bg-purple-900/40 border border-purple-500/30 rounded-xl py-3 px-4 shadow-inner backdrop-blur-sm"
-                  >
-                    <Trophy size={16} className="text-purple-400" />
-                    Unlocked {summary.earnedAchievements.length} new {summary.earnedAchievements.length === 1 ? 'trophy' : 'trophies'}!
-                  </motion.div>
-                )}
-              </div>
             </div>
-          </div>
-        </motion.div>
 
-        {/* Action Buttons - Outside of the cardRef so they aren't included in the screenshot */}
-        <div className="mt-8 flex gap-4 w-full max-w-sm">
-          <button 
-            onClick={handleDownload}
-            disabled={downloading}
-            className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-4 rounded-2xl flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50 disabled:active:scale-100 shadow-xl shadow-indigo-600/20 border border-indigo-500/50"
-          >
-            {downloading ? "Saving..." : <><Download size={18} /> Save Card</>}
-          </button>
-          
-          <button 
-            onClick={onClose}
-            className="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition active:scale-95 border border-slate-700 shadow-xl"
-            aria-label="Close"
-          >
-            <X size={20} /> Close
-          </button>
+            {/* Action Buttons - Outside of the cardRef to keep screenshots clean */}
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full justify-center px-2">
+              <button 
+                onClick={handleDownload}
+                disabled={downloading}
+                className="flex-1 min-h-[56px] sm:min-h-[60px] bg-[var(--color-indigo-500)] hover:bg-[var(--color-indigo-600)] text-[var(--color-white)] font-black text-lg sm:text-xl py-3 sm:py-4 px-6 rounded-[1.25rem] flex items-center justify-center gap-2 transition-all shadow-[0_6px_0_0_var(--color-button-shadow)] active:shadow-[0_0px_0_0_var(--color-button-shadow)] active:translate-y-[6px] hover:-translate-y-1 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {downloading ? (
+                  <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  <><Download size={22} strokeWidth={3} /> Save Card</>
+                )}
+              </button>
+              
+              <button 
+                onClick={onClose}
+                className="bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] text-[var(--color-slate-500)] hover:text-[var(--color-slate-800)] font-black text-lg sm:text-xl py-3 sm:py-4 px-6 rounded-[1.25rem] flex items-center justify-center gap-2 transition-all shadow-[0_6px_0_0_var(--color-gray-200)] active:shadow-[0_0px_0_0_var(--color-gray-200)] active:translate-y-[6px] border border-[var(--color-gray-100)] sm:flex-none"
+                aria-label="Close"
+              >
+                <X size={22} strokeWidth={3} /> Close
+              </button>
+            </div>
+          </motion.div>
         </div>
       </motion.div>
     </AnimatePresence>
